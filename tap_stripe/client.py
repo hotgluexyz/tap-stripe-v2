@@ -16,6 +16,9 @@ class stripeStream(RESTStream):
     url_base = "https://api.stripe.com/v1/"
     _page_size = 100
 
+    records_jsonpath = "$.data[*]"
+    primary_keys = ["id"]
+
     @property
     def last_id_jsonpath(self):
         jsonpath = self.records_jsonpath.replace("*", "-1")

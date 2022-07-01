@@ -10,8 +10,6 @@ class Invoices(stripeStream):
 
     name = "invoices"
     path = "invoices"
-    primary_keys = ["id"]
-    records_jsonpath = "$.data[*]"
     replication_key = "created"
 
     schema = th.PropertiesList(
@@ -104,8 +102,6 @@ class InvoiceItems(stripeStream):
 
     name = "invoice_items"
     path = "invoiceitems"
-    primary_keys = ["id"]
-    records_jsonpath = "$.data[*]"
     replication_key = "date"
 
     schema = th.PropertiesList(
@@ -142,8 +138,6 @@ class Subscriptions(stripeStream):
 
     name = "subscriptions"
     path = "subscriptions"
-    primary_keys = ["id"]
-    records_jsonpath = "$.data[*]"
     replication_key = "created"
 
     schema = th.PropertiesList(
@@ -188,4 +182,159 @@ class Subscriptions(stripeStream):
         th.Property("transfer_data", th.StringType),
         th.Property("trial_end", th.DateTimeType),
         th.Property("trial_start", th.DateTimeType),
+    ).to_dict()
+
+
+class Plans(stripeStream):
+    """Define Plans stream."""
+
+    name = "plans"
+    path = "plans"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("active", th.BooleanType),
+        th.Property("aggregate_usage", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("amount_decimal", th.StringType),
+        th.Property("billing_scheme", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("interval", th.StringType),
+        th.Property("interval_count", th.IntegerType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("nickname", th.StringType),
+        th.Property("product", th.StringType),
+        th.Property("tiers_mode", th.StringType),
+        th.Property("transform_usage", th.StringType),
+        th.Property("trial_period_days", th.StringType),
+        th.Property("usage_type", th.StringType),
+    ).to_dict()
+
+
+class CreditNotes(stripeStream):
+    """Define CreditNotes stream."""
+
+    name = "credit_notes"
+    path = "credit_notes"
+    replication_key = None
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("customer", th.StringType),
+        th.Property("customer_balance_transaction", th.StringType),
+        th.Property("discount_amount", th.NumberType),
+        th.Property("discount_amounts", th.CustomType({"type": ["array", "string"]})),
+        th.Property("invoice", th.StringType),
+        th.Property("lines", th.CustomType({"type": ["object", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("memo", th.StringType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("number", th.StringType),
+        th.Property("out_of_band_amount", th.StringType),
+        th.Property("pdf", th.StringType),
+        th.Property("reason", th.StringType),
+        th.Property("refund", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("subtotal", th.NumberType),
+        th.Property("subtotal_excluding_tax", th.NumberType),
+        th.Property("tax_amounts", th.CustomType({"type": ["array", "string"]})),
+        th.Property("total", th.NumberType),
+        th.Property("total_excluding_tax", th.NumberType),
+        th.Property("type", th.StringType),
+        th.Property("voided_at", th.DateTimeType),
+    ).to_dict()
+
+
+class Coupons(stripeStream):
+    """Define Coupons stream."""
+
+    name = "coupons"
+    path = "coupons"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount_off", th.NumberType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("duration", th.StringType),
+        th.Property("duration_in_months", th.IntegerType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("max_redemptions", th.IntegerType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("name", th.StringType),
+        th.Property("percent_off", th.NumberType),
+        th.Property("redeem_by", th.DateTimeType),
+        th.Property("times_redeemed", th.IntegerType),
+        th.Property("valid", th.BooleanType),
+    ).to_dict()
+
+
+class Products(stripeStream):
+    """Define Products stream."""
+
+    name = "products"
+    path = "products"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("active", th.BooleanType),
+        th.Property("created", th.DateTimeType),
+        th.Property("default_price", th.NumberType),
+        th.Property("description", th.StringType),
+        th.Property("images", th.CustomType({"type": ["array", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("name", th.StringType),
+        th.Property("package_dimensions", th.StringType),
+        th.Property("shippable", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("tax_code", th.StringType),
+        th.Property("unit_label", th.StringType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("url", th.StringType),
+    ).to_dict()
+
+
+class Customers(stripeStream):
+    """Define Customers stream."""
+
+    name = "customers"
+    path = "customers"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("address", th.CustomType({"type": ["object", "string"]})),
+        th.Property("balance", th.IntegerType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("default_source", th.StringType),
+        th.Property("delinquent", th.BooleanType),
+        th.Property("description", th.StringType),
+        th.Property("discount", th.StringType),
+        th.Property("email", th.StringType),
+        th.Property("invoice_prefix", th.StringType),
+        th.Property("invoice_settings", th.CustomType({"type": ["object", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("name", th.StringType),
+        th.Property("next_invoice_sequence", th.IntegerType),
+        th.Property("phone", th.StringType),
+        th.Property("preferred_locales", th.CustomType({"type": ["array", "string"]})),
+        th.Property("shipping", th.CustomType({"type": ["object", "string"]})),
+        th.Property("tax_exempt", th.StringType),
+        th.Property("test_clock", th.StringType),
     ).to_dict()

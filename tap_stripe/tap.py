@@ -5,9 +5,27 @@ from typing import List
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
 
-from tap_stripe.streams import InvoiceItems, Invoices, Subscriptions
+from tap_stripe.streams import (
+    Coupons,
+    CreditNotes,
+    Customers,
+    InvoiceItems,
+    Invoices,
+    Plans,
+    Products,
+    Subscriptions,
+)
 
-STREAM_TYPES = [Invoices, InvoiceItems, Subscriptions]
+STREAM_TYPES = [
+    Invoices,
+    InvoiceItems,
+    Subscriptions,
+    Plans,
+    CreditNotes,
+    Coupons,
+    Products,
+    Customers,
+]
 
 
 class Tapstripe(Tap):
