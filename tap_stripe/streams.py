@@ -139,6 +139,7 @@ class Subscriptions(stripeStream):
     name = "subscriptions"
     path = "subscriptions"
     replication_key = "created"
+    params = {"status": "canceled"}
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -156,7 +157,7 @@ class Subscriptions(stripeStream):
         th.Property("current_period_end", th.DateTimeType),
         th.Property("current_period_start", th.DateTimeType),
         th.Property("customer", th.StringType),
-        th.Property("days_until_due", th.StringType),
+        th.Property("days_until_due", th.IntegerType),
         th.Property("default_payment_method", th.StringType),
         th.Property("default_source", th.StringType),
         th.Property(
@@ -170,11 +171,13 @@ class Subscriptions(stripeStream):
         th.Property("livemode", th.BooleanType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("next_pending_invoice_item_invoice", th.StringType),
-        th.Property("pause_collection", th.StringType),
+        th.Property("pause_collection", th.CustomType({"type": ["object", "string"]})),
         th.Property("payment_settings", th.CustomType({"type": ["object", "string"]})),
         th.Property("pending_invoice_item_interval", th.StringType),
         th.Property("pending_setup_intent", th.StringType),
         th.Property("pending_update", th.StringType),
+        th.Property("plan", th.CustomType({"type": ["object", "string"]})),
+        th.Property("quantity", th.NumberType),
         th.Property("schedule", th.StringType),
         th.Property("start_date", th.DateTimeType),
         th.Property("status", th.StringType),

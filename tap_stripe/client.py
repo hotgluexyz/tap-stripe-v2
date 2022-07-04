@@ -19,6 +19,8 @@ class stripeStream(RESTStream):
     records_jsonpath = "$.data[*]"
     primary_keys = ["id"]
 
+    params = {}
+
     @property
     def last_id_jsonpath(self):
         jsonpath = self.records_jsonpath.replace("*", "-1")
@@ -51,7 +53,7 @@ class stripeStream(RESTStream):
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization."""
-        params: dict = {}
+        params: dict = self.params
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
