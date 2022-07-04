@@ -53,7 +53,7 @@ class stripeStream(RESTStream):
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
         """Return a dictionary of values to be used in URL parameterization."""
-        params: dict = self.params
+        params: dict = self.params.copy()
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
