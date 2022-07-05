@@ -139,7 +139,7 @@ class Subscriptions(stripeStream):
     name = "subscriptions"
     path = "subscriptions"
     replication_key = "created"
-    params = {"status": "canceled"}
+    params = {"status": "all"}
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
