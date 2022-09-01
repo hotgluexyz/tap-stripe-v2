@@ -212,7 +212,7 @@ class Plans(stripeStream):
         th.Property("nickname", th.StringType),
         th.Property("product", th.StringType),
         th.Property("tiers_mode", th.StringType),
-        th.Property("transform_usage", th.StringType),
+        th.Property("transform_usage", th.CustomType({"type": ["object", "string"]})),
         th.Property("trial_period_days", th.StringType),
         th.Property("usage_type", th.StringType),
     ).to_dict()
