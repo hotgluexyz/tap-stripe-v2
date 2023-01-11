@@ -1,7 +1,7 @@
 """REST client handling, including stripeStream base class."""
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterable, Optional, cast
 
 import requests
 from backports.cached_property import cached_property
@@ -77,3 +77,51 @@ class stripeStream(RESTStream):
                 dt_field = datetime.fromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
+            if "lines" in record:
+                if record["lines"].get("has_more"):
+                    next_page_token = self.get_next_page_token_lines(record["lines"])
+                    base_url = "/".join(self.url_base.split("/")[:-2])
+                    url = base_url + record["lines"]["url"]
+                    decorated_request = self.request_decorator(self._request)
+                    lines = record["lines"].get("data", [])
+                    while next_page_token:
+                        params = {"limit": 100, "starting_after": next_page_token}
+                        lines_response = decorated_request(
+                            self.prepare_request_lines(url, params), {}
+                        )
+                        next_page_token = self.get_next_page_token_lines(lines_response)
+                        response_obj = lines_response.json()
+                        response_data = response_obj.get("data", [])
+                        lines.extend(response_data)
+                    record["lines"]["data"] = lines
+                    record["lines"]["has_more"] = False
+            yield record
+
+    def get_next_page_token_lines(self, response: requests.Response) -> Optional[Any]:
+        """Return a token for identifying next page or None if no more pages."""
+        has_more = extract_jsonpath("$.has_more", response)
+        if has_more:
+            return next(extract_jsonpath(self.last_id_jsonpath, response), None)
+        return None
+
+    def prepare_request_lines(self, url, params) -> requests.PreparedRequest:
+        http_method = self.rest_method
+        headers = self.http_headers
+        authenticator = self.authenticator
+        if authenticator:
+            headers.update(authenticator.auth_headers or {})
+        request = cast(
+            requests.PreparedRequest,
+            self.requests_session.prepare_request(
+                requests.Request(
+                    method=http_method,
+                    url=url,
+                    params=params,
+                    headers=headers,
+                ),
+            ),
+        )
+        return request

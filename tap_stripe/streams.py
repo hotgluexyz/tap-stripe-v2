@@ -341,3 +341,23 @@ class Customers(stripeStream):
         th.Property("tax_exempt", th.StringType),
         th.Property("test_clock", th.StringType),
     ).to_dict()
+
+
+class Events(stripeStream):
+    """Define Coupons stream."""
+
+    name = "events"
+    path = "events"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("api_version", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("data", th.CustomType({"type": ["array", "object", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("pending_webhooks", th.IntegerType),
+        th.Property("request", th.CustomType({"type": ["object", "string"]})),
+        th.Property("type", th.StringType),
+    ).to_dict()

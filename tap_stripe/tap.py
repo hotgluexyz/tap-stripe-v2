@@ -9,6 +9,7 @@ from tap_stripe.streams import (
     Coupons,
     CreditNotes,
     Customers,
+    Events,
     InvoiceItems,
     Invoices,
     Plans,
@@ -17,14 +18,15 @@ from tap_stripe.streams import (
 )
 
 STREAM_TYPES = [
-    Invoices,
-    InvoiceItems,
-    Subscriptions,
-    Plans,
-    CreditNotes,
     Coupons,
-    Products,
+    CreditNotes,
     Customers,
+    Events,
+    InvoiceItems,
+    Invoices,
+    Plans,
+    Products,
+    Subscriptions,
 ]
 
 
