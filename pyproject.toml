@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-stripe"
-version = "0.0.2"
+version = "0.0.3"
 description = "`tap-stripe-v2` is a Singer tap for stripe, built with the Meltano SDK for Singer Taps."
 authors = ["Hotglue Inc."]
 keywords = [

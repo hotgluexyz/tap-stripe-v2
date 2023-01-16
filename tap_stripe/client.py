@@ -8,6 +8,7 @@ from backports.cached_property import cached_property
 from singer_sdk.authenticators import BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
+from pendulum import parse
 
 
 class stripeStream(RESTStream):
@@ -18,6 +19,8 @@ class stripeStream(RESTStream):
 
     records_jsonpath = "$.data[*]"
     primary_keys = ["id"]
+    event_filter = None
+    event_ids = []
 
     params = {}
 
@@ -57,10 +60,17 @@ class stripeStream(RESTStream):
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
-        if self.replication_key:
+        if self.replication_key and self.path!="credit_notes":
             start_date = self.get_starting_timestamp(context)
             params["created[gt]"] = int(start_date.timestamp())
+        if self.path=="events" and self.event_filter:
+            params["type"] = self.event_filter
         return params
+
+    @property
+    def get_from_events(self):
+        start_date = self.get_starting_timestamp({}).replace(tzinfo=None)
+        return start_date!=parse(self.config.get("start_date"))
 
     @cached_property
     def datetime_fields(self):
@@ -74,12 +84,22 @@ class stripeStream(RESTStream):
         """As needed, append or transform raw data to match expected structure."""
         for field in self.datetime_fields:
             if row.get(field):
-                dt_field = datetime.fromtimestamp(int(row[field]))
+                dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
+            if self.path=="events" and self.event_filter:
+                event_date = record["created"]
+                record = record["data"]["object"]
+                record["updated"] = event_date
+                record_id = record.get("id")
+                if (not record_id) or (record_id in self.event_ids) or (self.object!=record["object"]):
+                    continue
+                self.event_ids.append(record_id)
+            if not record.get("updated"):
+                record["updated"] = record["created"]
             if "lines" in record:
                 if record["lines"].get("has_more"):
                     next_page_token = self.get_next_page_token_lines(record["lines"])
