@@ -2,15 +2,20 @@
 
 from singer_sdk import typing as th
 
-from tap_stripe.client import stripeStream
+from tap_stripe.client import stripeStream  
 
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
 
     name = "invoices"
-    path = "invoices"
-    replication_key = "created"
+    replication_key = "updated"
+    event_filter = "invoice.*"
+    object = "invoice"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "invoices"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -31,6 +36,7 @@ class Invoices(stripeStream):
         th.Property("charge", th.StringType),
         th.Property("collection_method", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("custom_fields", th.CustomType({"type": ["array", "string"]})),
         th.Property("customer", th.StringType),
@@ -103,6 +109,7 @@ class InvoiceItems(stripeStream):
     name = "invoice_items"
     path = "invoiceitems"
     replication_key = "date"
+    object = "plan"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -137,9 +144,13 @@ class Subscriptions(stripeStream):
     """Define Subscriptions stream."""
 
     name = "subscriptions"
-    path = "subscriptions"
-    replication_key = "created"
-    params = {"status": "all"}
+    replication_key = "updated"
+    event_filter = "customer.*"
+    object = "subscription"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "customers"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -154,6 +165,7 @@ class Subscriptions(stripeStream):
         th.Property("canceled_at", th.DateTimeType),
         th.Property("collection_method", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("current_period_end", th.DateTimeType),
         th.Property("current_period_start", th.DateTimeType),
         th.Property("customer", th.StringType),
@@ -192,8 +204,13 @@ class Plans(stripeStream):
     """Define Plans stream."""
 
     name = "plans"
-    path = "plans"
-    replication_key = "created"
+    replication_key = "updated"
+    event_filter = "plan.*"
+    object = "plan"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "plans"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -204,6 +221,7 @@ class Plans(stripeStream):
         th.Property("amount_decimal", th.StringType),
         th.Property("billing_scheme", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("interval", th.StringType),
         th.Property("interval_count", th.IntegerType),
@@ -222,14 +240,20 @@ class CreditNotes(stripeStream):
     """Define CreditNotes stream."""
 
     name = "credit_notes"
-    path = "credit_notes"
-    replication_key = None
+    replication_key = "updated"
+    event_filter = "credit_note.*"
+    object = "credit_note"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "credit_notes"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("amount", th.NumberType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("customer", th.StringType),
         th.Property("customer_balance_transaction", th.StringType),
@@ -260,14 +284,20 @@ class Coupons(stripeStream):
     """Define Coupons stream."""
 
     name = "coupons"
-    path = "coupons"
-    replication_key = "created"
+    replication_key = "updated"
+    event_filter = "coupon.*"
+    object = "coupon"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "coupons"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("amount_off", th.NumberType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("duration", th.StringType),
         th.Property("duration_in_months", th.IntegerType),
@@ -286,14 +316,20 @@ class Products(stripeStream):
     """Define Products stream."""
 
     name = "products"
-    path = "products"
-    replication_key = "created"
+    replication_key = "updated"
+    event_filter = "product.*"
+    object = "product"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "products"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("active", th.BooleanType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("default_price", th.StringType),
         th.Property("description", th.StringType),
         th.Property("images", th.CustomType({"type": ["array", "string"]})),
@@ -314,8 +350,13 @@ class Customers(stripeStream):
     """Define Customers stream."""
 
     name = "customers"
-    path = "customers"
-    replication_key = "created"
+    replication_key = "updated"
+    event_filter = "customer.*"
+    object = "customer"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "customers"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -323,6 +364,7 @@ class Customers(stripeStream):
         th.Property("address", th.CustomType({"type": ["object", "string"]})),
         th.Property("balance", th.IntegerType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("default_source", th.StringType),
         th.Property("delinquent", th.BooleanType),
