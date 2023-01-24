@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, Optional, cast
 
 import requests
+from memoization import cached
 from backports.cached_property import cached_property
 from singer_sdk.authenticators import BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -23,6 +24,12 @@ class stripeStream(RESTStream):
     event_ids = []
 
     params = {}
+
+    @cached
+    def get_starting_time(self, context):
+        start_date = parse(self.config.get("start_date"))
+        rep_key = self.get_starting_timestamp(context)
+        return rep_key or start_date
 
     @property
     def last_id_jsonpath(self):
@@ -61,7 +68,7 @@ class stripeStream(RESTStream):
         if next_page_token:
             params["starting_after"] = next_page_token
         if self.replication_key and self.path!="credit_notes":
-            start_date = self.get_starting_timestamp(context)
+            start_date = self.get_starting_time(context)
             params["created[gt]"] = int(start_date.timestamp())
         if self.path=="events" and self.event_filter:
             params["type"] = self.event_filter
@@ -69,7 +76,7 @@ class stripeStream(RESTStream):
 
     @property
     def get_from_events(self):
-        start_date = self.get_starting_timestamp({}).replace(tzinfo=None)
+        start_date = self.get_starting_time({}).replace(tzinfo=None)
         return start_date!=parse(self.config.get("start_date"))
 
     @cached_property
@@ -90,7 +97,7 @@ class stripeStream(RESTStream):
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
-            if self.path=="events" and self.event_filter:
+            if self.path=="events" and self.event_filter and "created" in record:
                 event_date = record["created"]
                 record = record["data"]["object"]
                 record["updated"] = event_date
@@ -98,7 +105,7 @@ class stripeStream(RESTStream):
                 if (not record_id) or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
                 self.event_ids.append(record_id)
-            if not record.get("updated"):
+            if not record.get("updated") and "created" in record:
                 record["updated"] = record["created"]
             if "lines" in record:
                 if record["lines"].get("has_more"):
