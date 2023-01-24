@@ -223,7 +223,7 @@ class CreditNotes(stripeStream):
 
     name = "credit_notes"
     path = "credit_notes"
-    replication_key = None
+    replication_key = "created"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),

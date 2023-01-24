@@ -57,7 +57,7 @@ class stripeStream(RESTStream):
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
-        if self.replication_key:
+        if self.replication_key and self.name!="credit_notes":
             start_date = self.get_starting_timestamp(context)
             params["created[gt]"] = int(start_date.timestamp())
         return params
@@ -74,8 +74,13 @@ class stripeStream(RESTStream):
         """As needed, append or transform raw data to match expected structure."""
         for field in self.datetime_fields:
             if row.get(field):
-                dt_field = datetime.fromtimestamp(int(row[field]))
+                dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
+                if self.replication_key == field:
+                    state = self.get_starting_timestamp({})
+                    state = state.replace(tzinfo=None)
+                    if dt_field <= state:
+                        return
         return row
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
