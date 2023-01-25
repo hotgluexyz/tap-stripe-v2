@@ -76,8 +76,9 @@ class stripeStream(RESTStream):
 
     @property
     def get_from_events(self):
-        start_date = self.get_starting_time({}).replace(tzinfo=None)
-        return start_date!=parse(self.config.get("start_date"))
+        state_date = self.get_starting_time({}).replace(tzinfo=None)
+        start_date = parse(self.config.get("start_date")).replace(tzinfo=None)
+        return state_date!=start_date
 
     @cached_property
     def datetime_fields(self):
