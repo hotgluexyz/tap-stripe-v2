@@ -150,7 +150,7 @@ class Subscriptions(stripeStream):
 
     @property
     def path(self):
-        return "events" if self.get_from_events else "customers"
+        return "events" if self.get_from_events else "subscriptions"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
