@@ -199,6 +199,13 @@ class Subscriptions(stripeStream):
         th.Property("trial_start", th.DateTimeType),
     ).to_dict()
 
+    def get_url_params(self, context, next_page_token):
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        if not self.get_from_events:
+            params["status"] = "all"
+        return params
+
 
 class Plans(stripeStream):
     """Define Plans stream."""
