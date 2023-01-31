@@ -98,13 +98,13 @@ class stripeStream(RESTStream):
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
-            record_id = record.get("id")
-            if self.path=="events" and ((not record_id) or (record_id in self.event_ids) or (self.object!=record["object"])):
-                continue
-            if self.path=="events" and self.event_filter and "created" in record:
+            if self.path=="events" and self.event_filter:
                 event_date = record["created"]
                 record = record["data"]["object"]
                 record["updated"] = event_date
+                record_id = record.get("id")
+                if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
+                    continue
                 self.event_ids.append(record_id)
             if not record.get("updated") and "created" in record:
                 record["updated"] = record["created"]
