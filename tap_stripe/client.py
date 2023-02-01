@@ -47,7 +47,7 @@ class stripeStream(RESTStream):
     def http_headers(self) -> dict:
         """Return headers dict to be used for HTTP requests."""
         result = self._http_headers
-        result["Stripe-Version"] = "2020-08-27"
+        result["Stripe-Version"] = "2022-11-15"
         return result
 
     def get_next_page_token(
@@ -97,23 +97,26 @@ class stripeStream(RESTStream):
         return row
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        decorated_request = self.request_decorator(self._request)
+        base_url = "/".join(self.url_base.split("/")[:-2])
         for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
             if self.path=="events" and self.event_filter:
                 event_date = record["created"]
                 record = record["data"]["object"]
-                record["updated"] = event_date
                 record_id = record.get("id")
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
+                url = base_url + f"/v1/{self.name}/{record['id']}"
+                response_obj = decorated_request(self.prepare_request_lines(url, {}), {})
+                record = response_obj.json()
+                record["updated"] = event_date
                 self.event_ids.append(record_id)
             if not record.get("updated") and "created" in record:
                 record["updated"] = record["created"]
             if "lines" in record:
                 if record["lines"].get("has_more"):
                     next_page_token = self.get_next_page_token_lines(record["lines"])
-                    base_url = "/".join(self.url_base.split("/")[:-2])
                     url = base_url + record["lines"]["url"]
-                    decorated_request = self.request_decorator(self._request)
                     lines = record["lines"].get("data", [])
                     while next_page_token:
                         params = {"limit": 100, "starting_after": next_page_token}
