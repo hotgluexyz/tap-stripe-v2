@@ -344,7 +344,7 @@ class Products(stripeStream):
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("name", th.StringType),
         th.Property("package_dimensions", th.StringType),
-        th.Property("shippable", th.StringType),
+        th.Property("shippable", th.BooleanType),
         th.Property("statement_descriptor", th.StringType),
         th.Property("tax_code", th.StringType),
         th.Property("unit_label", th.StringType),
