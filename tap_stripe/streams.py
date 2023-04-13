@@ -1,5 +1,6 @@
 """Stream type classes for tap-stripe-v2."""
 
+from typing import Optional
 from singer_sdk import typing as th
 
 from tap_stripe.client import stripeStream  
@@ -205,7 +206,54 @@ class Subscriptions(stripeStream):
         if not self.get_from_events:
             params["status"] = "all"
         return params
+        
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"subscription_id": record["id"]}
 
+
+class SubscriptionItemStream(stripeStream):
+    name = "subscription_items"
+    path = "subscription_items"
+    parent_stream_type = Subscriptions
+    primary_keys = ["id"]
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.IntegerType),
+        th.Property("price", th.ObjectType(
+            th.Property("id", th.StringType),
+            th.Property("object", th.StringType),
+            th.Property("active", th.BooleanType),
+            th.Property("billing_scheme", th.StringType),
+            th.Property("created", th.IntegerType),
+            th.Property("currency", th.StringType),
+            th.Property("livemode", th.BooleanType),
+            th.Property("lookup_key", th.StringType),
+            th.Property("nickname", th.StringType),
+            th.Property("product", th.StringType),
+            th.Property("recurring", th.ObjectType(
+                th.Property("aggregate_usage", th.StringType),
+                th.Property("interval", th.StringType),
+                th.Property("interval_count", th.IntegerType),
+                th.Property("usage_type", th.StringType)
+            )),
+            th.Property("tax_behavior", th.StringType),
+            th.Property("tiers_mode", th.StringType),
+            th.Property("type", th.StringType),
+            th.Property("unit_amount", th.IntegerType),
+            th.Property("unit_amount_decimal", th.StringType)
+        )),
+        th.Property("quantity", th.IntegerType),
+        th.Property("subscription", th.StringType),
+        th.Property("tax_rates", th.ArrayType(th.StringType)),
+    ).to_dict()
+
+    def get_url_params(self, context, next_page_token):
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        params["subscription"] = context["subscription_id"]
+        return params
 
 class Plans(stripeStream):
     """Define Plans stream."""

@@ -15,6 +15,7 @@ from tap_stripe.streams import (
     Plans,
     Products,
     Subscriptions,
+    SubscriptionItemStream
 )
 
 STREAM_TYPES = [
@@ -27,6 +28,7 @@ STREAM_TYPES = [
     Plans,
     Products,
     Subscriptions,
+    SubscriptionItemStream
 ]
 
 
