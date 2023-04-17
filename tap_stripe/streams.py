@@ -103,6 +103,51 @@ class Invoices(stripeStream):
         th.Property("lines", th.CustomType({"type": ["object", "string"]})),
     ).to_dict()
 
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        if record:
+            return {
+                # grab just the invoice ID
+                "invoice_id": record["lines"]["url"].split('/')[3],
+            }
+        else:
+            return None
+
+class InvoiceLineItems(stripeStream):
+    name = "invoice_line_items"
+    parent_stream_type = Invoices
+    path = "invoices/{invoice_id}/lines"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.IntegerType),
+        th.Property("amount_excluding_tax", th.IntegerType),
+        th.Property("currency", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("discount_amounts", th.CustomType({"type": ["array", "string"]})),
+        th.Property("discountable", th.BooleanType),
+        th.Property(
+            "discounts", th.CustomType({"type": ["array", "object", "string"]})
+        ),
+        th.Property("invoice_item", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("period", th.CustomType({"type": ["object", "string"]})),
+        th.Property("price", th.CustomType({"type": ["object", "string"]})),
+        th.Property("proration", th.BooleanType),
+        th.Property("proration_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("quantity", th.IntegerType),
+        th.Property("subscription", th.StringType),
+        th.Property(
+            "tax_amounts", th.CustomType({"type": ["array", "object", "string"]})
+        ),
+        th.Property(
+            "tax_rates", th.CustomType({"type": ["array", "object", "string"]})
+        ),
+        th.Property("type", th.StringType),        
+        th.Property("unit_amount_excluding_tax", th.StringType),
+    ).to_dict()
+
 
 class InvoiceItems(stripeStream):
     """Define InvoiceItems stream."""
