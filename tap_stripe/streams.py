@@ -265,7 +265,7 @@ class SubscriptionItemStream(stripeStream):
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
-        th.Property("created", th.IntegerType),
+        th.Property("created", th.DateTimeType),
         th.Property("price", th.ObjectType(
             th.Property("id", th.StringType),
             th.Property("object", th.StringType),
