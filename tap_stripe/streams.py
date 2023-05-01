@@ -271,7 +271,7 @@ class SubscriptionItemStream(stripeStream):
             th.Property("object", th.StringType),
             th.Property("active", th.BooleanType),
             th.Property("billing_scheme", th.StringType),
-            th.Property("created", th.IntegerType),
+            th.Property("created", th.NumberType),
             th.Property("currency", th.StringType),
             th.Property("livemode", th.BooleanType),
             th.Property("lookup_key", th.StringType),
