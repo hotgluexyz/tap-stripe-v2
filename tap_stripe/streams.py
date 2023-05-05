@@ -171,6 +171,7 @@ class InvoiceItems(stripeStream):
         th.Property("proration", th.BooleanType),
         th.Property("quantity", th.IntegerType),
         th.Property("subscription", th.StringType),
+        th.Property("subscription_item", th.StringType),
         th.Property("test_clock", th.StringType),
         th.Property("unit_amount", th.IntegerType),
         th.Property("unit_amount_decimal", th.StringType),
