@@ -123,6 +123,7 @@ class InvoiceLineItems(stripeStream):
         th.Property("amount", th.IntegerType),
         th.Property("amount_excluding_tax", th.IntegerType),
         th.Property("currency", th.StringType),
+        th.Property("subscription_item", th.StringType),
         th.Property("description", th.StringType),
         th.Property("discount_amounts", th.CustomType({"type": ["array", "string"]})),
         th.Property("discountable", th.BooleanType),
