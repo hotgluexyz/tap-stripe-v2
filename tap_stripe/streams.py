@@ -23,7 +23,7 @@ class Invoices(stripeStream):
         th.Property("object", th.StringType),
         th.Property("account_country", th.StringType),
         th.Property("account_name", th.StringType),
-        th.Property("account_tax_ids", th.StringType),
+        th.Property("account_tax_ids", th.ArrayType(th.StringType)),
         th.Property("amount_due", th.IntegerType),
         th.Property("amount_paid", th.NumberType),
         th.Property("amount_remaining", th.NumberType),
@@ -293,7 +293,7 @@ class SubscriptionItemStream(stripeStream):
         )),
         th.Property("quantity", th.IntegerType),
         th.Property("subscription", th.StringType),
-        th.Property("tax_rates", th.ArrayType(th.StringType)),
+        th.Property("tax_rates", th.ArrayType(th.CustomType({"type": ["object", "string"]}))),
     ).to_dict()
 
     def get_url_params(self, context, next_page_token):
@@ -333,7 +333,7 @@ class Plans(stripeStream):
         th.Property("product", th.StringType),
         th.Property("tiers_mode", th.StringType),
         th.Property("transform_usage", th.CustomType({"type": ["object", "string"]})),
-        th.Property("trial_period_days", th.StringType),
+        th.Property("trial_period_days", th.NumberType),
         th.Property("usage_type", th.StringType),
     ).to_dict()
 
