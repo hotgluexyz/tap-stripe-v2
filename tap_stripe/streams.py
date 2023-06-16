@@ -4,6 +4,7 @@ from typing import Optional
 from singer_sdk import typing as th
 
 from tap_stripe.client import stripeStream  
+from urllib.parse import urlencode
 
 
 class Invoices(stripeStream):
@@ -311,6 +312,10 @@ class Plans(stripeStream):
     object = "plan"
 
     @property
+    def expand(self):
+        return "data.tiers"
+
+    @property
     def path(self):
         return "events" if self.get_from_events else "plans"
 
@@ -334,6 +339,44 @@ class Plans(stripeStream):
         th.Property("tiers_mode", th.StringType),
         th.Property("transform_usage", th.CustomType({"type": ["object", "string"]})),
         th.Property("trial_period_days", th.NumberType),
+        th.Property(
+            "tiers",
+            th.ArrayType(
+                th.CustomType(
+                    {
+                        "anyOf": [
+                            {
+                                "type":["string","null"]
+                            },
+                            {
+                                "type":["object","null"],
+                                "properties": {
+                                    "flat_amount": {
+                                        "type": [
+                                        "null",
+                                        "integer"
+                                        ]
+                                    },
+                                    "unit_amount": {
+                                        "type": [
+                                        "null",
+                                        "integer"
+                                        ]
+                                    },
+                                    "up_to": {
+                                        "type": [
+                                        "null",
+                                        "integer"
+                                        ]
+                                    }
+                                }
+                            }
+                            
+                        ]
+                    }
+                )
+                    )
+        ),
         th.Property("usage_type", th.StringType),
     ).to_dict()
 
