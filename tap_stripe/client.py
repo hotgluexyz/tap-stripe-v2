@@ -72,6 +72,10 @@ class stripeStream(RESTStream):
             params["created[gt]"] = int(start_date.timestamp())
         if self.path=="events" and self.event_filter:
             params["type"] = self.event_filter
+        
+        if getattr(self,"expand", None):
+           params["expand[]"]=self.expand
+
         return params
 
     @property
@@ -95,6 +99,8 @@ class stripeStream(RESTStream):
                 dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
+       
+
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
