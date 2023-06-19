@@ -31,6 +31,9 @@ class stripeStream(RESTStream):
         rep_key = self.get_starting_timestamp(context)
         return rep_key or start_date
 
+    def expand(self,second_request=False):
+        return None
+
     @property
     def last_id_jsonpath(self):
         jsonpath = self.records_jsonpath.replace("*", "-1")
@@ -73,8 +76,9 @@ class stripeStream(RESTStream):
         if self.path=="events" and self.event_filter:
             params["type"] = self.event_filter
         
-        if getattr(self,"expand", None):
-           params["expand[]"]=self.expand
+        expansion = self.expand(second_request=False)
+        if not self.get_from_events and expansion:
+           params["expand[]"] = expansion
 
         return params
 
@@ -112,8 +116,11 @@ class stripeStream(RESTStream):
                 record_id = record.get("id")
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
-                url = base_url + f"/v1/{self.name}/{record['id']}"
-                response_obj = decorated_request(self.prepare_request_lines(url, {}), {})
+                url = base_url + f"/v1/{self.name}/{record['id']}" 
+                params = {}
+                if self.expand(second_request=True):
+                    params["expand[]"] = self.expand(second_request=True)
+                response_obj = decorated_request(self.prepare_request_lines(url,params), {})
                 record = response_obj.json()
                 record["updated"] = event_date
                 self.event_ids.append(record_id)

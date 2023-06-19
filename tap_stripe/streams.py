@@ -311,9 +311,11 @@ class Plans(stripeStream):
     event_filter = "plan.*"
     object = "plan"
 
-    @property
-    def expand(self):
-        return "data.tiers"
+    def expand(self,second_request = False):
+        if not self.get_from_events: 
+            return "data.tiers"
+        elif second_request:
+            return "tiers"
 
     @property
     def path(self):
