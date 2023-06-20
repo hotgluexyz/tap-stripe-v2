@@ -116,6 +116,9 @@ class stripeStream(RESTStream):
                 record_id = record.get("id")
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
+                # when the invoice is deleted or draft
+                if record.get("status") in ["deleted", "draft"]:
+                    continue
                 url = base_url + f"/v1/{self.name}/{record['id']}" 
                 params = {}
                 if self.expand(second_request=True):

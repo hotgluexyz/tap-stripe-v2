@@ -77,7 +77,7 @@ class Invoices(stripeStream):
         th.Property("quote", th.StringType),
         th.Property("receipt_number", th.StringType),
         th.Property("redaction", th.StringType),
-        th.Property("rendering_options", th.StringType),
+        th.Property("rendering_options", th.CustomType({"type": ["object", "string"]})),
         th.Property("starting_balance", th.IntegerType),
         th.Property("statement_descriptor", th.StringType),
         th.Property("status", th.StringType),
