@@ -10,6 +10,10 @@ from singer_sdk.authenticators import BearerTokenAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
 from pendulum import parse
+from typing import Any, Callable, Dict, Iterable, Optional
+import backoff
+from singer_sdk.exceptions import RetriableAPIError
+
 
 
 class stripeStream(RESTStream):
@@ -172,3 +176,19 @@ class stripeStream(RESTStream):
             ),
         )
         return request
+    
+
+    def request_decorator(self, func: Callable) -> Callable:
+        decorator: Callable = backoff.on_exception(
+            backoff.expo,
+            (
+                RetriableAPIError,
+                requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.RequestException,
+                ConnectionError,
+            ),
+            max_tries=5,
+            factor=2,
+        )(func)
+        return decorator
