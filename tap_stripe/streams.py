@@ -208,7 +208,7 @@ class Subscriptions(stripeStream):
         th.Property("application_fee_percent", th.StringType),
         th.Property("automatic_tax", th.CustomType({"type": ["object", "string"]})),
         th.Property("billing_cycle_anchor", th.DateTimeType),
-        th.Property("billing_thresholds", th.StringType),
+        th.Property("billing_thresholds", th.CustomType({"type": ["object", "string"]})),
         th.Property("cancel_at", th.DateTimeType),
         th.Property("cancel_at_period_end", th.BooleanType),
         th.Property("canceled_at", th.DateTimeType),
