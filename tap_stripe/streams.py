@@ -2,10 +2,10 @@
 
 from typing import Optional
 from singer_sdk import typing as th
-
+from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from tap_stripe.client import stripeStream  
 from urllib.parse import urlencode
-
+import requests
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -302,6 +302,12 @@ class SubscriptionItemStream(stripeStream):
         params = super().get_url_params(context, next_page_token)
         params["subscription"] = context["subscription_id"]
         return params
+    
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"subscription_item_id": record["id"]}
+    
+    
 
 class Plans(stripeStream):
     """Define Plans stream."""
@@ -550,3 +556,61 @@ class Events(stripeStream):
         th.Property("request", th.CustomType({"type": ["object", "string"]})),
         th.Property("type", th.StringType),
     ).to_dict()
+
+
+class SubscriptionSchedulesStream(stripeStream):
+    """Define stream."""
+
+    name = "subscription_schedules"
+    path = "subscription_schedules"
+    replication_key = "created"
+    object = "subscription_schedule"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("canceled_at", th.DateTimeType),
+        th.Property("completed_at", th.DateTimeType),
+        th.Property("created", th.DateTimeType),
+        th.Property("current_phase", th.CustomType({"type": ["object", "string"]})),
+        th.Property("customer", th.StringType),
+        th.Property("default_settings", th.CustomType({"type": ["object", "string"]})),
+        th.Property("end_behavior", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("phases", th.CustomType({"type": ["array", "string"]})),
+        th.Property("released_at", th.DateTimeType),
+        th.Property("released_subscription", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("subscription", th.StringType),
+    ).to_dict()
+
+
+class UsageRecordsStream(stripeStream):
+
+    name = "usage_records"
+    path = "subscription_items/{subscription_item_id}/usage_record_summaries"
+    parent_stream_type = SubscriptionItemStream
+    object = "usage_record_summary"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("invoice", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("period", th.CustomType({"type": ["object", "string"]})),
+        th.Property("subscription_item", th.StringType),
+        th.Property("total_usage", th.IntegerType),
+    ).to_dict()
+
+    def validate_response(self, response: requests.Response) -> None:
+       
+        if (
+            response.status_code in self.extra_retry_statuses
+            or 500 <= response.status_code < 600
+        ):
+            msg = self.response_error_message(response)
+            raise RetriableAPIError(msg, response)
+      
+
+    
