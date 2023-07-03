@@ -12,7 +12,7 @@ from singer_sdk.streams import RESTStream
 from pendulum import parse
 from typing import Any, Callable, Dict, Iterable, Optional
 import backoff
-from singer_sdk.exceptions import RetriableAPIError
+from singer_sdk.exceptions import RetriableAPIError, FatalAPIError
 
 
 
@@ -26,7 +26,7 @@ class stripeStream(RESTStream):
     primary_keys = ["id"]
     event_filter = None
     event_ids = []
-
+    ignore_statuscode = [404]
     params = {}
 
     @cached
@@ -122,12 +122,16 @@ class stripeStream(RESTStream):
                     continue
                 # when the invoice is deleted or draft
                 if record.get("status") in ["deleted", "draft"]:
+                    self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
                 url = base_url + f"/v1/{self.name}/{record['id']}" 
                 params = {}
                 if self.expand(second_request=True):
                     params["expand[]"] = self.expand(second_request=True)
                 response_obj = decorated_request(self.prepare_request_lines(url,params), {})
+                if response_obj.status_code in self.ignore_statuscode:
+                    self.logger.debug(f"{self.name} with id {record_id} skipped")
+                    continue
                 record = response_obj.json()
                 record["updated"] = event_date
                 self.event_ids.append(record_id)
@@ -192,3 +196,14 @@ class stripeStream(RESTStream):
             factor=2,
         )(func)
         return decorator
+    
+    def validate_response(self, response: requests.Response) -> None:
+        if (
+            response.status_code in self.extra_retry_statuses
+            or 500 <= response.status_code < 600
+        ):
+            msg = self.response_error_message(response)
+            raise RetriableAPIError(msg, response)
+        elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
+            msg = self.response_error_message(response)
+            raise FatalAPIError(msg)
