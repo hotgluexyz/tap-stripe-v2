@@ -132,6 +132,7 @@ class InvoiceLineItems(stripeStream):
             "discounts", th.CustomType({"type": ["array", "object", "string"]})
         ),
         th.Property("invoice_item", th.StringType),
+        th.Property("invoice_id",  th.StringType),
         th.Property("livemode", th.BooleanType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("period", th.CustomType({"type": ["object", "string"]})),
@@ -149,6 +150,11 @@ class InvoiceLineItems(stripeStream):
         th.Property("type", th.StringType),        
         th.Property("unit_amount_excluding_tax", th.StringType),
     ).to_dict()
+
+    def post_process(self, row: dict, context: dict ) -> dict:
+    
+        row["invoice_id"] = context["invoice_id"]
+        return row
 
 
 class InvoiceItems(stripeStream):
