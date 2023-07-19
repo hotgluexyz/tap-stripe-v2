@@ -29,7 +29,7 @@ class Invoices(stripeStream):
         th.Property("amount_paid", th.NumberType),
         th.Property("amount_remaining", th.NumberType),
         th.Property("application", th.StringType),
-        th.Property("application_fee_amount", th.StringType),
+        th.Property("application_fee_amount", th.CustomType({"type": ["number", "string"]})),
         th.Property("attempt_count", th.IntegerType),
         th.Property("attempted", th.BooleanType),
         th.Property("auto_advance", th.BooleanType),
