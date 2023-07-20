@@ -121,13 +121,21 @@ class stripeStream(RESTStream):
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
                 # when the invoice is deleted or draft
-                if record.get("status") in ["deleted", "draft"]:
+                if record.get("status") in ["deleted"]:
                     self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
-                url = base_url + f"/v1/{self.name}/{record['id']}" 
+                elif record.get("status") in ['draft']:
+                    url = base_url + f"/v1/{self.name}/upcoming?"
+                else: 
+                    url = base_url + f"/v1/{self.name}/{record['id']}" 
+
                 params = {}
                 if self.expand(second_request=True):
                     params["expand[]"] = self.expand(second_request=True)
+                
+                if record.get("status") in ['draft']:
+                    params['customer'] = record.get('customer')
+            
                 response_obj = decorated_request(self.prepare_request_lines(url,params), {})
                 if response_obj.status_code in self.ignore_statuscode:
                     self.logger.debug(f"{self.name} with id {record_id} skipped")
