@@ -61,7 +61,7 @@ class stripeStream(RESTStream):
         self, response: requests.Response, previous_token: Optional[Any]
     ) -> Optional[Any]:
         """Return a token for identifying next page or None if no more pages."""
-        has_more = extract_jsonpath("$.has_more", response.json())
+        has_more = (response.json() or {}).get("has_more")
         if has_more:
             return next(extract_jsonpath(self.last_id_jsonpath, response.json()), None)
         return None
