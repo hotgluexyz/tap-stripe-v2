@@ -1,11 +1,13 @@
 """Stream type classes for tap-stripe-v2."""
 
-from typing import Optional
+from typing import Any, Optional, Iterable
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from tap_stripe.client import stripeStream  
 from urllib.parse import urlencode
 import requests
+from singer_sdk.helpers.jsonpath import extract_jsonpath
+import copy
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -107,8 +109,8 @@ class Invoices(stripeStream):
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         if record:
             return {
-                # grab just the invoice ID
                 "invoice_id": record["lines"]["url"].split('/')[3],
+                "lines": record["lines"]
             }
         else:
             return None
@@ -152,9 +154,23 @@ class InvoiceLineItems(stripeStream):
     ).to_dict()
 
     def post_process(self, row: dict, context: dict ) -> dict:
-    
         row["invoice_id"] = context["invoice_id"]
         return row
+    
+    def _request(
+        self, prepared_request: requests.PreparedRequest, context: Optional[dict]
+    ) -> requests.Response:
+        response = copy.deepcopy(context["lines"])
+        return response
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        yield from extract_jsonpath(self.records_jsonpath, input=response)
+    
+    def get_next_page_token(
+        self, response: requests.Response, previous_token: Optional[Any]
+    ) -> Optional[Any]:
+        """Return a token for identifying next page or None if no more pages."""
+        return None
 
 
 class InvoiceItems(stripeStream):
