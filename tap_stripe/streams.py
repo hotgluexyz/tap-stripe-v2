@@ -7,7 +7,7 @@ from tap_stripe.client import stripeStream
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-import copy
+
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -108,17 +108,22 @@ class Invoices(stripeStream):
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         if record:
-            return {
-                "invoice_id": record["lines"]["url"].split('/')[3],
-                "lines": record["lines"]
+            invoice_id = record["lines"]["url"].split('/')[3]
+            record_lines = []
+            for line in record["lines"]["data"]:
+                line["invoice_id"] = invoice_id
+                record_lines.append(line)
+            data = {
+                "lines": record_lines
             }
-        else:
-            return None
+            stripeStream.invoice_lines = data
+            return {}
 
 class InvoiceLineItems(stripeStream):
     name = "invoice_line_items"
     parent_stream_type = Invoices
     path = "invoices/{invoice_id}/lines"
+    records_jsonpath = "$.[*]"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -152,16 +157,14 @@ class InvoiceLineItems(stripeStream):
         th.Property("type", th.StringType),        
         th.Property("unit_amount_excluding_tax", th.StringType),
     ).to_dict()
-
-    def post_process(self, row: dict, context: dict ) -> dict:
-        row["invoice_id"] = context["invoice_id"]
-        return row
     
     def _request(
         self, prepared_request: requests.PreparedRequest, context: Optional[dict]
     ) -> requests.Response:
-        response = copy.deepcopy(context["lines"])
-        return response
+        content = stripeStream.invoice_lines
+        if content.get("lines"):
+            response = content.get("lines")
+            return response
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         yield from extract_jsonpath(self.records_jsonpath, input=response)
