@@ -28,6 +28,7 @@ class stripeStream(RESTStream):
     event_ids = []
     ignore_statuscode = [404]
     params = {}
+    invoice_lines = []
 
     @cached
     def get_starting_time(self, context):
