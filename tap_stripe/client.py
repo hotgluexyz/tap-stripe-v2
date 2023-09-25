@@ -125,7 +125,11 @@ class stripeStream(RESTStream):
                 if record.get("status") in ["deleted", "draft"]:
                     self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
-                url = base_url + f"/v1/{self.name}/{record['id']}"
+                # using prices API instead of plans API
+                if self.name == "plans":
+                    url = base_url + f"/v1/prices/{record['id']}"
+                else:  
+                    url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
                 if self.expand(second_request=True):
                     params["expand[]"] = self.expand(second_request=True)

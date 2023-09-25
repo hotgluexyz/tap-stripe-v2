@@ -413,6 +413,12 @@ class Plans(stripeStream):
         th.Property("usage_type", th.StringType),
     ).to_dict()
 
+    def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
+        row = super().post_process(row, context)
+        row.update({"amount": row.get("unit_amount")})
+        row.update({"amount_decimal": row.get("unit_amount_decimal")})
+        return row
+
 
 class CreditNotes(stripeStream):
     """Define CreditNotes stream."""
