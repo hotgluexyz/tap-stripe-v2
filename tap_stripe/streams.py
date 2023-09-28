@@ -417,6 +417,16 @@ class Plans(stripeStream):
         row = super().post_process(row, context)
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
+        row.update({"transform_usage": row.get("transform_quantity")})
+        
+        # process fields for recurring prices
+        recurring = row.get("recurring")
+        if recurring:
+            row.update({"aggregate_usage": recurring.get("aggregate_usage")})
+            row.update({"interval": recurring.get("interval")})
+            row.update({"interval_count": recurring.get("interval_count")})
+            row.update({"trial_period_days": recurring.get("trial_period_days")})
+            row.update({"usage_type": recurring.get("usage_type")})
         return row
 
 
