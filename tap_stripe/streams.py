@@ -20,6 +20,9 @@ class Invoices(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "invoices"
+    
+    def expand(self,second_request = False):
+        return "data.discounts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -225,6 +228,9 @@ class Subscriptions(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "subscriptions"
+    
+    def expand(self,second_request = False):
+        return "data.discounts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
