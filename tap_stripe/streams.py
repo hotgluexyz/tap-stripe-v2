@@ -21,8 +21,11 @@ class Invoices(stripeStream):
     def path(self):
         return "events" if self.get_from_events else "invoices"
     
-    def expand(self,second_request = False):
-        return "data.discounts"
+    def expand(self):
+        if self.get_from_events:
+            return "discounts"
+        else:
+            return "data.discounts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -229,8 +232,11 @@ class Subscriptions(stripeStream):
     def path(self):
         return "events" if self.get_from_events else "subscriptions"
     
-    def expand(self,second_request = False):
-        return "data.discounts"
+    def expand(self):
+        if self.get_from_events:
+            return "discounts"
+        else:
+            return "data.discounts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -348,11 +354,11 @@ class Plans(stripeStream):
     event_filter = "plan.*"
     object = "plan"
 
-    def expand(self,second_request = False):
-        if not self.get_from_events: 
-            return "data.tiers"
-        elif second_request:
+    def expand(self):
+        if self.get_from_events:
             return "tiers"
+        else:
+            return "data.tiers"
 
     @property
     def path(self):
