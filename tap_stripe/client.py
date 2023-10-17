@@ -82,7 +82,7 @@ class stripeStream(RESTStream):
         if self.path=="events" and self.event_filter:
             params["type"] = self.event_filter
         
-        expansion = self.expand(second_request=False)
+        expansion = self.expand()
         if not self.get_from_events and expansion:
            params["expand[]"] = expansion
 
@@ -129,11 +129,11 @@ class stripeStream(RESTStream):
                 # using prices API instead of plans API
                 if self.name == "plans":
                     url = base_url + f"/v1/prices/{record['id']}"
-                else:  
+                else: 
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
-                if self.expand(second_request=True):
-                    params["expand[]"] = self.expand(second_request=True)
+                if self.expand():
+                    params["expand[]"] = self.expand()
             
                 response_obj = decorated_request(self.prepare_request_lines(url,params), {})
                 if response_obj.status_code in self.ignore_statuscode:
