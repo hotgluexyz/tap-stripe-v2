@@ -3,7 +3,7 @@
 from typing import Any, Optional, Iterable
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
-from tap_stripe.client import stripeStream  
+from tap_stripe.client import stripeStream
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -20,7 +20,7 @@ class Invoices(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "invoices"
-    
+
     def expand(self):
         if self.get_from_events:
             return "discounts"
@@ -160,10 +160,10 @@ class InvoiceLineItems(stripeStream):
         th.Property(
             "tax_rates", th.CustomType({"type": ["array", "object", "string"]})
         ),
-        th.Property("type", th.StringType),        
+        th.Property("type", th.StringType),
         th.Property("unit_amount_excluding_tax", th.StringType),
     ).to_dict()
-    
+
     def _request(
         self, prepared_request: requests.PreparedRequest, context: Optional[dict]
     ) -> requests.Response:
@@ -174,7 +174,7 @@ class InvoiceLineItems(stripeStream):
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         yield from extract_jsonpath(self.records_jsonpath, input=response)
-    
+
     def get_next_page_token(
         self, response: requests.Response, previous_token: Optional[Any]
     ) -> Optional[Any]:
@@ -231,7 +231,7 @@ class Subscriptions(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "subscriptions"
-    
+
     def expand(self):
         if self.get_from_events:
             return "discounts"
@@ -273,7 +273,7 @@ class Subscriptions(stripeStream):
         th.Property("payment_settings", th.CustomType({"type": ["object", "string"]})),
         th.Property("pending_invoice_item_interval", th.StringType),
         th.Property("pending_setup_intent", th.StringType),
-        th.Property("pending_update", th.StringType),
+        th.Property("pending_update", th.CustomType({"type": ["object", "string"]})),
         th.Property("plan", th.CustomType({"type": ["object", "string"]})),
         th.Property("quantity", th.NumberType),
         th.Property("schedule", th.StringType),
@@ -291,7 +291,7 @@ class Subscriptions(stripeStream):
         if not self.get_from_events:
             params["status"] = "all"
         return params
-        
+
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"subscription_id": record["id"]}
@@ -339,12 +339,12 @@ class SubscriptionItemStream(stripeStream):
         params = super().get_url_params(context, next_page_token)
         params["subscription"] = context["subscription_id"]
         return params
-    
+
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"subscription_item_id": record["id"]}
-    
-    
+
+
 
 class Plans(stripeStream):
     """Define Plans stream."""
@@ -383,7 +383,7 @@ class Plans(stripeStream):
         th.Property("product", th.StringType),
         th.Property("tiers_mode", th.StringType),
         th.Property("transform_usage", th.CustomType({"type": ["object", "string"]})),
-        th.Property("trial_period_days", th.NumberType),
+        th.Property("trial_period_days", th.CustomType({"type": ["object", "string", "number"]})),
         th.Property(
             "tiers",
             th.ArrayType(
@@ -416,7 +416,7 @@ class Plans(stripeStream):
                                     }
                                 }
                             }
-                            
+
                         ]
                     }
                 )
@@ -430,7 +430,7 @@ class Plans(stripeStream):
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
         row.update({"transform_usage": row.get("transform_quantity")})
-        
+
         # process fields for recurring prices
         recurring = row.get("recurring")
         if recurring:
@@ -657,13 +657,13 @@ class UsageRecordsStream(stripeStream):
     ).to_dict()
 
     def validate_response(self, response: requests.Response) -> None:
-       
+
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
         ):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
-      
 
-    
+
+
