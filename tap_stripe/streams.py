@@ -26,6 +26,12 @@ class Invoices(stripeStream):
             return "discounts"
         else:
             return "data.discounts"
+    
+    def lines_expand(self):
+        if self.get_from_events:
+            return "lines.data.discounts"
+        else:
+            return "data.lines.data.discounts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
