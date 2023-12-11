@@ -20,18 +20,15 @@ class Invoices(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "invoices"
-
-    def expand(self):
-        if self.get_from_events:
-            return "discounts"
-        else:
-            return "data.discounts"
     
-    def lines_expand(self):
+    @property
+    def expand(self):
+        # not expanding lines discount coupons 'applies_to' here because 
+        # stripe only allows expanding up to 4 levels of a property
         if self.get_from_events:
-            return "lines.data.discounts"
+            return ["discounts", "lines.data.discounts", "discounts.coupon.applies_to"]
         else:
-            return "data.lines.data.discounts"
+            return ["data.discounts", "data.lines.data.discounts", "data.discounts.coupon.applies_to"]
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -136,6 +133,11 @@ class InvoiceLineItems(stripeStream):
     parent_stream_type = Invoices
     path = "invoices/{invoice_id}/lines"
     records_jsonpath = "$.[*]"
+    get_from_events = False
+
+    @property
+    def expand(self):
+        return ["data.discounts", "data.discounts.coupon.applies_to"]
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -503,6 +505,13 @@ class Coupons(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "coupons"
+    
+    @property
+    def expand(self):
+        if self.get_from_events:
+            return ["applies_to"]
+        else:
+            return ["data.applies_to"]
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -521,6 +530,7 @@ class Coupons(stripeStream):
         th.Property("redeem_by", th.DateTimeType),
         th.Property("times_redeemed", th.IntegerType),
         th.Property("valid", th.BooleanType),
+        th.Property("applies_to", th.CustomType({"type": ["object", "string"]})),
     ).to_dict()
 
 

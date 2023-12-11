@@ -30,18 +30,13 @@ class stripeStream(RESTStream):
     ignore_statuscode = [404]
     params = {}
     invoice_lines = []
+    expand = []
 
     @cached
     def get_starting_time(self, context):
         start_date = parse(self.config.get("start_date"))
         rep_key = self.get_starting_timestamp(context)
         return rep_key or start_date
-
-    def expand(self):
-        return None
-    
-    def lines_expand(self):
-        return None
 
     @property
     def last_id_jsonpath(self):
@@ -84,13 +79,8 @@ class stripeStream(RESTStream):
             params["created[gt]"] = int(start_date.timestamp())
         if self.path=="events" and self.event_filter:
             params["type"] = self.event_filter
-        
-        expansion = self.expand()
-        if not self.get_from_events and expansion:
-           params["expand[]"] = expansion
-           lines_expand = self.lines_expand()
-           if lines_expand:
-               params["expand[]"] = [expansion, lines_expand]
+        if not self.get_from_events and self.expand:
+            params["expand[]"] = self.expand
         return params
 
     @property
@@ -137,11 +127,8 @@ class stripeStream(RESTStream):
                 else: 
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
-                if self.expand():
-                    params["expand[]"] = self.expand()
-                    lines_expand = self.lines_expand()
-                    if lines_expand:
-                        params["expand[]"] = [self.expand(), lines_expand]
+                if self.expand:
+                    params["expand[]"] = self.expand
             
                 response_obj = decorated_request(self.prepare_request_lines(url,params), {})
                 if response_obj.status_code in self.ignore_statuscode:
