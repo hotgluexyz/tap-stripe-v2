@@ -52,9 +52,7 @@ class OAuth2Authenticator(APIAuthenticatorBase):
 
     def update_access_token(self) -> None:
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        api_key = self.config.get("api_key")
-        if not api_key:
-            raise Exception("api_key is missing in the config file")
+
         token_response = requests.post(
             self._auth_endpoint, data=self.oauth_request_body, headers=headers, auth=(self.config.get("client_secret"),"")
         )
