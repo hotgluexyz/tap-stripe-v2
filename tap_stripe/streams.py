@@ -393,7 +393,7 @@ class Plans(stripeStream):
         th.Property("product", th.StringType),
         th.Property("tiers_mode", th.StringType),
         th.Property("transform_usage", th.CustomType({"type": ["object", "string"]})),
-        th.Property("trial_period_days", th.CustomType({"type": ["object", "string", "number"]})),
+        th.Property("trial_period_days", th.NumberType),
         th.Property(
             "tiers",
             th.ArrayType(
