@@ -207,7 +207,7 @@ class stripeStream(RESTStream):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
-            msg = self.response_error_message(response)
+            msg = response.text
             raise FatalAPIError(msg)
 
     def _write_state_message(self) -> None:
