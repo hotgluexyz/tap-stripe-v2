@@ -28,6 +28,7 @@ from tap_stripe.streams import (
     PayoutsStream,
     PromotionCodesStream,
     TransfersStream,
+    TaxRatesStream,
 )
 
 STREAM_TYPES = [
@@ -53,6 +54,7 @@ STREAM_TYPES = [
     PayoutsStream,
     PromotionCodesStream,
     TransfersStream,
+    TaxRatesStream
 ]
 
 
