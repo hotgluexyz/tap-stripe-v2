@@ -721,9 +721,12 @@ class BalanceTransactionsStream(stripeStream):
 class ChargesStream(stripeStream):
 
     name = "charges"
-    path = "charges"
     object = "charges"
-    replication_key = "created"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "charges"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -739,6 +742,7 @@ class ChargesStream(stripeStream):
         th.Property("Stripe", th.StringType),
         th.Property("captured", th.BooleanType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("customer", th.StringType),
         th.Property("description", th.StringType),
@@ -774,14 +778,18 @@ class ChargesStream(stripeStream):
 class CheckoutSessionsStream(stripeStream):
 
     name = "checkout_sessions"
-    path = "checkout/sessions"
     object = "checkout.session"
-    replication_key = "created"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "checkout/sessions"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("after_expiration", th.CustomType({"type": ["object", "string"]})),
         th.Property("allow_promotion_codes", th.BooleanType),
         th.Property("amount_subtotal", th.NumberType),
@@ -833,6 +841,7 @@ class CreditNoteLineItemsStream(stripeStream):
     path = "credit_notes/{credit_note_id}/lines"
     object = "credit_note_line_item"
     parent_stream_type = CreditNotes
+    get_from_events = False
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -855,15 +864,18 @@ class CreditNoteLineItemsStream(stripeStream):
 class DisputesStream(stripeStream):
 
     name = "disputes"
-    path = "issuing/disputes"
     object = "issuing.dispute"
-    replication_key = "created"
+    replication_key = "updated"
     
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "issuing/disputes"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("evidence", th.CustomType({"type": ["object", "string"]})),
         th.Property("livemode", th.BooleanType),
@@ -875,15 +887,19 @@ class DisputesStream(stripeStream):
 class PaymentIntentsStream(stripeStream):
 
     name = "payment_intents"
-    path = "payment_intents"
     object = "payment_intent"
-    replication_key = "created"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "payment_intents"
     
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("amount", th.NumberType),
         th.Property("amount_capturable", th.NumberType),
         th.Property("amount_details", th.CustomType({"type": ["object", "string"]})),
@@ -923,15 +939,18 @@ class PaymentIntentsStream(stripeStream):
 class PayoutsStream(stripeStream):
 
     name = "payouts"
-    path = "payouts"
     object = "payout"
-    replication_key = "created"
+    replication_key = "updated"
     
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "payouts"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("amount", th.NumberType),
         th.Property("arrival_date", th.DateTimeType),
         th.Property("automatic", th.BooleanType),
@@ -957,15 +976,18 @@ class PayoutsStream(stripeStream):
 class PromotionCodesStream(stripeStream):
 
     name = "promotion_codes"
-    path = "promotion_codes"
     object = "promotion_code"
-    replication_key = "created"
+    replication_key = "updated"
     
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "promotion_codes"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("active", th.BooleanType),
         th.Property("code", th.StringType),
         th.Property("coupon", th.CustomType({"type": ["object", "string"]})),
@@ -982,15 +1004,18 @@ class PromotionCodesStream(stripeStream):
 class TransfersStream(stripeStream):
 
     name = "transfers"
-    path = "transfers"
     object = "transfer"
-    replication_key = "created"
+    replication_key = "updated"
     
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "transfers"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("amount", th.NumberType),
         th.Property("amount_reversed", th.NumberType),
         th.Property("balance_transaction", th.StringType),
