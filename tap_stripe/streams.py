@@ -494,6 +494,12 @@ class CreditNotes(stripeStream):
         th.Property("type", th.StringType),
         th.Property("voided_at", th.DateTimeType),
     ).to_dict()
+    
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {
+            "credit_note_id": record["id"],
+        }
 
 
 class Coupons(stripeStream):
@@ -707,6 +713,350 @@ class TaxRatesStream(stripeStream):
         th.Property("tax_type", th.StringType),
         
     ).to_dict()        
+
+
+class BalanceTransactionsStream(stripeStream):
+
+    name = "balance_transactions"
+    path = "balance_transactions"
+    object = "balance_transactions"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("available_on", th.NumberType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("fee", th.NumberType),
+        th.Property("fee_details", th.CustomType({"type": ["array", "string"]})),
+        th.Property("net", th.NumberType),
+        th.Property("reporting_category", th.StringType),
+        th.Property("source", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("type", th.StringType),
+        th.Property("invoice", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("period", th.CustomType({"type": ["object", "string"]})),
+        th.Property("subscription_item", th.StringType),
+        th.Property("total_usage", th.IntegerType),
+    ).to_dict()
+    
+class ChargesStream(stripeStream):
+
+    name = "charges"
+    object = "charges"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "charges"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("amount_captured", th.NumberType),
+        th.Property("amount_refunded", th.NumberType),
+        th.Property("application", th.StringType),
+        th.Property("application_fee", th.StringType),
+        th.Property("application_fee_amount", th.NumberType),
+        th.Property("balance_transaction", th.StringType),
+        th.Property("billing_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("Stripe", th.StringType),
+        th.Property("captured", th.BooleanType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("customer", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("disputed", th.BooleanType),
+        th.Property("failure_balance_transaction", th.StringType),
+        th.Property("failure_code", th.StringType),
+        th.Property("failure_message", th.StringType),
+        th.Property("fraud_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("invoice", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("on_behalf_of", th.StringType),
+        th.Property("on_behalf_of", th.StringType),
+        th.Property("outcome", th.CustomType({"type": ["object", "string"]})),
+        th.Property("paid", th.BooleanType),
+        th.Property("payment_intent", th.StringType),
+        th.Property("payment_method", th.StringType),
+        th.Property("payment_method_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("receipt_email", th.StringType),
+        th.Property("receipt_url", th.StringType),
+        th.Property("refunded", th.BooleanType),
+        th.Property("review", th.StringType),
+        th.Property("source_transfer", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("statement_descriptor_suffix", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_group", th.StringType),
+       
+    ).to_dict()
+
+class CheckoutSessionsStream(stripeStream):
+
+    name = "checkout_sessions"
+    object = "checkout.session"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "checkout/sessions"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("after_expiration", th.CustomType({"type": ["object", "string"]})),
+        th.Property("allow_promotion_codes", th.BooleanType),
+        th.Property("amount_subtotal", th.NumberType),
+        th.Property("amount_total", th.NumberType),
+        th.Property("automatic_tax", th.CustomType({"type": ["object", "string"]})),
+        th.Property("billing_address_collection", th.CustomType({"type": ["object", "string"]})),
+        th.Property("cancel_url", th.StringType),
+        th.Property("client_reference_id", th.StringType),
+        th.Property("consent", th.CustomType({"type": ["object", "string"]})),
+        th.Property("consent_collection", th.CustomType({"type": ["object", "string"]})),
+        th.Property("currency", th.StringType),
+        th.Property("custom_fields", th.CustomType({"type": ["array", "string"]})),
+        th.Property("custom_text", th.CustomType({"type": ["object", "string"]})),
+        th.Property("customer_creation", th.StringType),
+        th.Property("customer_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("customer_email", th.StringType),
+        th.Property("expires_at", th.NumberType),
+        th.Property("invoice", th.StringType),
+        th.Property("invoice_creation", th.CustomType({"type": ["object", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("locale", th.StringType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("mode", th.StringType),
+        th.Property("payment_intent", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_link", th.StringType),
+        th.Property("payment_method_collection", th.StringType),
+        th.Property("payment_method_options", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_method_types", th.CustomType({"type": ["array", "string"]})),
+        th.Property("payment_status", th.StringType),
+        th.Property("phone_number_collection", th.CustomType({"type": ["object", "string"]})),
+        th.Property("recovered_from", th.StringType),
+        th.Property("setup_intent", th.StringType),
+        th.Property("shipping_cost", th.CustomType({"type": ["object", "string"]})),
+        th.Property("shipping_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("shipping_options", th.CustomType({"type": ["array", "string"]})),
+        th.Property("status", th.StringType),
+        th.Property("submit_type", th.StringType),
+        th.Property("subscription", th.StringType),
+        th.Property("success_url", th.StringType),
+        th.Property("total_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("url", th.StringType),
+       
+    ).to_dict()
+
+
+class CreditNoteLineItemsStream(stripeStream):
+
+    name = "credit_note_line_items"
+    path = "credit_notes/{credit_note_id}/lines"
+    object = "credit_note_line_item"
+    parent_stream_type = CreditNotes
+    get_from_events = False
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("amount_excluding_tax", th.NumberType),
+        th.Property("description", th.StringType),
+        th.Property("discount_amount", th.NumberType),
+        th.Property("discount_amounts", th.CustomType({"type": ["array", "string"]})),
+        th.Property("invoice_line_item", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("quantity", th.NumberType),
+        th.Property("tax_amounts", th.CustomType({"type": ["array", "string"]})),
+        th.Property("tax_rates", th.CustomType({"type": ["array", "string"]})),
+        th.Property("type", th.StringType),
+        th.Property("unit_amount", th.NumberType),
+        th.Property("unit_amount_decimal", th.StringType),
+        th.Property("unit_amount_excluding_tax", th.StringType),
+    ).to_dict()
+class DisputesStream(stripeStream):
+
+    name = "disputes"
+    object = "issuing.dispute"
+    replication_key = "updated"
+    
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "issuing/disputes"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("evidence", th.CustomType({"type": ["object", "string"]})),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("status", th.StringType),
+        th.Property("transaction", th.StringType),
+        
+    ).to_dict()
+class PaymentIntentsStream(stripeStream):
+
+    name = "payment_intents"
+    object = "payment_intent"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "payment_intents"
+    
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("amount", th.NumberType),
+        th.Property("amount_capturable", th.NumberType),
+        th.Property("amount_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("application", th.StringType),
+        th.Property("application_fee_amount", th.NumberType),
+        th.Property("application", th.StringType),
+        th.Property("automatic_payment_methods", th.CustomType({"type": ["object", "string"]})),
+        th.Property("canceled_at", th.NumberType),
+        th.Property("cancellation_reason", th.StringType),
+        th.Property("capture_method", th.StringType),
+        th.Property("client_secret", th.StringType),
+        th.Property("confirmation_method", th.StringType),
+        th.Property("currency", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("last_payment_error", th.CustomType({"type": ["object", "string"]})),
+        th.Property("latest_charge", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("next_action", th.CustomType({"type": ["object", "string"]})),
+        th.Property("on_behalf_of", th.StringType),
+        th.Property("payment_method", th.StringType),
+        th.Property("payment_method_options", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_method_types", th.CustomType({"type": ["array", "string"]})),
+        th.Property("processing", th.CustomType({"type": ["object", "string"]})),
+        th.Property("receipt_email", th.StringType),
+        th.Property("review", th.StringType),
+        th.Property("setup_future_usage", th.StringType),
+        th.Property("shipping", th.StringType),
+        th.Property("source", th.StringType),
+        th.Property("statement_descriptor_suffix", th.StringType),
+        th.Property("statement_descriptor_suffix", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("transfer_data", th.CustomType({"type": ["object", "string"]})),
+        th.Property("transfer_group", th.StringType),
+        
+    ).to_dict()
+class PayoutsStream(stripeStream):
+
+    name = "payouts"
+    object = "payout"
+    replication_key = "updated"
+    
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "payouts"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("amount", th.NumberType),
+        th.Property("arrival_date", th.DateTimeType),
+        th.Property("automatic", th.BooleanType),
+        th.Property("balance_transaction", th.StringType),
+        th.Property("currency", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("destination", th.StringType),
+        th.Property("failure_balance_transaction", th.StringType),
+        th.Property("failure_code", th.StringType),
+        th.Property("failure_message", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("method", th.StringType),
+        th.Property("original_payout", th.StringType),
+        th.Property("reconciliation_status", th.StringType),
+        th.Property("reversed_by", th.StringType),
+        th.Property("source_type", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("type", th.StringType),
+        
+    ).to_dict()
+class PromotionCodesStream(stripeStream):
+
+    name = "promotion_codes"
+    object = "promotion_code"
+    replication_key = "updated"
+    
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "promotion_codes"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("active", th.BooleanType),
+        th.Property("code", th.StringType),
+        th.Property("coupon", th.CustomType({"type": ["object", "string"]})),
+        th.Property("customer", th.StringType),
+        th.Property("expires_at", th.DateTimeType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("customer", th.StringType),
+        th.Property("max_redemptions", th.NumberType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("restrictions", th.CustomType({"type": ["object", "string"]})),
+        th.Property("times_redeemed", th.NumberType),
+    ).to_dict()
+
+class TransfersStream(stripeStream):
+
+    name = "transfers"
+    object = "transfer"
+    replication_key = "updated"
+    
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "transfers"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("amount", th.NumberType),
+        th.Property("amount_reversed", th.NumberType),
+        th.Property("balance_transaction", th.StringType),
+        th.Property("currency", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("destination", th.StringType),
+        th.Property("destination_payment", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("reversals", th.CustomType({"type": ["object", "string"]})),
+        th.Property("reversed", th.BooleanType),
+        th.Property("source_transaction", th.StringType),
+        th.Property("source_type", th.StringType),
+        th.Property("transfer_group", th.StringType),
+        
+    ).to_dict()
 
 
 
