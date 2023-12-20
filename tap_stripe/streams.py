@@ -683,5 +683,30 @@ class UsageRecordsStream(stripeStream):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
 
+class TaxRatesStream(stripeStream):
+
+    name = "tax_rates"
+    path = "tax_rates"
+    object = "tax_rate"
+    replication_key = "created"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("active", th.BooleanType),
+        th.Property("country", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("display_name", th.StringType),
+        th.Property("inclusive", th.BooleanType),
+        th.Property("jurisdiction", th.StringType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("percentage", th.NumberType),
+        th.Property("state", th.StringType),
+        th.Property("state", th.StringType),
+        th.Property("tax_type", th.StringType),
+        
+    ).to_dict()        
+
 
 
