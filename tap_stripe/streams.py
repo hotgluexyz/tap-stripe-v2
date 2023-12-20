@@ -695,7 +695,6 @@ class BalanceTransactionsStream(stripeStream):
     name = "balance_transactions"
     path = "balance_transactions"
     object = "balance_transactions"
-    replication_key = "created"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
