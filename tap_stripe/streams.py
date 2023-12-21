@@ -688,8 +688,7 @@ class TaxRatesStream(stripeStream):
     name = "tax_rates"
     path = "tax_rates"
     object = "tax_rate"
-    replication_key = "created"
-
+    
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
