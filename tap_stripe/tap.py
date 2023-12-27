@@ -61,6 +61,17 @@ STREAM_TYPES = [
 class Tapstripe(Tap):
     """stripe tap class."""
 
+    def __init__(
+        self,
+        config=None,
+        catalog=None,
+        state=None,
+        parse_env_config=False,
+        validate_config=True,
+    ) -> None:
+        super().__init__(config, catalog, state, parse_env_config, validate_config)
+        self.config_file = config[0]
+
     name = "tap-stripe-v2"
 
     config_jsonschema = th.PropertiesList(

@@ -13,6 +13,7 @@ from pendulum import parse
 from typing import Any, Callable, Dict, Iterable, Optional
 import backoff
 from singer_sdk.exceptions import RetriableAPIError, FatalAPIError
+from tap_stripe.auth import OAuth2Authenticator
 
 import singer
 from singer import StateMessage
@@ -44,11 +45,14 @@ class stripeStream(RESTStream):
         return f"{jsonpath}.id"
 
     @property
-    def authenticator(self) -> BearerTokenAuthenticator:
+    def authenticator(self):
         """Return a new authenticator object."""
-        return BearerTokenAuthenticator.create_for_stream(
-            self, token=self.config.get("client_secret")
-        )
+        if self.config.get("refresh_token"):
+            return OAuth2Authenticator(self, self.config, "https://connect.stripe.com/oauth/token")
+        else:
+            return BearerTokenAuthenticator.create_for_stream(
+                self, token=self.config.get("client_secret")
+            )
 
     @property
     def http_headers(self) -> dict:
