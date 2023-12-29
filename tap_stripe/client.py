@@ -104,8 +104,13 @@ class stripeStream(RESTStream):
                 dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
-       
-
+    
+    @property
+    def not_sync_invoice_status(self):
+        not_sync_invoice_status = self.config.get("inc_sync_ignore_invoice_status")
+        if not_sync_invoice_status:
+            return not_sync_invoice_status.split(",")
+        return []
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
@@ -118,7 +123,7 @@ class stripeStream(RESTStream):
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
                 # when the invoice is deleted or draft
-                if record.get("status") in ["deleted", "draft"]:
+                if record.get("status") in self.not_sync_invoice_status:
                     self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
                 # using prices API instead of plans API
