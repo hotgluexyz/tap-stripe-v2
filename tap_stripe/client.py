@@ -110,7 +110,7 @@ class stripeStream(RESTStream):
         not_sync_invoice_status = self.config.get("inc_sync_ignore_invoice_status")
         if not_sync_invoice_status:
             return not_sync_invoice_status.split(",")
-        return []
+        return ["deleted"]
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
@@ -122,7 +122,7 @@ class stripeStream(RESTStream):
                 record_id = record.get("id")
                 if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
                     continue
-                # when the invoice is deleted or draft
+                # filter status that we need to ignore, ignore deleted status as default
                 if record.get("status") in self.not_sync_invoice_status:
                     self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
