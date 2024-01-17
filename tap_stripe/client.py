@@ -57,6 +57,8 @@ class stripeStream(RESTStream):
         """Return headers dict to be used for HTTP requests."""
         result = self._http_headers
         result["Stripe-Version"] = "2022-11-15"
+        if self.config.get("account_id"):
+            result["Stripe-Account"] = self.config.get("account_id")
         return result
 
     def get_next_page_token(
