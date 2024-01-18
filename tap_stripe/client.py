@@ -47,7 +47,7 @@ class stripeStream(RESTStream):
     def authenticator(self) -> BearerTokenAuthenticator:
         """Return a new authenticator object."""
         return BearerTokenAuthenticator.create_for_stream(
-            self, token=self.config.get("client_secret")
+            self, token=self.config.get("access_token") or self.config.get("client_secret")
         )
 
     @property
