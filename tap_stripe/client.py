@@ -200,7 +200,33 @@ class stripeStream(RESTStream):
             factor=2,
         )(func)
         return decorator
-    
+
+
+    def response_error_message(self, response: requests.Response) -> str:
+        """Build error message for invalid http statuses.
+
+        Args:
+            response: A `requests.Response`_ object.
+
+        Returns:
+            str: The error message
+        """
+        if 400 <= response.status_code < 500:
+            error_type = "Client"
+        else:
+            error_type = "Server"
+
+        response_content = response.json()
+
+        if response_content.get("error"):
+            error = response_content.get("error")
+            return f'Error: {error.get("message")} at path {self.path}'
+
+        return (
+            f"{response.status_code} {error_type} Error: "
+            f"{response.reason} for path: {self.path}"
+        )
+
     def validate_response(self, response: requests.Response) -> None:
         if (
             response.status_code in self.extra_retry_statuses
@@ -209,7 +235,7 @@ class stripeStream(RESTStream):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
-            msg = response.text
+            msg = self.response_error_message(response)
             raise FatalAPIError(msg)
 
     def _write_state_message(self) -> None:
