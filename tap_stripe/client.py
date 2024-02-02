@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, Optional, cast
 
 import requests
+from requests.exceptions import JSONDecodeError
 from memoization import cached
 from backports.cached_property import cached_property
 from singer_sdk.authenticators import BearerTokenAuthenticator
@@ -216,15 +217,19 @@ class stripeStream(RESTStream):
         else:
             error_type = "Server"
 
-        response_content = response.json()
-
-        if response_content.get("error"):
-            error = response_content.get("error")
-            return f'Error: {error.get("message")} at path {self.path}'
+        try:
+            response_content = response.json()
+    
+            if response_content.get("error"):
+                error = response_content.get("error")
+                return f'Error: {error.get("message")} at path {self.path}'
+        except JSONDecodeError:
+            # ignore JSON errors
+            pass
 
         return (
             f"{response.status_code} {error_type} Error: "
-            f"{response.reason} for path: {self.path}"
+            f"{response.text} for path: {self.path}"
         )
 
     def validate_response(self, response: requests.Response) -> None:
