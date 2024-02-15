@@ -360,7 +360,7 @@ class Plans(stripeStream):
 
     name = "plans"
     replication_key = "updated"
-    event_filter = "plan.*"
+    event_filter = ["plan.*", "customer.subscription.updated"]
     object = "plan"
 
     @property

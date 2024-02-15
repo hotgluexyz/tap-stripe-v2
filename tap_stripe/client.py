@@ -77,10 +77,10 @@ class stripeStream(RESTStream):
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
-        if self.replication_key and self.path!="credit_notes":
+        if self.replication_key and self.path != "credit_notes":
             start_date = self.get_starting_time(context)
             params["created[gt]"] = int(start_date.timestamp())
-        if self.path=="events" and self.event_filter:
+        if self.path == "events" and self.event_filter:
             params["type"] = self.event_filter
         if not self.get_from_events and self.expand:
             params["expand[]"] = self.expand
@@ -90,7 +90,7 @@ class stripeStream(RESTStream):
     def get_from_events(self):
         state_date = self.get_starting_time({}).replace(tzinfo=None)
         start_date = parse(self.config.get("start_date")).replace(tzinfo=None)
-        return state_date!=start_date
+        return state_date != start_date
 
     @cached_property
     def datetime_fields(self):
@@ -107,33 +107,66 @@ class stripeStream(RESTStream):
                 dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
-       
-
-
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
-        for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
-            if self.path=="events" and self.event_filter:
+        records = extract_jsonpath(self.records_jsonpath, input=response.json())
+
+
+        if self.name == "plans":
+            records = list(records)
+            # for plans get all prices, including the updated ones from subscriptions
+            plans = [plan for plan in records if plan["type"].startswith("plan")]
+            # Extract plans from the subscriptions
+            subscription_plans = []
+            [subscription_plans.extend(item.get("data", {}).get("object", {}).get("items", {}).get("data", [])) for item in records if item["type"] == "customer.subscription.updated"]
+            subscription_plans = [item["plan"] for item in subscription_plans]
+            # clean duplicated prices
+            subscription_plans = list({obj["id"]: obj for obj in subscription_plans}.values())
+
+            # Combine both sets of plans
+            records = plans + subscription_plans
+
+        for record in records:
+            if self.path == "events" and self.event_filter:
                 event_date = record["created"]
-                record = record["data"]["object"]
+                if self.name != "plans":
+                    record = record["data"]["object"]
                 record_id = record.get("id")
-                if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
+                if (
+                    not record_id
+                    or (record_id in self.event_ids)
+                    or (
+                        self.object != record["object"]
+                        if self.object != "plan"
+                        else False
+                    )
+                ):
                     continue
                 # when the invoice is deleted or draft
                 if record.get("status") in ["deleted", "draft"]:
-                    self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
+                    self.logger.debug(
+                        f"{self.name} with id {record_id} skipped due to status {record.get('status')}"
+                    )
                     continue
                 # using prices API instead of plans API
                 if self.name == "plans":
-                    url = base_url + f"/v1/prices/{record['id']}"
-                else: 
+                    # check if there is a price coming from an updated subscription
+                    if record["object"] == "subscription":
+                        record_id = (record.get("plan") or {}).get("id")
+                    if record_id:
+                        url = base_url + f"/v1/prices/{record_id}"
+                    else:
+                        continue
+                else:
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
                 if self.expand:
                     params["expand[]"] = self.expand
-            
-                response_obj = decorated_request(self.prepare_request_lines(url,params), {})
+
+                response_obj = decorated_request(
+                    self.prepare_request_lines(url, params), {}
+                )
                 if response_obj.status_code in self.ignore_statuscode:
                     self.logger.debug(f"{self.name} with id {record_id} skipped")
                     continue
