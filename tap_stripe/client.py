@@ -113,7 +113,7 @@ class stripeStream(RESTStream):
         records = extract_jsonpath(self.records_jsonpath, input=response.json())
 
 
-        if self.name == "plans":
+        if self.name == "plans" and self.path == "events":
             records = list(records)
             # for plans get all prices, including the updated ones from subscriptions
             plans = [plan for plan in records if plan["type"].startswith("plan")]
