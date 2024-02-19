@@ -362,17 +362,28 @@ class Plans(stripeStream):
     replication_key = "updated"
     event_filter = ["plan.*", "customer.subscription.updated"]
     object = "plan"
+    from_invoice_items = False
 
     @property
     def expand(self):
         if self.get_from_events:
             return ["tiers"]
         else:
-            return ["data.tiers"]
+            if self.from_invoice_items:
+                return ["data.price.tiers"]
+            else:
+                return ["data.tiers"]
 
     @property
     def path(self):
-        return "events" if self.get_from_events else "prices"
+        # get prices from invoiceitems and prices in a full sync
+        if not self.get_from_events:
+            if self.from_invoice_items:
+                return "invoiceitems"
+            else:
+                return "prices" 
+        else:   
+            return "events"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -440,6 +451,7 @@ class Plans(stripeStream):
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
         row.update({"transform_usage": row.get("transform_quantity")})
+        row.update({"updated": row.get("created")})
 
         # process fields for recurring prices
         recurring = row.get("recurring")
@@ -450,6 +462,41 @@ class Plans(stripeStream):
             row.update({"trial_period_days": recurring.get("trial_period_days")})
             row.update({"usage_type": recurring.get("usage_type")})
         return row
+    
+    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
+        # activate flag if it's a full sync to fetch prices from invoiceitems
+        if not self.stream_state.get("replication_key"):
+            self.from_invoice_items = True
+        return super().request_records(context)
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        if self.from_invoice_items:
+            items = response.json()["data"]
+            prices = [item["price"] for item in items]
+            for record in prices:
+                # clean dupplicate prices from invoice items
+                if record["id"] not in stripeStream.prices_ids:
+                    stripeStream.prices_ids.append(record["id"])
+                    yield record
+        else:
+            for record in super().parse_response(response):
+                yield record
+    
+    def get_next_page_token(self, response, previous_token):
+        next_page_token = super().get_next_page_token(response, previous_token)
+        # get a dummy next page token to iterate first through invoice_items and then through prices
+        if self.from_invoice_items and not next_page_token:
+            next_page_token = 1
+            self.from_invoice_items = False
+        return next_page_token
+    
+    def get_url_params(self, context, next_page_token):
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        # delete the dummy next page token to avoid errors
+        if not self.from_invoice_items and next_page_token == 1:
+            del params["starting_after"]
+        return params
 
 
 class CreditNotes(stripeStream):

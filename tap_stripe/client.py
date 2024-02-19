@@ -32,6 +32,7 @@ class stripeStream(RESTStream):
     params = {}
     invoice_lines = []
     expand = []
+    prices_ids = []
 
     @cached
     def get_starting_time(self, context):
@@ -107,6 +108,7 @@ class stripeStream(RESTStream):
                 dt_field = datetime.utcfromtimestamp(int(row[field]))
                 row[field] = dt_field.isoformat()
         return row
+    
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
@@ -151,13 +153,12 @@ class stripeStream(RESTStream):
                     continue
                 # using prices API instead of plans API
                 if self.name == "plans":
-                    # check if there is a price coming from an updated subscription
-                    if record["object"] == "subscription":
-                        record_id = (record.get("plan") or {}).get("id")
-                    if record_id:
-                        url = base_url + f"/v1/prices/{record_id}"
-                    else:
+                    # check for dupplicates in incremental sync prices
+                    if record_id in stripeStream.prices_ids:
                         continue
+                    else:
+                        url = base_url + f"/v1/prices/{record_id}"
+                        stripeStream.prices_ids.append(record_id)
                 else:
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
@@ -191,6 +192,11 @@ class stripeStream(RESTStream):
                         lines.extend(response_data)
                     record["lines"]["data"] = lines
                     record["lines"]["has_more"] = False
+            if hasattr(self, "from_invoice_items"):
+                # check for dupplicates in a full sync in prices
+                if self.from_invoice_items:
+                    if record["id"] in stripeStream.prices_ids:
+                        continue
             yield record
 
     def get_next_page_token_lines(self, response: requests.Response) -> Optional[Any]:
