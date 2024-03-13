@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, Optional, cast
 
 import requests
+from requests.exceptions import JSONDecodeError
 from memoization import cached
 from backports.cached_property import cached_property
 from singer_sdk.authenticators import BearerTokenAuthenticator
@@ -31,6 +32,7 @@ class stripeStream(RESTStream):
     params = {}
     invoice_lines = []
     expand = []
+    prices_ids = []
 
     @cached
     def get_starting_time(self, context):
@@ -47,7 +49,7 @@ class stripeStream(RESTStream):
     def authenticator(self) -> BearerTokenAuthenticator:
         """Return a new authenticator object."""
         return BearerTokenAuthenticator.create_for_stream(
-            self, token=self.config.get("client_secret")
+            self, token=self.config.get("access_token") or self.config.get("client_secret")
         )
 
     @property
@@ -55,6 +57,8 @@ class stripeStream(RESTStream):
         """Return headers dict to be used for HTTP requests."""
         result = self._http_headers
         result["Stripe-Version"] = "2022-11-15"
+        if self.config.get("account_id"):
+            result["Stripe-Account"] = self.config.get("account_id")
         return result
 
     def get_next_page_token(
@@ -74,10 +78,10 @@ class stripeStream(RESTStream):
         params["limit"] = self._page_size
         if next_page_token:
             params["starting_after"] = next_page_token
-        if self.replication_key and self.path!="credit_notes":
+        if self.replication_key and self.path != "credit_notes":
             start_date = self.get_starting_time(context)
             params["created[gt]"] = int(start_date.timestamp())
-        if self.path=="events" and self.event_filter:
+        if self.path == "events" and self.event_filter:
             params["type"] = self.event_filter
         if not self.get_from_events and self.expand:
             params["expand[]"] = self.expand
@@ -87,7 +91,7 @@ class stripeStream(RESTStream):
     def get_from_events(self):
         state_date = self.get_starting_time({}).replace(tzinfo=None)
         start_date = parse(self.config.get("start_date")).replace(tzinfo=None)
-        return state_date!=start_date
+        return state_date != start_date
 
     @cached_property
     def datetime_fields(self):
@@ -115,27 +119,61 @@ class stripeStream(RESTStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
-        for record in extract_jsonpath(self.records_jsonpath, input=response.json()):
-            if self.path=="events" and self.event_filter:
+        records = extract_jsonpath(self.records_jsonpath, input=response.json())
+
+
+        if self.name == "plans" and self.path == "events":
+            records = list(records)
+            # for plans get all prices, including the updated ones from subscriptions
+            plans = [plan for plan in records if plan["type"].startswith("plan")]
+            # Extract plans from the subscriptions
+            subscription_plans = []
+            [subscription_plans.extend(item.get("data", {}).get("object", {}).get("items", {}).get("data", [])) for item in records if item["type"] == "customer.subscription.updated"]
+            subscription_plans = [item["plan"] for item in subscription_plans]
+            # clean duplicated prices
+            subscription_plans = list({obj["id"]: obj for obj in subscription_plans}.values())
+
+            # Combine both sets of plans
+            records = plans + subscription_plans
+
+        for record in records:
+            if self.path == "events" and self.event_filter:
                 event_date = record["created"]
-                record = record["data"]["object"]
+                if self.name != "plans":
+                    record = record["data"]["object"]
                 record_id = record.get("id")
-                if not record_id or (record_id in self.event_ids) or (self.object!=record["object"]):
+                if (
+                    not record_id
+                    or (record_id in self.event_ids)
+                    or (
+                        self.object != record["object"]
+                        if self.object != "plan"
+                        else False
+                    )
+                ):
                     continue
+
                 # filter status that we need to ignore, ignore deleted status as default
                 if record.get("status") in self.not_sync_invoice_status:
                     self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
                 # using prices API instead of plans API
                 if self.name == "plans":
-                    url = base_url + f"/v1/prices/{record['id']}"
-                else: 
+                    # check for dupplicates in incremental sync prices
+                    if record_id in stripeStream.prices_ids:
+                        continue
+                    else:
+                        url = base_url + f"/v1/prices/{record_id}"
+                        stripeStream.prices_ids.append(record_id)
+                else:
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
                 if self.expand:
                     params["expand[]"] = self.expand
-            
-                response_obj = decorated_request(self.prepare_request_lines(url,params), {})
+
+                response_obj = decorated_request(
+                    self.prepare_request_lines(url, params), {}
+                )
                 if response_obj.status_code in self.ignore_statuscode:
                     self.logger.debug(f"{self.name} with id {record_id} skipped")
                     continue
@@ -160,6 +198,11 @@ class stripeStream(RESTStream):
                         lines.extend(response_data)
                     record["lines"]["data"] = lines
                     record["lines"]["has_more"] = False
+            if hasattr(self, "from_invoice_items"):
+                # check for dupplicates in a full sync in prices
+                if self.from_invoice_items:
+                    if record["id"] in stripeStream.prices_ids:
+                        continue
             yield record
 
     def get_next_page_token_lines(self, response: requests.Response) -> Optional[Any]:
@@ -203,7 +246,37 @@ class stripeStream(RESTStream):
             factor=2,
         )(func)
         return decorator
+
+
+    def response_error_message(self, response: requests.Response) -> str:
+        """Build error message for invalid http statuses.
+
+        Args:
+            response: A `requests.Response`_ object.
+
+        Returns:
+            str: The error message
+        """
+        if 400 <= response.status_code < 500:
+            error_type = "Client"
+        else:
+            error_type = "Server"
+
+        try:
+            response_content = response.json()
     
+            if response_content.get("error"):
+                error = response_content.get("error")
+                return f'Error: {error.get("message")} at path {self.path}'
+        except JSONDecodeError:
+            # ignore JSON errors
+            pass
+
+        return (
+            f"{response.status_code} {error_type} Error: "
+            f"{response.text} for path: {self.path}"
+        )
+
     def validate_response(self, response: requests.Response) -> None:
         if (
             response.status_code in self.extra_retry_statuses
@@ -212,7 +285,7 @@ class stripeStream(RESTStream):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
-            msg = response.text
+            msg = self.response_error_message(response)
             raise FatalAPIError(msg)
 
     def _write_state_message(self) -> None:
