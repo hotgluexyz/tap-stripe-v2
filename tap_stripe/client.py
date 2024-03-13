@@ -109,6 +109,13 @@ class stripeStream(RESTStream):
                 row[field] = dt_field.isoformat()
         return row
     
+    @property
+    def not_sync_invoice_status(self):
+        not_sync_invoice_status = self.config.get("inc_sync_ignore_invoice_status")
+        if not_sync_invoice_status:
+            return not_sync_invoice_status.split(",")
+        return ["deleted"]
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
@@ -145,11 +152,10 @@ class stripeStream(RESTStream):
                     )
                 ):
                     continue
-                # when the invoice is deleted or draft
-                if record.get("status") in ["deleted", "draft"]:
-                    self.logger.debug(
-                        f"{self.name} with id {record_id} skipped due to status {record.get('status')}"
-                    )
+
+                # filter status that we need to ignore, ignore deleted status as default
+                if record.get("status") in self.not_sync_invoice_status:
+                    self.logger.debug(f"{self.name} with id {record_id} skipped due to status {record.get('status')}")
                     continue
                 # using prices API instead of plans API
                 if self.name == "plans":
