@@ -3,7 +3,7 @@
 from typing import Any, Optional, Iterable
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
-from tap_stripe.client import stripeStream
+from tap_stripe.client import stripeStream, StripeStreamV2
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -355,12 +355,11 @@ class SubscriptionItemStream(stripeStream):
 
 
 
-class Plans(stripeStream):
+class Plans(StripeStreamV2):
     """Define Plans stream."""
 
     name = "plans"
     replication_key = "updated"
-    event_filter = ["plan.*", "customer.subscription.updated"]
     object = "plan"
     from_invoice_items = False
 
@@ -463,11 +462,6 @@ class Plans(stripeStream):
             row.update({"usage_type": recurring.get("usage_type")})
         return row
     
-    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
-        # activate flag if it's a full sync to fetch prices from invoiceitems
-        if not self.stream_state.get("replication_key"):
-            self.from_invoice_items = True
-        return super().request_records(context)
     
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         if self.from_invoice_items:
@@ -475,28 +469,13 @@ class Plans(stripeStream):
             prices = [item["price"] for item in items]
             for record in prices:
                 # clean dupplicate prices from invoice items
-                if record["id"] not in stripeStream.prices_ids:
-                    stripeStream.prices_ids.append(record["id"])
+                if record["id"] not in self.fullsync_ids:
+                    self.fullsync_ids.append(record["id"])
                     yield record
         else:
             for record in super().parse_response(response):
                 yield record
-    
-    def get_next_page_token(self, response, previous_token):
-        next_page_token = super().get_next_page_token(response, previous_token)
-        # get a dummy next page token to iterate first through invoice_items and then through prices
-        if self.from_invoice_items and not next_page_token:
-            next_page_token = 1
-            self.from_invoice_items = False
-        return next_page_token
-    
-    def get_url_params(self, context, next_page_token):
-        """Return a dictionary of values to be used in URL parameterization."""
-        params = super().get_url_params(context, next_page_token)
-        # delete the dummy next page token to avoid errors
-        if not self.from_invoice_items and next_page_token == 1:
-            del params["starting_after"]
-        return params
+
 
 
 class CreditNotes(stripeStream):
@@ -589,17 +568,24 @@ class Coupons(stripeStream):
     ).to_dict()
 
 
-class Products(stripeStream):
+class Products(StripeStreamV2):
     """Define Products stream."""
 
     name = "products"
     replication_key = "updated"
-    event_filter = "product.*"
     object = "product"
-
+    from_invoice_items = False
+    
     @property
     def path(self):
-        return "events" if self.get_from_events else "products"
+        # get products from invoiceitems and products in a full sync
+        if not self.get_from_events:
+            if self.from_invoice_items:
+                return "invoiceitems"
+            else:
+                return "products" 
+        else:   
+            return "events"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -621,6 +607,17 @@ class Products(stripeStream):
         th.Property("updated", th.DateTimeType),
         th.Property("url", th.StringType),
     ).to_dict()
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        if self.from_invoice_items:
+            self.get_data_from_id = True
+            products = [item["price"] for item in response.json()["data"]]
+            [item.update({"id": item["product"]}) for item in products]
+            for record in super().parse_response(products):
+                yield record
+        else:
+            for record in super().parse_response(response):
+                yield record
 
 
 class Customers(stripeStream):

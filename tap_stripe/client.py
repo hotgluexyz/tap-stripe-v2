@@ -32,7 +32,8 @@ class stripeStream(RESTStream):
     params = {}
     invoice_lines = []
     expand = []
-    prices_ids = []
+    fullsync_ids = []
+    get_data_from_id = False
 
     @cached
     def get_starting_time(self, context):
@@ -119,8 +120,10 @@ class stripeStream(RESTStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
-        records = extract_jsonpath(self.records_jsonpath, input=response.json())
-
+        try:
+            records = extract_jsonpath(self.records_jsonpath, input=response.json())
+        except:
+            records = response
 
         if self.name == "plans" and self.path == "events":
             records = list(records)
@@ -128,18 +131,34 @@ class stripeStream(RESTStream):
             plans = [plan for plan in records if plan["type"].startswith("plan")]
             # Extract plans from the subscriptions
             subscription_plans = []
-            [subscription_plans.extend(item.get("data", {}).get("object", {}).get("items", {}).get("data", [])) for item in records if item["type"] == "customer.subscription.updated"]
+            [subscription_plans.extend(item.get("data", {}).get("object", {}).get("items", {}).get("data", [])) for item in records if (item["type"] == "customer.subscription.updated")]
             subscription_plans = [item["plan"] for item in subscription_plans]
-            # clean duplicated prices
-            subscription_plans = list({obj["id"]: obj for obj in subscription_plans}.values())
+
+            invoice_plans = []
+            [invoice_plans.extend(item.get("data", {}).get("object", {}).get("lines", {}).get("data", [])) for item in records if (item["type"].startswith("invoice"))]
+            invoice_plans = [item.get("price", item.get("plan")) for item in invoice_plans]
 
             # Combine both sets of plans
-            records = plans + subscription_plans
+            records = plans + subscription_plans + invoice_plans
+
+        if self.name == "products" and self.path == "events":
+            records = list(records)
+            # for products get all products, including the updated ones from invoiceitems
+            products = [product.get("data", {}).get("object") for product in records if product["type"].startswith("product")]
+            # Extract plans from the subscriptions
+            invoiceitems_products = []
+            [invoiceitems_products.extend(item.get("data", {}).get("object", {}).get("lines", {}).get("data", [])) for item in records if item["type"].startswith("invoice")]
+            invoiceitems_products = [item.get("price", item.get("plan")) for item in invoiceitems_products]
+            # get product ids
+            [item.update({"id": item["product"]}) for item in invoiceitems_products]
+            # Combine both sets of plans
+            records = products + invoiceitems_products
 
         for record in records:
-            if self.path == "events" and self.event_filter:
+            # logic for incremental syncs
+            if self.path == "events" or self.get_data_from_id:
                 event_date = record["created"]
-                if self.name != "plans":
+                if self.name not in ["plans", "products"]:
                     record = record["data"]["object"]
                 record_id = record.get("id")
                 if (
@@ -147,7 +166,7 @@ class stripeStream(RESTStream):
                     or (record_id in self.event_ids)
                     or (
                         self.object != record["object"]
-                        if self.object != "plan"
+                        if self.object not in ["plan", "product"]
                         else False
                     )
                 ):
@@ -159,12 +178,7 @@ class stripeStream(RESTStream):
                     continue
                 # using prices API instead of plans API
                 if self.name == "plans":
-                    # check for dupplicates in incremental sync prices
-                    if record_id in stripeStream.prices_ids:
-                        continue
-                    else:
-                        url = base_url + f"/v1/prices/{record_id}"
-                        stripeStream.prices_ids.append(record_id)
+                    url = base_url + f"/v1/prices/{record_id}"
                 else:
                     url = base_url + f"/v1/{self.name}/{record['id']}"
                 params = {}
@@ -179,9 +193,13 @@ class stripeStream(RESTStream):
                     continue
                 record = response_obj.json()
                 record["updated"] = event_date
+
+                # add record id to event_ids to not get dupplicates in incremental syncs
                 self.event_ids.append(record_id)
             if not record.get("updated") and "created" in record:
                 record["updated"] = record["created"]
+            
+            # iterate through lines pages
             if "lines" in record:
                 if record["lines"].get("has_more"):
                     next_page_token = self.get_next_page_token_lines(record["lines"])
@@ -198,10 +216,11 @@ class stripeStream(RESTStream):
                         lines.extend(response_data)
                     record["lines"]["data"] = lines
                     record["lines"]["has_more"] = False
+            
+            # clean dupplicates for fullsync streams that fetch data from more than one endpoint
             if hasattr(self, "from_invoice_items"):
-                # check for dupplicates in a full sync in prices
                 if self.from_invoice_items:
-                    if record["id"] in stripeStream.prices_ids:
+                    if record["id"] in self.fullsync_ids:
                         continue
             yield record
 
@@ -298,3 +317,29 @@ class stripeStream(RESTStream):
                     tap_state["bookmarks"][stream_name] = {"partitions": []}
 
         singer.write_message(StateMessage(value=tap_state))
+
+
+class StripeStreamV2(stripeStream):
+    """Class for the streams that need to get data from invoice items in full sync and more than one event in incremental syncs """
+
+    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
+        # activate flag if it's a full sync to fetch prices from invoiceitems
+        if not self.stream_state.get("replication_key"):
+            self.from_invoice_items = True
+        return super().request_records(context)
+
+    def get_next_page_token(self, response, previous_token):
+        next_page_token = super().get_next_page_token(response, previous_token)
+        # get a dummy next page token to iterate first through invoice_items and then through prices
+        if self.from_invoice_items and not next_page_token:
+            next_page_token = 1
+            self.from_invoice_items = False
+        return next_page_token
+    
+    def get_url_params(self, context, next_page_token):
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        # delete the dummy next page token to avoid errors
+        if not self.from_invoice_items and next_page_token == 1:
+            del params["starting_after"]
+        return params
