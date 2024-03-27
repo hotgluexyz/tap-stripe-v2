@@ -3,7 +3,7 @@
 from typing import Any, Optional, Iterable
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
-from tap_stripe.client import stripeStream
+from tap_stripe.client import stripeStream, StripeStreamV2
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -355,24 +355,34 @@ class SubscriptionItemStream(stripeStream):
 
 
 
-class Plans(stripeStream):
+class Plans(StripeStreamV2):
     """Define Plans stream."""
 
     name = "plans"
     replication_key = "updated"
-    event_filter = "plan.*"
     object = "plan"
+    from_invoice_items = False
 
     @property
     def expand(self):
         if self.get_from_events:
             return ["tiers"]
         else:
-            return ["data.tiers"]
+            if self.from_invoice_items:
+                return ["data.price.tiers"]
+            else:
+                return ["data.tiers"]
 
     @property
     def path(self):
-        return "events" if self.get_from_events else "prices"
+        # get prices from invoiceitems and prices in a full sync
+        if not self.get_from_events:
+            if self.from_invoice_items:
+                return "invoiceitems"
+            else:
+                return "prices" 
+        else:   
+            return "events"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -440,6 +450,7 @@ class Plans(stripeStream):
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
         row.update({"transform_usage": row.get("transform_quantity")})
+        row.update({"updated": row.get("created")})
 
         # process fields for recurring prices
         recurring = row.get("recurring")
@@ -450,6 +461,21 @@ class Plans(stripeStream):
             row.update({"trial_period_days": recurring.get("trial_period_days")})
             row.update({"usage_type": recurring.get("usage_type")})
         return row
+    
+    
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        if self.from_invoice_items:
+            items = response.json()["data"]
+            prices = [item["price"] for item in items]
+            for record in prices:
+                # clean dupplicate prices from invoice items
+                if record["id"] not in self.fullsync_ids:
+                    self.fullsync_ids.append(record["id"])
+                    yield record
+        else:
+            for record in super().parse_response(response):
+                yield record
+
 
 
 class CreditNotes(stripeStream):
@@ -542,17 +568,24 @@ class Coupons(stripeStream):
     ).to_dict()
 
 
-class Products(stripeStream):
+class Products(StripeStreamV2):
     """Define Products stream."""
 
     name = "products"
     replication_key = "updated"
-    event_filter = "product.*"
     object = "product"
-
+    from_invoice_items = False
+    
     @property
     def path(self):
-        return "events" if self.get_from_events else "products"
+        # get products from invoiceitems and products in a full sync
+        if not self.get_from_events:
+            if self.from_invoice_items:
+                return "invoiceitems"
+            else:
+                return "products" 
+        else:   
+            return "events"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -574,6 +607,17 @@ class Products(stripeStream):
         th.Property("updated", th.DateTimeType),
         th.Property("url", th.StringType),
     ).to_dict()
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        if self.from_invoice_items:
+            self.get_data_from_id = True
+            products = [item["price"] for item in response.json()["data"]]
+            [item.update({"id": item["product"]}) for item in products]
+            for record in super().parse_response(products):
+                yield record
+        else:
+            for record in super().parse_response(response):
+                yield record
 
 
 class Customers(stripeStream):
