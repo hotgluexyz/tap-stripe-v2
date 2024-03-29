@@ -155,6 +155,8 @@ class stripeStream(RESTStream):
             records = products + invoiceitems_products
 
         for record in records:
+            if not record:
+                continue
             # logic for incremental syncs
             if (self.path == "events" and self.get_from_events) or self.get_data_from_id: 
                 event_date = record["created"]
