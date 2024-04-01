@@ -1104,7 +1104,7 @@ class RefundsStream(stripeStream):
 
     name = "refunds"
     object = "refunds"
-    replication_key = None
+    replication_key = "updated"
     
     @property
     def path(self):
