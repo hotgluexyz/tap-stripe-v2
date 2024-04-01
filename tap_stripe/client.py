@@ -136,7 +136,7 @@ class stripeStream(RESTStream):
 
             invoice_plans = []
             [invoice_plans.extend(item.get("data", {}).get("object", {}).get("lines", {}).get("data", [])) for item in records if (item["type"].startswith("invoice"))]
-            invoice_plans = [item.get("price", item.get("plan")) for item in invoice_plans]
+            invoice_plans = [item.get("price") or item.get("plan") for item in invoice_plans if item.get("price") is not None or item.get("plan") is not None]
 
             # Combine both sets of plans
             records = plans + subscription_plans + invoice_plans
