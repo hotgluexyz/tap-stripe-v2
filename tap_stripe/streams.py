@@ -1103,7 +1103,7 @@ class TransfersStream(stripeStream):
 class RefundsStream(stripeStream):
 
     name = "refunds"
-    object = "transfer"
+    object = "refunds"
     replication_key = None
     
     @property
