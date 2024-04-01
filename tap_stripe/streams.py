@@ -1100,6 +1100,41 @@ class TransfersStream(stripeStream):
         th.Property("transfer_group", th.StringType),
         
     ).to_dict()
+class RefundsStream(stripeStream):
+
+    name = "refunds"
+    object = "transfer"
+    replication_key = None
+    
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "refunds"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("balance_transaction", th.StringType),
+        th.Property("charge", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("destination_details", th.ObjectType(
+            th.Property("card", th.ObjectType(
+                th.Property("reference", th.StringType),
+                th.Property("reference_status", th.StringType),
+                th.Property("reference_type", th.StringType),
+                th.Property("type", th.StringType)
+            )),
+            th.Property("type", th.StringType)
+        )),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_intent", th.StringType),
+        th.Property("reason", th.StringType),
+        th.Property("receipt_number", th.StringType),
+        th.Property("source_transfer_reversal", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("transfer_reversal", th.StringType)
+).to_dict()
 
 
 
