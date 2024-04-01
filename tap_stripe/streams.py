@@ -1103,8 +1103,9 @@ class TransfersStream(stripeStream):
 class RefundsStream(stripeStream):
 
     name = "refunds"
-    object = "refunds"
     replication_key = "updated"
+    event_filter = "refund.updated"
+    object = "refund"
     
     @property
     def path(self):
@@ -1117,6 +1118,7 @@ class RefundsStream(stripeStream):
         th.Property("balance_transaction", th.StringType),
         th.Property("charge", th.StringType),
         th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("destination_details", th.ObjectType(
             th.Property("card", th.ObjectType(
