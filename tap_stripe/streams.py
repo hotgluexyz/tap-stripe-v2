@@ -1104,7 +1104,6 @@ class RefundsStream(stripeStream):
 
     name = "refunds"
     replication_key = "updated"
-    event_filter = "refund.updated"
     object = "refund"
     
     @property
