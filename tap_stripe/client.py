@@ -140,7 +140,6 @@ class stripeStream(RESTStream):
 
             # Combine both sets of plans
             records = plans + subscription_plans + invoice_plans
-
         if self.name == "products" and self.path == "events":
             records = list(records)
             # for products get all products, including the updated ones from invoiceitems
@@ -148,7 +147,7 @@ class stripeStream(RESTStream):
             # Extract plans from the subscriptions
             invoiceitems_products = []
             [invoiceitems_products.extend(item.get("data", {}).get("object", {}).get("lines", {}).get("data", [])) for item in records if item["type"].startswith("invoice")]
-            invoiceitems_products = [item.get("price", item.get("plan")) for item in invoiceitems_products]
+            invoiceitems_products = [item.get("price") or item.get("plan") for item in invoiceitems_products if item.get("price") is not None or item.get("plan") is not None]
             # get product ids
             [item.update({"id": item["product"]}) for item in invoiceitems_products]
             # Combine both sets of plans
