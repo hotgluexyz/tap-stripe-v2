@@ -1,13 +1,15 @@
 """Stream type classes for tap-stripe-v2."""
 
-from typing import Any, Optional, Iterable
+from typing import Any, Optional, Iterable, Dict
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from tap_stripe.client import stripeStream, StripeStreamV2
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-
+from backports.cached_property import cached_property
+import csv
+from io import StringIO
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -1136,6 +1138,170 @@ class RefundsStream(stripeStream):
         th.Property("status", th.StringType),
         th.Property("transfer_reversal", th.StringType)
 ).to_dict()
+    
+class PayoutReportsStream(stripeStream):
 
+    name = "report_payout_reconciliation"
+    replication_key = "updated"
+    report_type = "payout_reconciliation.itemized.5"
 
+    schema = th.PropertiesList(
+        th.Property("automatic_payout_id", th.StringType),
+        th.Property("automatic_payout_effective_at", th.StringType),
+        th.Property("balance_transaction_id", th.StringType),
+        th.Property("balance_transaction", th.StringType),
+        th.Property("charge", th.StringType),
+        th.Property("created_utc", th.DateTimeType),
+        th.Property("created", th.DateTimeType),
+        th.Property("available_on_utc", th.DateTimeType),
+        th.Property("available_on", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("gross", th.NumberType),
+        th.Property("fee", th.NumberType),
+        th.Property("net", th.NumberType),
+        th.Property("reporting_category", th.StringType),
+        th.Property("source_id", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("customer_facing_amount", th.StringType),
+        th.Property("customer_facing_currency", th.StringType),
+        th.Property("regulatory_tag", th.StringType),
+        th.Property("automatic_payout_effective_at_utc", th.StringType),
+        th.Property("customer_id", th.StringType),
+        th.Property("customer_email", th.StringType),
+        th.Property("customer_name", th.StringType),
+        th.Property("customer_description", th.StringType),
+        th.Property("customer_shipping_address_line1", th.StringType),
+        th.Property("customer_shipping_address_line2", th.StringType),
+        th.Property("customer_shipping_address_city", th.StringType),
+        th.Property("customer_shipping_address_state", th.StringType),
+        th.Property("customer_shipping_address_postal_code", th.StringType),
+        th.Property("customer_shipping_address_country", th.StringType),
+        th.Property("customer_address_line1", th.StringType),
+        th.Property("customer_address_line2", th.StringType),
+        th.Property("customer_address_city", th.StringType),
+        th.Property("customer_address_state", th.StringType),
+        th.Property("customer_address_postal_code", th.StringType),
+        th.Property("customer_address_country", th.StringType),
+        th.Property("shipping_address_line1", th.StringType),
+        th.Property("shipping_address_line2", th.StringType),
+        th.Property("shipping_address_city", th.StringType),
+        th.Property("shipping_address_state", th.StringType),
+        th.Property("shipping_address_postal_code", th.StringType),
+        th.Property("shipping_address_country", th.StringType),
+        th.Property("card_address_line1", th.StringType),
+        th.Property("card_address_line2", th.StringType),
+        th.Property("card_address_city", th.StringType),
+        th.Property("card_address_state", th.StringType),
+        th.Property("card_address_postal_code", th.StringType),
+        th.Property("card_address_country", th.StringType),
+        th.Property("charge_id", th.StringType),
+        th.Property("payment_intent_id", th.StringType),
+        th.Property("charge_created_utc", th.StringType),
+        th.Property("charge_created", th.StringType),
+        th.Property("invoice_id", th.StringType),
+        th.Property("invoice_number", th.StringType),
+        th.Property("subscription_id", th.StringType),
+        th.Property("order_id", th.StringType),
+        th.Property("payment_method_type", th.StringType),
+        th.Property("is_link", th.StringType),
+        th.Property("card_brand", th.StringType),
+        th.Property("card_funding", th.StringType),
+        th.Property("card_country", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("dispute_reason", th.StringType),
+        th.Property("connected_account_id", th.StringType),
+        th.Property("connected_account_name", th.StringType),
+        th.Property("connected_account_country", th.StringType),
+        th.Property("connected_account_direct_charge_id", th.StringType),
+        th.Property("destination_payment_id", th.StringType),
+        th.Property("payment_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("refund_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("transfer_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+).to_dict()
+    
+    def get_custom_headers(self):
+        headers = self.http_headers
+        auth_headers = self.authenticator.auth_headers
+        headers.update(auth_headers)
+        return headers
+    
+    def get_report_ranges(self):
+        url = f"{self.url_base}reporting/report_types/{self.report_type}"
+        resp = requests.get(url=url,headers=self.get_custom_headers())
+        self.validate_response(resp)
+        data = resp.json()
+        return data['data_available_start'],data['data_available_end']
+    
+    @cached_property
+    def selected_properties(self):
+        selected_properties = []
+        for key, value in self.metadata.items():
+            if isinstance(key, tuple) and len(key) == 2 and value.selected:
+                field_name = key[-1]
+                selected_properties.append(field_name)
+        return selected_properties
+    
+    def create_report(self,start_date,end_date):
+        url = f"{self.url_base}reporting/report_runs"
+        headers = self.get_custom_headers()
+        body = {}
+        parameters = {}
+        body['report_type'] = self.report_type
+        body['parameters[interval_start]'] = start_date
+        body['parameters[interval_end]'] = end_date
+        # parameters['columns'] = self.selected_properties
+        # body['parameters'] = parameters
+        response = requests.post(url=url,headers=headers,data=body)
+        self.validate_response(response)
+        data = response.json()
+        return data
+    
+    def verify_report(self,report_id):
+        res = {}
+        while True:
+            headers = self.get_custom_headers()
+            url = f"{self.url_base}reporting/report_runs/{report_id}"
+            response = requests.get(url,headers=headers)
+            self.validate_response(response)
+            data = response.json()
+            if data['status']=="succeeded" and "result" in data:
+                res =  data['result']['url']
+                break
+        return res    
 
+    def read_csv_from_url(self,url):
+        try:
+            # Send GET request to the URL to fetch the CSV data
+            headers = self.get_custom_headers()
+            response = requests.get(url,headers=headers)
+            self.validate_response(response)
+            csv_file = StringIO(response.text)
+
+            # Create a CSV DictReader from the response content
+            data = csv.DictReader(csv_file,delimiter=',')
+
+            return data
+
+        except requests.exceptions.RequestException as e:
+            raise(f"Error fetching CSV from URL: {e}")
+            
+        except csv.Error as e:
+            raise(f"Error parsing CSV data: {e}")
+            
+        
+    def get_records(self, context: Optional[dict]) -> Iterable[Dict[str, Any]]:
+        #@TODO use this only if there is no incremental state present. 
+        start_date, end_date = self.get_report_ranges()
+        report = self.create_report(start_date,end_date)
+        if report.get('result') is not None:
+            report_file = report['result']['url']
+        else:
+            report_file = self.verify_report(report['id'])
+        records = self.read_csv_from_url(report_file)    
+        for record in records:
+            transformed_record = self.post_process(record, context)
+            if transformed_record is None:
+                # Record filtered out during post_process()
+                continue
+            yield transformed_record
