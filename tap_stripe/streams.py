@@ -10,6 +10,10 @@ from singer_sdk.helpers.jsonpath import extract_jsonpath
 from backports.cached_property import cached_property
 import csv
 from io import StringIO
+import time
+from dateutil.parser import parse
+from datetime import datetime
+
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -1142,7 +1146,12 @@ class RefundsStream(stripeStream):
 class PayoutReportsStream(stripeStream):
 
     name = "report_payout_reconciliation"
-    replication_key = "updated"
+    #although update is mentioned in docs, it is not part of report's response for some reason. Disabling until requested
+    # replication_key = "created"
+    """
+    There are five types of report mentioned here https://docs.stripe.com/reports/report-types/payout-reconciliation
+    For now we shortlisted payout_reconciliation.itemized.5 as our report type. This could be potentially configurable using the `report_type` property in config.py
+    """
     report_type = "payout_reconciliation.itemized.5"
 
     schema = th.PropertiesList(
@@ -1157,9 +1166,9 @@ class PayoutReportsStream(stripeStream):
         th.Property("available_on", th.DateTimeType),
         th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
-        th.Property("gross", th.NumberType),
-        th.Property("fee", th.NumberType),
-        th.Property("net", th.NumberType),
+        th.Property("gross", th.StringType),
+        th.Property("fee", th.StringType),
+        th.Property("net", th.StringType),
         th.Property("reporting_category", th.StringType),
         th.Property("source_id", th.StringType),
         th.Property("description", th.StringType),
@@ -1215,18 +1224,31 @@ class PayoutReportsStream(stripeStream):
         th.Property("connected_account_country", th.StringType),
         th.Property("connected_account_direct_charge_id", th.StringType),
         th.Property("destination_payment_id", th.StringType),
-        th.Property("payment_metadata[key]", th.CustomType({"type": ["object", "string"]})),
-        th.Property("refund_metadata[key]", th.CustomType({"type": ["object", "string"]})),
-        th.Property("transfer_metadata[key]", th.CustomType({"type": ["object", "string"]})),
-).to_dict()
+        th.Property(
+            "payment_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property(
+            "refund_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property(
+            "transfer_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+    ).to_dict()
     
     def get_custom_headers(self):
         headers = self.http_headers
+        #get the headers with auth token populated
         auth_headers = self.authenticator.auth_headers
         headers.update(auth_headers)
         return headers
     
     def get_report_ranges(self):
+        """We can request stripe for available data ranges for a given report type
+        This is safer option because we will always get a valid response for valid ranges.
+        Otherwise stripe will raise an error.
+        Returns:
+            available starting and ending date ranges.
+        """
         url = f"{self.url_base}reporting/report_types/{self.report_type}"
         resp = requests.get(url=url,headers=self.get_custom_headers())
         self.validate_response(resp)
@@ -1246,12 +1268,14 @@ class PayoutReportsStream(stripeStream):
         url = f"{self.url_base}reporting/report_runs"
         headers = self.get_custom_headers()
         body = {}
-        parameters = {}
+        # The report data and processing time will vary based on report type and requested interval.
         body['report_type'] = self.report_type
         body['parameters[interval_start]'] = start_date
         body['parameters[interval_end]'] = end_date
+        #Not ready for production
         # parameters['columns'] = self.selected_properties
         # body['parameters'] = parameters
+        #Make the request
         response = requests.post(url=url,headers=headers,data=body)
         self.validate_response(response)
         data = response.json()
@@ -1259,15 +1283,19 @@ class PayoutReportsStream(stripeStream):
     
     def verify_report(self,report_id):
         res = {}
+        #keep checking for report status until report is ready for download
         while True:
             headers = self.get_custom_headers()
             url = f"{self.url_base}reporting/report_runs/{report_id}"
             response = requests.get(url,headers=headers)
             self.validate_response(response)
             data = response.json()
+            #Stripe will return processing status in "status" property of the response
             if data['status']=="succeeded" and "result" in data:
                 res =  data['result']['url']
                 break
+            #wait for 30 seconds before checking again
+            time.sleep(30)
         return res    
 
     def read_csv_from_url(self,url):
@@ -1280,7 +1308,6 @@ class PayoutReportsStream(stripeStream):
 
             # Create a CSV DictReader from the response content
             data = csv.DictReader(csv_file,delimiter=',')
-
             return data
 
         except requests.exceptions.RequestException as e:
@@ -1289,14 +1316,34 @@ class PayoutReportsStream(stripeStream):
         except csv.Error as e:
             raise(f"Error parsing CSV data: {e}")
             
-        
+    def post_process(self, row: dict, context: Optional[dict]) -> dict:
+        """As needed, append or transform raw data to match expected structure."""
+        for field in self.datetime_fields:
+            if row.get(field):
+                # Payout stream have valid formatted dates instead of unix timestamp
+                dt_field = parse(row[field])
+                if isinstance(dt_field, datetime):
+                    row[field] = dt_field.isoformat()
+        return row
+
     def get_records(self, context: Optional[dict]) -> Iterable[Dict[str, Any]]:
+        """Stripe provides a CSV report that can be used to get all records.
+        to get all the records we need to do the following steps:
+        1. Create/request a report
+        2. Periodically check status of the report if its done.
+        3. Download the CSV and process. it
+        """
         #@TODO use this only if there is no incremental state present. 
         start_date, end_date = self.get_report_ranges()
         report = self.create_report(start_date,end_date)
         if report.get('result') is not None:
+            #This means report was already processed and download url is already available
             report_file = report['result']['url']
         else:
+            """
+            If a report in given range and type is already requested stripe will return previously created report's detail.
+            In this case will start verifying the report.
+            """
             report_file = self.verify_report(report['id'])
         records = self.read_csv_from_url(report_file)    
         for record in records:
