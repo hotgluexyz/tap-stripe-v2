@@ -1158,13 +1158,10 @@ class PayoutReportsStream(stripeStream):
         th.Property("automatic_payout_id", th.StringType),
         th.Property("automatic_payout_effective_at", th.StringType),
         th.Property("balance_transaction_id", th.StringType),
-        th.Property("balance_transaction", th.StringType),
-        th.Property("charge", th.StringType),
         th.Property("created_utc", th.DateTimeType),
         th.Property("created", th.DateTimeType),
         th.Property("available_on_utc", th.DateTimeType),
         th.Property("available_on", th.DateTimeType),
-        th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("gross", th.StringType),
         th.Property("fee", th.StringType),
@@ -1272,8 +1269,11 @@ class PayoutReportsStream(stripeStream):
         body['report_type'] = self.report_type
         body['parameters[interval_start]'] = start_date
         body['parameters[interval_end]'] = end_date
+        body = list(body.items())
         #Not ready for production
-        # parameters['columns'] = self.selected_properties
+        for column in self.selected_properties:
+            body.append(("parameters[columns][]", column))
+            
         # body['parameters'] = parameters
         #Make the request
         response = requests.post(url=url,headers=headers,data=body)
