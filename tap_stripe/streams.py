@@ -935,9 +935,9 @@ class CreditNoteLineItemsStream(stripeStream):
         th.Property("unit_amount_decimal", th.StringType),
         th.Property("unit_amount_excluding_tax", th.StringType),
     ).to_dict()
-class DisputesStream(stripeStream):
+class DisputesIssuingStream(stripeStream):
 
-    name = "disputes"
+    name = "disputes_issuing"
     object = "issuing.dispute"
     replication_key = "updated"
     
@@ -1352,3 +1352,30 @@ class PayoutReportsStream(stripeStream):
                 # Record filtered out during post_process()
                 continue
             yield transformed_record
+
+class DisputesStream(stripeStream):
+    name = "disputes"
+    object = "dispute"
+    replication_key = "updated"
+
+    @property
+    def path(self):
+        return "events" if self.get_from_events else "disputes"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.NumberType),
+        th.Property("charge", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("evidence", th.CustomType({"type": ["object", "string"]})),
+        th.Property("evidence_details", th.CustomType({"type": ["object", "string"]})),
+        th.Property("is_charge_refundable", th.BooleanType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_intent", th.StringType),
+        th.Property("reason", th.StringType),
+        th.Property("status", th.StringType),
+    ).to_dict()
