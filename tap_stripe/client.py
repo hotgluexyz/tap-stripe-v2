@@ -209,8 +209,8 @@ class stripeStream(RESTStream):
                         lines_response = decorated_request(
                             self.prepare_request_lines(url, params), {}
                         )
-                        next_page_token = self.get_next_page_token_lines(lines_response)
                         response_obj = lines_response.json()
+                        next_page_token = self.get_next_page_token_lines(response_obj)
                         response_data = response_obj.get("data", [])
                         lines.extend(response_data)
                     record["lines"]["data"] = lines
