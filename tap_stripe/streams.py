@@ -785,11 +785,11 @@ class BalanceTransactionsStream(stripeStream):
         th.Property("source", th.StringType),
         th.Property("status", th.StringType),
         th.Property("type", th.StringType),
-        th.Property("invoice", th.StringType),
         th.Property("livemode", th.BooleanType),
         th.Property("period", th.CustomType({"type": ["object", "string"]})),
         th.Property("subscription_item", th.StringType),
         th.Property("total_usage", th.IntegerType),
+        th.Property("exchange_rate", th.NumberType),
     ).to_dict()
     
 class ChargesStream(stripeStream):
