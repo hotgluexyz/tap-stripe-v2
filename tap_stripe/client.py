@@ -155,7 +155,7 @@ class stripeStream(RESTStream):
 
         for record in records:
             # logic for incremental syncs
-            if (self.path == "events" and self.get_from_events) or self.get_data_from_id: 
+            if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id): 
                 event_date = record["created"]
                 if self.name not in ["plans", "products"]:
                     record = record["data"]["object"]
