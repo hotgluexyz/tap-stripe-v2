@@ -32,9 +32,9 @@ class Invoices(stripeStream):
         # not expanding lines discount coupons 'applies_to' here because 
         # stripe only allows expanding up to 4 levels of a property
         if self.get_from_events:
-            return ["discounts", "lines.data.discounts", "discounts.coupon.applies_to"]
+            return ["discounts", "lines.data.discounts", "discounts.coupon.applies_to", "customer"]
         else:
-            return ["data.discounts", "data.lines.data.discounts", "data.discounts.coupon.applies_to"]
+            return ["data.discounts", "data.lines.data.discounts", "data.discounts.coupon.applies_to", "data.customer"]
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -59,6 +59,30 @@ class Invoices(stripeStream):
         th.Property("currency", th.StringType),
         th.Property("custom_fields", th.CustomType({"type": ["array", "string"]})),
         th.Property("customer", th.StringType),
+        th.Property("customer_object", th.ObjectType(
+            th.Property("id", th.StringType),
+            th.Property("object", th.StringType),
+            th.Property("address", th.CustomType({"type": ["object", "string"]})),
+            th.Property("balance", th.IntegerType),
+            th.Property("created", th.DateTimeType),
+            th.Property("currency", th.StringType),
+            th.Property("default_source", th.StringType),
+            th.Property("delinquent", th.BooleanType),
+            th.Property("description", th.StringType),
+            th.Property("discount", th.CustomType({"type": ["object", "string"]})),
+            th.Property("email", th.StringType),
+            th.Property("invoice_prefix", th.StringType),
+            th.Property("invoice_settings", th.CustomType({"type": ["object", "string"]})),
+            th.Property("livemode", th.BooleanType),
+            th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+            th.Property("name", th.StringType),
+            th.Property("next_invoice_sequence", th.IntegerType),
+            th.Property("phone", th.StringType),
+            th.Property("preferred_locales", th.CustomType({"type": ["array", "string"]})),
+            th.Property("shipping", th.CustomType({"type": ["object", "string"]})),
+            th.Property("tax_exempt", th.StringType),
+            th.Property("test_clock", th.StringType),
+        )),
         th.Property("customer_address", th.CustomType({"type": ["object", "string"]})),
         th.Property("customer_email", th.StringType),
         th.Property("customer_name", th.StringType),
@@ -133,6 +157,15 @@ class Invoices(stripeStream):
             }
             stripeStream.invoice_lines = data
             return {}
+    
+    def post_process(self, row, context) -> dict:
+        # add customer data as customer_object and parse data
+        row["customer_object"] = row.get("customer")
+        row["customer_object"]["created"] = datetime.utcfromtimestamp(int(row["customer_object"]["created"])).isoformat()
+        # keep customer id in customer field
+        row["customer"] = row.get("customer_object", {}).get("id")
+        row = super().post_process(row, context)
+        return row
 
 class InvoiceLineItems(stripeStream):
     name = "invoice_line_items"
