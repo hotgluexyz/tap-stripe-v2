@@ -155,7 +155,7 @@ class stripeStream(RESTStream):
 
         for record in records:
             # logic for incremental syncs
-            if (self.path == "events" and self.get_from_events) or self.get_data_from_id: 
+            if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id): 
                 event_date = record["created"]
                 if self.name not in ["plans", "products"]:
                     record = record["data"]["object"]
@@ -212,8 +212,8 @@ class stripeStream(RESTStream):
                         lines_response = decorated_request(
                             self.prepare_request_lines(url, params), {}
                         )
-                        next_page_token = self.get_next_page_token_lines(lines_response)
                         response_obj = lines_response.json()
+                        next_page_token = self.get_next_page_token_lines(response_obj)
                         response_data = response_obj.get("data", [])
                         lines.extend(response_data)
                     record["lines"]["data"] = lines
