@@ -1379,3 +1379,78 @@ class DisputesStream(stripeStream):
         th.Property("reason", th.StringType),
         th.Property("status", th.StringType),
     ).to_dict()
+
+
+class Discounts(stripeStream):
+    """Define Products stream."""
+
+    name = "discounts"
+    replication_key = "updated"
+    object = "invoice"
+    event_filter = "invoice.*"
+    
+    @property
+    def path(self):
+        # get discounts from invoices and invoice line items
+        if not self.get_from_events:
+            return "invoices"
+        else:   
+            return "events"
+
+
+    @property
+    def expand(self):
+        if self.get_from_events:
+            return ["discounts", "lines.data.discounts", "discounts.coupon.applies_to"]
+        else:
+            return ["data.discounts", "data.lines.data.discounts", "data.discounts.coupon.applies_to"]
+        
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("checkout_session", th.StringType),
+        th.Property("coupon", th.ObjectType(
+            th.Property("id", th.StringType),
+            th.Property("object", th.StringType),
+            th.Property("amount_off", th.IntegerType),
+            th.Property("created", th.IntegerType),
+            th.Property("currency", th.StringType),
+            th.Property("duration", th.StringType),
+            th.Property("duration_in_months", th.IntegerType),
+            th.Property("max_redemptions", th.IntegerType),
+            th.Property("metadata", th.CustomType({"type": ["object", "array", "string"]})),
+            th.Property("name", th.StringType),
+            th.Property("percent_off", th.NumberType),
+            th.Property("redeem_by", th.IntegerType),
+            th.Property("times_redeemed", th.IntegerType),
+            th.Property("valid", th.BooleanType),
+        )),
+        th.Property("customer", th.StringType),
+        th.Property("end", th.DateTimeType),
+        th.Property("invoice", th.StringType),
+        th.Property("invoice_item", th.StringType),
+        th.Property("promotion_code", th.StringType),
+        th.Property("start", th.DateTimeType),
+        th.Property("subscription", th.BooleanType),
+        th.Property("subscription_item", th.StringType),
+        th.Property("updated", th.DateTimeType),
+    ).to_dict()
+
+    def parse_response(self, response) -> Iterable[dict]:
+        response = super().parse_response(response)
+        discounts = []
+        for invoice in response:
+            invoice_discounts = []
+            updated = invoice["updated"]
+            # add header discounts to invoice discounts list
+            invoice_discounts.extend(invoice["discounts"])
+            # add line discounts to invoice discounts list
+            [invoice_discounts.extend(line["discounts"]) for line in invoice["lines"]["data"]]
+            # add updated rep key to all invoice discounts
+            [discount.update({"updated": updated}) for discount in invoice_discounts]
+            # add invoice discounts to discounts list
+            discounts.extend(invoice_discounts)
+        return discounts
+
+
