@@ -179,7 +179,7 @@ class stripeStream(RESTStream):
                 if self.name == "plans":
                     url = base_url + f"/v1/prices/{record_id}"
                 # discounts is a synthetic stream, it uses data from invoices
-                if self.name == "discounts":
+                elif self.name == "discounts":
                     url = base_url + f"/v1/invoices/{record_id}"
                 else:
                     url = base_url + f"/v1/{self.name}/{record['id']}"
