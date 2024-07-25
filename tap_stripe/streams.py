@@ -242,7 +242,7 @@ class Subscriptions(stripeStream):
         th.Property("payment_settings", th.CustomType({"type": ["object", "string"]})),
         th.Property("pending_invoice_item_interval", th.StringType),
         th.Property("pending_setup_intent", th.StringType),
-        th.Property("pending_update", th.StringType),
+        th.Property("pending_update", th.CustomType({"type": ["object", "string"]})),
         th.Property("plan", th.CustomType({"type": ["object", "string"]})),
         th.Property("quantity", th.NumberType),
         th.Property("schedule", th.StringType),
