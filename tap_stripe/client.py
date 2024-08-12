@@ -81,7 +81,7 @@ class stripeStream(RESTStream):
             params["starting_after"] = next_page_token
         if self.replication_key and self.path != "credit_notes":
             start_date = self.get_starting_time(context)
-            params["created[gt]"] = int(start_date.timestamp())
+            params["created[gte]"] = int(start_date.timestamp())
         if self.path == "events" and self.event_filter:
             params["type"] = self.event_filter
         if not self.get_from_events and self.expand:
