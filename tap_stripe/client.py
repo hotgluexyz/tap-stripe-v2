@@ -34,6 +34,7 @@ class stripeStream(RESTStream):
     expand = []
     fullsync_ids = []
     get_data_from_id = False
+    lines_field = "lines"
 
     @cached
     def get_starting_time(self, context):
@@ -202,11 +203,11 @@ class stripeStream(RESTStream):
                 record["updated"] = record["created"]
             
             # iterate through lines pages
-            if "lines" in record:
-                if record["lines"].get("has_more"):
-                    next_page_token = self.get_next_page_token_lines(record["lines"])
-                    url = base_url + record["lines"]["url"]
-                    lines = record["lines"].get("data", [])
+            if self.lines_field in record:
+                if record[self.lines_field].get("has_more"):
+                    next_page_token = self.get_next_page_token_lines(record[self.lines_field])
+                    url = base_url + record[self.lines_field]["url"]
+                    lines = record[self.lines_field].get("data", [])
                     while next_page_token:
                         params = {"limit": 100, "starting_after": next_page_token}
                         lines_response = decorated_request(
@@ -216,8 +217,8 @@ class stripeStream(RESTStream):
                         next_page_token = self.get_next_page_token_lines(response_obj)
                         response_data = response_obj.get("data", [])
                         lines.extend(response_data)
-                    record["lines"]["data"] = lines
-                    record["lines"]["has_more"] = False
+                    record[self.lines_field]["data"] = lines
+                    record[self.lines_field]["has_more"] = False
             
             # clean dupplicates for fullsync streams that fetch data from more than one endpoint
             if hasattr(self, "from_invoice_items"):
