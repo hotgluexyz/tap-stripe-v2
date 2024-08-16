@@ -1466,21 +1466,28 @@ class ApplicationFees(stripeStream):
     @property
     def path(self):
         return "events" if self.get_from_events else "application_fees"
+    
+    @property
+    def expand(self):
+        if self.get_from_events:
+            return ["charge", "application", "balance_transaction", "originating_transaction", "account"]
+        else:
+            return ["data.charge", "data.application", "data.balance_transaction", "data.originating_transaction", "data.account"]
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
-        th.Property("account", th.StringType),
+        th.Property("account", th.CustomType({"type": ["object", "string"]})),
         th.Property("amount", th.NumberType),
         th.Property("amount_refunded", th.NumberType),
-        th.Property("application", th.StringType),
-        th.Property("balance_transaction", th.StringType),
-        th.Property("charge", th.StringType),
+        th.Property("application", th.CustomType({"type": ["object", "string"]})),
+        th.Property("balance_transaction", th.CustomType({"type": ["object", "string"]})),
+        th.Property("charge", th.CustomType({"type": ["object", "string"]})),
         th.Property("created", th.DateTimeType),
         th.Property("updated", th.DateTimeType),
         th.Property("currency", th.StringType),
         th.Property("livemode", th.BooleanType),
-        th.Property("originating_transaction", th.StringType),
+        th.Property("originating_transaction", th.CustomType({"type": ["object", "string"]})),
         th.Property("refunded", th.BooleanType),
         th.Property("refunds", th.ObjectType(
             th.Property("object", th.StringType),
