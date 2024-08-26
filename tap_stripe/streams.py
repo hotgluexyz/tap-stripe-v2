@@ -813,7 +813,6 @@ class ChargesStream(stripeStream):
         th.Property("application_fee_amount", th.NumberType),
         th.Property("balance_transaction", th.StringType),
         th.Property("billing_details", th.CustomType({"type": ["object", "string"]})),
-        th.Property("Stripe", th.StringType),
         th.Property("captured", th.BooleanType),
         th.Property("created", th.DateTimeType),
         th.Property("updated", th.DateTimeType),
