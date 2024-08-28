@@ -198,12 +198,13 @@ class stripeStream(RESTStream):
         return decorator
     
     def validate_response(self, response: requests.Response) -> None:
+        self.logger.info(f"Validating response for request to url: {response.url}")
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
         ):
             msg = self.response_error_message(response)
-            raise RetriableAPIError(msg, response)
+            raise RetriableAPIError(f"{msg}, response: {response.text}")
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
             msg = self.response_error_message(response)
-            raise FatalAPIError(msg)
+            raise FatalAPIError(f"{msg}, response: {response.text}")
