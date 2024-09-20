@@ -770,6 +770,12 @@ class BalanceTransactionsStream(stripeStream):
     path = "balance_transactions"
     object = "balance_transactions"
 
+    @property
+    def replication_key(self):
+        if self.config.get("incremental_balance_transactions"):
+            return "created"
+        return None
+
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
