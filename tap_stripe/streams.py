@@ -797,7 +797,16 @@ class BalanceTransactionsStream(stripeStream):
         th.Property("total_usage", th.IntegerType),
         th.Property("exchange_rate", th.NumberType),
     ).to_dict()
-    
+
+    def apply_catalog(self, catalog) -> None:
+        self._tap_input_catalog = catalog
+        catalog_entry = catalog.get_stream(self.name)
+        if catalog_entry:
+            self.primary_keys = catalog_entry.key_properties
+            if catalog_entry.replication_method:
+                self.forced_replication_method = catalog_entry.replication_method
+
+
 class ChargesStream(stripeStream):
 
     name = "charges"
