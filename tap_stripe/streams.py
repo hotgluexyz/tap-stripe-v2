@@ -368,6 +368,7 @@ class Plans(StripeStreamV2):
     replication_key = "updated"
     object = "plan"
     from_invoice_items = False
+    event_filter = "plan.*"
 
     @property
     def expand(self):
@@ -580,6 +581,7 @@ class Products(StripeStreamV2):
     name = "products"
     replication_key = "updated"
     object = "product"
+    event_filter = "product.*"
     from_invoice_items = False
     
     @property
@@ -810,8 +812,9 @@ class BalanceTransactionsStream(stripeStream):
 class ChargesStream(stripeStream):
 
     name = "charges"
-    object = "charges"
+    object = "charge"
     replication_key = "updated"
+    event_filter = "charge.*"
 
     @property
     def path(self):
@@ -860,7 +863,6 @@ class ChargesStream(stripeStream):
         th.Property("transfer_data", th.StringType),
         th.Property("transfer_data", th.StringType),
         th.Property("transfer_group", th.StringType),
-       
     ).to_dict()
 
 class CheckoutSessionsStream(stripeStream):
