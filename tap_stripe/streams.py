@@ -368,7 +368,6 @@ class Plans(StripeStreamV2):
     replication_key = "updated"
     object = "plan"
     from_invoice_items = False
-    event_filter = "plan.*"
 
     @property
     def expand(self):
@@ -581,7 +580,6 @@ class Products(StripeStreamV2):
     name = "products"
     replication_key = "updated"
     object = "product"
-    event_filter = "product.*"
     from_invoice_items = False
     
     @property
