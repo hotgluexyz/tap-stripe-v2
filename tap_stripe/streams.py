@@ -810,8 +810,9 @@ class BalanceTransactionsStream(stripeStream):
 class ChargesStream(stripeStream):
 
     name = "charges"
-    object = "charges"
+    object = "charge"
     replication_key = "updated"
+    event_filter = "charge.*"
 
     @property
     def path(self):
@@ -860,7 +861,6 @@ class ChargesStream(stripeStream):
         th.Property("transfer_data", th.StringType),
         th.Property("transfer_data", th.StringType),
         th.Property("transfer_group", th.StringType),
-       
     ).to_dict()
 
 class CheckoutSessionsStream(stripeStream):
