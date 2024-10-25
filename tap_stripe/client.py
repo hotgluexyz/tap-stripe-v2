@@ -14,6 +14,8 @@ from pendulum import parse
 from typing import Any, Callable, Dict, Iterable, Optional
 import backoff
 from singer_sdk.exceptions import RetriableAPIError, FatalAPIError
+import copy
+import concurrent.futures
 
 import singer
 from singer import StateMessage
@@ -345,3 +347,111 @@ class StripeStreamV2(stripeStream):
         if not self.from_invoice_items and next_page_token == 1:
             del params["starting_after"]
         return params
+
+
+class ConcurrentStream(stripeStream):
+    """Class for the streams that need to get data from invoice items in full sync and more than one event in incremental syncs """
+
+    def prepare_request(
+        self, context: Optional[dict], next_page_token: Optional[Any]
+    ) -> requests.PreparedRequest:
+        http_method = self.rest_method
+        url: str = self.get_url(context)
+        # update params with the date chunks for concurrent requests
+        params: dict = self.get_url_params(context, next_page_token)
+        if context:
+            params.update(context)
+
+        request_data = self.prepare_request_payload(context, next_page_token)
+        headers = self.http_headers
+
+        authenticator = self.authenticator
+        if authenticator:
+            headers.update(authenticator.auth_headers or {})
+            params.update(authenticator.auth_params or {})
+
+        request = cast(
+            requests.PreparedRequest,
+            self.requests_session.prepare_request(
+                requests.Request(
+                    method=http_method,
+                    url=url,
+                    params=params,
+                    headers=headers,
+                    json=request_data,
+                ),
+            ),
+        )
+        return request
+    
+    def concurrent_request(self, context):
+        next_page_token: Any = None
+        finished = False
+        decorated_request = self.request_decorator(self._request)
+
+        consolidated_response = []
+
+        while not finished:
+            prepared_request = self.prepare_request(
+                context, next_page_token=next_page_token
+            )
+            resp = decorated_request(prepared_request, context)
+            consolidated_response.extend(self.parse_response(resp))
+            previous_token = copy.deepcopy(next_page_token)
+            next_page_token = self.get_next_page_token(
+                response=resp, previous_token=previous_token
+            )
+            if next_page_token and next_page_token == previous_token:
+                raise RuntimeError(
+                    f"Loop detected in pagination. "
+                    f"Pagination token {next_page_token} is identical to prior token."
+                )
+            # Cycle until get_next_page_token() no longer returns a value
+            finished = not next_page_token
+        return consolidated_response
+    
+    def get_concurrent_params(self, context, max_requests):
+        base_params = self.get_url_params(context, None)
+
+        start_date = self.get_starting_time(context)
+        start_date_timestamp = int(start_date.timestamp())
+        end_date_timestamp = int(datetime.utcnow().timestamp())
+
+        current_start = start_date_timestamp
+        partition_size = round((end_date_timestamp - start_date_timestamp) / max_requests)
+
+        concurrent_params = []
+
+        for _ in range(max_requests):
+            current_end = current_start + partition_size
+            params = base_params.copy()
+            params["created[gte]"] = current_start
+            params["created[lt]"] = current_end
+            concurrent_params.append(params)
+            current_start = current_end
+        
+        return concurrent_params
+
+    
+    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
+        max_requests = 1
+        requests_params = []
+
+        # use sequential requests for incremental syncs
+        if self.stream_state.get("replication_key_value") or not self.replication_key:
+            max_requests = 20
+            requests_params = self.get_concurrent_params(context, max_requests)
+
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=max_requests
+        ) as executor:
+            futures = {
+                executor.submit(self.concurrent_request, x): x for x in requests_params
+            }
+
+            # Process each future as it completes
+            for future in concurrent.futures.as_completed(futures):
+                context = futures[future]
+                # Yield records
+                for result in future.result():
+                    yield result
