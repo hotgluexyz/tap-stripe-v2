@@ -16,6 +16,7 @@ import backoff
 from singer_sdk.exceptions import RetriableAPIError, FatalAPIError
 import copy
 import concurrent.futures
+import math
 
 import singer
 from singer import StateMessage
@@ -323,66 +324,17 @@ class stripeStream(RESTStream):
         singer.write_message(StateMessage(value=tap_state))
 
 
-class StripeStreamV2(stripeStream):
-    """Class for the streams that need to get data from invoice items in full sync and more than one event in incremental syncs """
-
-    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
-        # activate flag if it's a full sync to fetch prices from invoiceitems
-        if not self.stream_state.get("replication_key"):
-            self.from_invoice_items = True
-        return super().request_records(context)
-
-    def get_next_page_token(self, response, previous_token):
-        next_page_token = super().get_next_page_token(response, previous_token)
-        # get a dummy next page token to iterate first through invoice_items and then through prices
-        if self.from_invoice_items and not next_page_token:
-            next_page_token = 1
-            self.from_invoice_items = False
-        return next_page_token
-    
-    def get_url_params(self, context, next_page_token):
-        """Return a dictionary of values to be used in URL parameterization."""
-        params = super().get_url_params(context, next_page_token)
-        # delete the dummy next page token to avoid errors
-        if not self.from_invoice_items and next_page_token == 1:
-            del params["starting_after"]
-        return params
-
-
 class ConcurrentStream(stripeStream):
     """Class for the streams that need to get data from invoice items in full sync and more than one event in incremental syncs """
 
-    def prepare_request(
+    def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
-    ) -> requests.PreparedRequest:
-        http_method = self.rest_method
-        url: str = self.get_url(context)
-        # update params with the date chunks for concurrent requests
-        params: dict = self.get_url_params(context, next_page_token)
-        if context:
-            params.update(context)
-
-        request_data = self.prepare_request_payload(context, next_page_token)
-        headers = self.http_headers
-
-        authenticator = self.authenticator
-        if authenticator:
-            headers.update(authenticator.auth_headers or {})
-            params.update(authenticator.auth_params or {})
-
-        request = cast(
-            requests.PreparedRequest,
-            self.requests_session.prepare_request(
-                requests.Request(
-                    method=http_method,
-                    url=url,
-                    params=params,
-                    headers=headers,
-                    json=request_data,
-                ),
-            ),
-        )
-        return request
+    ) -> Dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params = super().get_url_params(context, next_page_token)
+        if context and "concurrent_params" in context:
+            params.update(context["concurrent_params"])
+        return params
     
     def concurrent_request(self, context):
         next_page_token: Any = None
@@ -390,6 +342,10 @@ class ConcurrentStream(stripeStream):
         decorated_request = self.request_decorator(self._request)
 
         consolidated_response = []
+
+        start_date = datetime.fromtimestamp(context["concurrent_params"]["created[gte]"]).isoformat()
+        end_date = datetime.fromtimestamp(context["concurrent_params"]["created[lt]"]).isoformat()
+        self.logger.info(f"Fetching data concurrently from {self.name} from {start_date} to {end_date}")
 
         while not finished:
             prepared_request = self.prepare_request(
@@ -411,23 +367,25 @@ class ConcurrentStream(stripeStream):
         return consolidated_response
     
     def get_concurrent_params(self, context, max_requests):
-        base_params = self.get_url_params(context, None)
-
         start_date = self.get_starting_time(context)
         start_date_timestamp = int(start_date.timestamp())
         end_date_timestamp = int(datetime.utcnow().timestamp())
 
         current_start = start_date_timestamp
-        partition_size = round((end_date_timestamp - start_date_timestamp) / max_requests)
+        default_partition_size = 2592000 # one month as default
+        partition_size = min(math.ceil((end_date_timestamp - start_date_timestamp) / max_requests), default_partition_size)
 
         concurrent_params = []
 
-        for _ in range(max_requests):
+        chunks = math.ceil((end_date_timestamp - start_date_timestamp)/partition_size)
+        for i in range(chunks):
+            params = {}
             current_end = current_start + partition_size
-            params = base_params.copy()
             params["created[gte]"] = current_start
-            params["created[lt]"] = current_end
-            concurrent_params.append(params)
+            # don't put an end_date at the final chunk
+            if i < chunks-1:
+                params["created[lt]"] = current_end
+            concurrent_params.append({"concurrent_params": params})
             current_start = current_end
         
         return concurrent_params
@@ -438,20 +396,41 @@ class ConcurrentStream(stripeStream):
         requests_params = []
 
         # use sequential requests for incremental syncs
-        if self.stream_state.get("replication_key_value") or not self.replication_key:
-            max_requests = 20
+        if not self.stream_state.get("replication_key_value") or not self.replication_key:
+            max_requests = 25 if "live" in self.config.get("client_secret") else 10
             requests_params = self.get_concurrent_params(context, max_requests)
+        
+        if len(requests_params):
+            for i in range(0, len(requests_params), max_requests):
+                req_params = requests_params[i: i + max_requests]
 
-        with concurrent.futures.ThreadPoolExecutor(
-            max_workers=max_requests
-        ) as executor:
-            futures = {
-                executor.submit(self.concurrent_request, x): x for x in requests_params
-            }
+                with concurrent.futures.ThreadPoolExecutor(
+                    max_workers=max_requests
+                ) as executor:
+                    futures = {
+                        executor.submit(self.concurrent_request, x): x for x in req_params
+                    }
 
-            # Process each future as it completes
-            for future in concurrent.futures.as_completed(futures):
-                context = futures[future]
-                # Yield records
-                for result in future.result():
-                    yield result
+                    # Process each future as it completes
+                    for future in concurrent.futures.as_completed(futures):
+                        context = futures[future]
+                        # Yield records
+                        for result in future.result():
+                            yield result            
+        else:
+            # keep original behaviour for incremental syncs
+            yield from super().request_records(context)
+
+
+class StripeStreamV2(ConcurrentStream):
+    """Class for the streams that need to get data from invoice items in full sync and more than one event in incremental syncs """
+
+    def request_records(self, context: Optional[dict]) -> Iterable[dict]:
+        # activate flag if it's a full sync to fetch prices from invoiceitems
+        if not self.stream_state.get("replication_key"):
+            # get data from invoice items
+            self.from_invoice_items = True
+            yield from super().request_records(context)
+            # get data from normal enpoint
+            self.from_invoice_items = False
+            yield from super().request_records(context)
