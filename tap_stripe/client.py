@@ -344,7 +344,7 @@ class ConcurrentStream(stripeStream):
         consolidated_response = []
 
         start_date = datetime.fromtimestamp(context["concurrent_params"]["created[gte]"]).isoformat()
-        end_date = datetime.fromtimestamp(context["concurrent_params"]["created[lt]"]).isoformat()
+        end_date = datetime.fromtimestamp(context["concurrent_params"].get("created[lt]", datetime.utcnow().timestamp())).isoformat()
         self.logger.info(f"Fetching data concurrently from {self.name} from {start_date} to {end_date}")
 
         while not finished:
