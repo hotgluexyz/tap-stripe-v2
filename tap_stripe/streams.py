@@ -981,6 +981,7 @@ class PaymentIntentsStream(ConcurrentStream):
     name = "payment_intents"
     object = "payment_intent"
     replication_key = "updated"
+    event_filter = "payment_intent.*"
 
     @property
     def path(self):
