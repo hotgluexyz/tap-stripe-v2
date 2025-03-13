@@ -22,6 +22,7 @@ import singer
 from singer import StateMessage
 import requests
 from requests.adapters import HTTPAdapter
+import time
 
 from singer_sdk.helpers._state import (
     finalize_state_progress_markers,
@@ -287,7 +288,7 @@ class stripeStream(RESTStream):
                 ConnectionError,
             ),
             max_tries=5,
-            factor=2,
+            factor=3,
         )(func)
         return decorator
 
@@ -363,7 +364,7 @@ class ConcurrentStream(stripeStream):
     def max_concurrent_requests(self):
         # if stream has child streams selected use half of possible connections 
         # for parent and half for child to be able to do concurrent calls in both
-        max_requests = 80 if "live" in self.config.get("client_secret") else 20
+        max_requests = 80 if "live" in self.config.get("client_secret") else 20 # using 80% of rate limit
         has_child_selected = any(getattr(obj, 'selected', False) for obj in self.child_streams)
         if has_child_selected:
             max_requests = max_requests/2
@@ -424,8 +425,10 @@ class ConcurrentStream(stripeStream):
         end_date_timestamp = int(datetime.utcnow().timestamp())
 
         current_start = start_date_timestamp
-        default_partition_size = 2592000 # one month as default
-        partition_size = min(math.ceil((end_date_timestamp - start_date_timestamp) / max_requests), default_partition_size)
+        max_size = 2592000 # one month as maximum
+        min_size = 604800 # one week as minimum
+        partition_size = math.ceil((end_date_timestamp - start_date_timestamp) / max_requests)
+        partition_size = max_size if partition_size > max_size else min_size if partition_size < min_size else partition_size
 
         concurrent_params = []
 
@@ -456,9 +459,13 @@ class ConcurrentStream(stripeStream):
         ]) and not self.parent_stream_type:
             max_requests = self.max_concurrent_requests
             requests_params = self.get_concurrent_params(context, max_requests)
-        
+
+            # Time per batch to stay within the rate limit
+            min_time_per_batch = 1 # The limit we use for concurrency is the same limit of requests allowed per second 
+
             for i in range(0, len(requests_params), max_requests):
                 req_params = requests_params[i: i + max_requests]
+                batch_start_time = time.time()
 
                 with concurrent.futures.ThreadPoolExecutor(
                     max_workers=max_requests
@@ -472,7 +479,14 @@ class ConcurrentStream(stripeStream):
                         context = futures[future]
                         # Yield records
                         for result in future.result():
-                            yield result            
+                            yield result       
+                # Enforce rate limit
+                elapsed = time.time() - batch_start_time
+                if elapsed < min_time_per_batch:
+                    sleep_time = min_time_per_batch - elapsed
+                    self.logger.info(f"Pausing for {sleep_time} to respect rate limits per second.")                    
+                    time.sleep(min_time_per_batch - elapsed)  
+                batch_start_time = time.time()    
         else:
             yield from super().request_records(context)
 
