@@ -289,6 +289,7 @@ class stripeStream(RESTStream):
             ),
             max_tries=5,
             factor=3,
+            base=1
         )(func)
         return decorator
 
@@ -364,7 +365,7 @@ class ConcurrentStream(stripeStream):
     def max_concurrent_requests(self):
         # if stream has child streams selected use half of possible connections 
         # for parent and half for child to be able to do concurrent calls in both
-        max_requests = 80 if "live" in self.config.get("client_secret") else 20 # using 80% of rate limit
+        max_requests = 80 if "live" in self.config.get("client_secret") else 27 # using 80% of rate limit
         has_child_selected = any(getattr(obj, 'selected', False) for obj in self.child_streams)
         if has_child_selected:
             max_requests = max_requests/2
