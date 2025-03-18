@@ -174,7 +174,9 @@ class stripeStream(RESTStream):
                 if record_id not in self.event_ids:
                     self.event_ids.append(record_id)
                     clean_records.append(record)
-        return clean_records
+            return clean_records
+        else:
+            return records
     
     def get_lines(self, record, decorated_request):
         base_url = self.url_base
