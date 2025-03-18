@@ -195,7 +195,7 @@ class InvoiceLineItems(stripeStream):
     ) -> Optional[Any]:
         """Return a token for identifying next page or None if no more pages."""
         return None
-
+    
     def get_child_context(self, record, context) -> dict:
         if record.get("invoice_item"):
             return {"invoice_item_id": record["invoice_item"]}
@@ -203,7 +203,6 @@ class InvoiceLineItems(stripeStream):
     def _sync_children(self, child_context: dict) -> None:
         if child_context is not None:
             return super()._sync_children(child_context)
-
 
 class InvoiceItems(stripeStream):
     """Define InvoiceItems stream."""
@@ -280,7 +279,7 @@ class InvoiceItems(stripeStream):
         if row["id"] not in self.ids:
             self.ids.add(row["id"])
             return super().post_process(row, context)
-        
+
 
 class Subscriptions(ConcurrentStream):
     """Define Subscriptions stream."""
