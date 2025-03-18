@@ -530,6 +530,8 @@ class ConcurrentStream(stripeStream):
                                 yield future.result()
         else:
             for record in records:
+                if not record.get("updated") and "created" in record:
+                    record["updated"] = record["created"]
                 record = self.get_lines(record, decorated_request)
                 yield record
 
