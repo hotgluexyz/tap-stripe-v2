@@ -363,6 +363,9 @@ class ConcurrentStream(stripeStream):
 
     @property
     def max_concurrent_requests(self):
+        # use max from config for testing purposes (vcr don't work well with concurrency)
+        if self.config.get("max_concurrent_requests"):
+            return self.config["max_concurrent_requests"]
         # if stream has child streams selected use half of possible connections 
         # for parent and half for child to be able to do concurrent calls in both
         max_requests = 80 if "live" in self.config.get("client_secret") else 27 # using 80% of rate limit
