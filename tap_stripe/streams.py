@@ -1,9 +1,9 @@
 """Stream type classes for tap-stripe-v2."""
 
-from typing import Any, Optional, Iterable, Dict
+from typing import Any, Optional, Iterable, Dict, cast
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
-from tap_stripe.client import stripeStream, StripeStreamV2
+from tap_stripe.client import stripeStream, StripeStreamV2, ConcurrentStream
 from urllib.parse import urlencode
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -15,7 +15,7 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
-class Invoices(stripeStream):
+class Invoices(ConcurrentStream):
     """Define Invoices stream."""
 
     name = "invoices"
@@ -133,6 +133,7 @@ class Invoices(stripeStream):
             }
             stripeStream.invoice_lines = data
             return {}
+
 
 class InvoiceLineItems(stripeStream):
     name = "invoice_line_items"
@@ -279,7 +280,8 @@ class InvoiceItems(stripeStream):
             self.ids.add(row["id"])
             return super().post_process(row, context)
 
-class Subscriptions(stripeStream):
+
+class Subscriptions(ConcurrentStream):
     """Define Subscriptions stream."""
 
     name = "subscriptions"
@@ -403,7 +405,6 @@ class SubscriptionItemStream(stripeStream):
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"subscription_item_id": record["id"]}
-
 
 
 class Plans(StripeStreamV2):
@@ -530,8 +531,7 @@ class Plans(StripeStreamV2):
                     yield record
 
 
-
-class CreditNotes(stripeStream):
+class CreditNotes(ConcurrentStream):
     """Define CreditNotes stream."""
 
     name = "credit_notes"
@@ -581,7 +581,7 @@ class CreditNotes(stripeStream):
         }
 
 
-class Coupons(stripeStream):
+class Coupons(ConcurrentStream):
     """Define Coupons stream."""
 
     name = "coupons"
@@ -673,7 +673,7 @@ class Products(StripeStreamV2):
                 yield record
 
 
-class Customers(stripeStream):
+class Customers(ConcurrentStream):
     """Define Customers stream."""
 
     name = "customers"
@@ -712,7 +712,7 @@ class Customers(stripeStream):
     ).to_dict()
 
 
-class Events(stripeStream):
+class Events(ConcurrentStream):
     """Define Coupons stream."""
 
     name = "events"
@@ -732,7 +732,7 @@ class Events(stripeStream):
     ).to_dict()
 
 
-class SubscriptionSchedulesStream(stripeStream):
+class SubscriptionSchedulesStream(ConcurrentStream):
     """Define stream."""
 
     name = "subscription_schedules"
@@ -786,6 +786,7 @@ class UsageRecordsStream(stripeStream):
             msg = self.response_error_message(response)
             raise RetriableAPIError(msg, response)
 
+
 class TaxRatesStream(stripeStream):
 
     name = "tax_rates"
@@ -811,7 +812,7 @@ class TaxRatesStream(stripeStream):
     ).to_dict()        
 
 
-class BalanceTransactionsStream(stripeStream):
+class BalanceTransactionsStream(ConcurrentStream):
 
     name = "balance_transactions"
     path = "balance_transactions"
@@ -854,7 +855,7 @@ class BalanceTransactionsStream(stripeStream):
                 self.forced_replication_method = catalog_entry.replication_method
 
 
-class ChargesStream(stripeStream):
+class ChargesStream(ConcurrentStream):
 
     name = "charges"
     object = "charge"
@@ -910,7 +911,8 @@ class ChargesStream(stripeStream):
         th.Property("transfer_group", th.StringType),
     ).to_dict()
 
-class CheckoutSessionsStream(stripeStream):
+
+class CheckoutSessionsStream(ConcurrentStream):
 
     name = "checkout_sessions"
     object = "checkout.session"
@@ -996,7 +998,9 @@ class CreditNoteLineItemsStream(stripeStream):
         th.Property("unit_amount_decimal", th.StringType),
         th.Property("unit_amount_excluding_tax", th.StringType),
     ).to_dict()
-class DisputesIssuingStream(stripeStream):
+
+    
+class DisputesIssuingStream(ConcurrentStream):
 
     name = "disputes_issuing"
     object = "issuing.dispute"
@@ -1019,16 +1023,17 @@ class DisputesIssuingStream(stripeStream):
         th.Property("transaction", th.StringType),
         
     ).to_dict()
-class PaymentIntentsStream(stripeStream):
 
+
+class PaymentIntentsStream(ConcurrentStream):
     name = "payment_intents"
     object = "payment_intent"
     replication_key = "updated"
+    event_filter = "payment_intent.*"
 
     @property
     def path(self):
         return "events" if self.get_from_events else "payment_intents"
-    
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -1068,9 +1073,10 @@ class PaymentIntentsStream(stripeStream):
         th.Property("status", th.StringType),
         th.Property("transfer_data", th.CustomType({"type": ["object", "string"]})),
         th.Property("transfer_group", th.StringType),
-        
     ).to_dict()
-class PayoutsStream(stripeStream):
+
+
+class PayoutsStream(ConcurrentStream):
 
     name = "payouts"
     object = "payout"
@@ -1105,9 +1111,10 @@ class PayoutsStream(stripeStream):
         th.Property("statement_descriptor", th.StringType),
         th.Property("status", th.StringType),
         th.Property("type", th.StringType),
-        
     ).to_dict()
-class PromotionCodesStream(stripeStream):
+
+
+class PromotionCodesStream(ConcurrentStream):
 
     name = "promotion_codes"
     object = "promotion_code"
@@ -1135,7 +1142,8 @@ class PromotionCodesStream(stripeStream):
         th.Property("times_redeemed", th.NumberType),
     ).to_dict()
 
-class TransfersStream(stripeStream):
+
+class TransfersStream(ConcurrentStream):
 
     name = "transfers"
     object = "transfer"
@@ -1164,9 +1172,10 @@ class TransfersStream(stripeStream):
         th.Property("source_transaction", th.StringType),
         th.Property("source_type", th.StringType),
         th.Property("transfer_group", th.StringType),
-        
     ).to_dict()
-class RefundsStream(stripeStream):
+
+
+class RefundsStream(ConcurrentStream):
 
     name = "refunds"
     replication_key = "updated"
@@ -1201,8 +1210,9 @@ class RefundsStream(stripeStream):
         th.Property("source_transfer_reversal", th.StringType),
         th.Property("status", th.StringType),
         th.Property("transfer_reversal", th.StringType)
-).to_dict()
-    
+    ).to_dict()
+
+
 class PayoutReportsStream(stripeStream):
 
     name = "report_payout_reconciliation"
@@ -1413,7 +1423,8 @@ class PayoutReportsStream(stripeStream):
                 continue
             yield transformed_record
 
-class DisputesStream(stripeStream):
+
+class DisputesStream(ConcurrentStream):
     name = "disputes"
     object = "dispute"
     replication_key = "updated"
