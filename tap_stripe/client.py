@@ -23,6 +23,9 @@ from singer import StateMessage
 import requests
 from requests.adapters import HTTPAdapter
 import time
+import queue
+import psutil
+import os
 
 from singer_sdk.helpers._state import (
     finalize_state_progress_markers,
@@ -45,6 +48,11 @@ class stripeStream(RESTStream):
     expand = []
     fullsync_ids = []
     get_data_from_id = False
+
+    def log_memory_usage(self, tag=""):
+        process = psutil.Process(os.getpid())
+        mem = process.memory_info().rss / (1024 * 1024)  # In MB
+        self.logger.info(f"[MEMORY] {tag}: {mem:.2f} MB")
 
     @cached
     def get_starting_time(self, context):
@@ -395,12 +403,25 @@ class ConcurrentStream(stripeStream):
             params.update(context["concurrent_params"])
         return params
     
-    def concurrent_request(self, context):
+    @backoff.on_exception(
+        backoff.expo,
+        (
+            Exception
+        ),
+        max_tries=10,
+        factor=3,
+        base=1
+    )
+    def safe_put(self, q: queue.Queue, item):
+        if q.qsize() == 500:
+            raise Exception("Queue is full backing off...")
+        q.put(item, timeout=2)
+    
+    def concurrent_request(self, context, record_queue):
+        self.logger.info(f"Started request thread for context {context}")
         next_page_token: Any = None
         finished = False
         decorated_request = self.request_decorator(self._request)
-
-        consolidated_response = []
 
         start_date = datetime.fromtimestamp(context["concurrent_params"]["created[gte]"]).isoformat()
         end_date = datetime.fromtimestamp(context["concurrent_params"].get("created[lt]", datetime.utcnow().timestamp())).isoformat()
@@ -411,7 +432,13 @@ class ConcurrentStream(stripeStream):
                 context, next_page_token=next_page_token
             )
             resp = decorated_request(prepared_request, context)
-            consolidated_response.extend(self.parse_response(resp))
+            for record in self.parse_response(resp):
+                self.logger.info(f"SIZE OF QUEUE BEFORE ADDING {record_queue.qsize()}")
+                self.safe_put(record_queue, record)
+                # record_queue.put(record)
+                self.logger.info(f"SIZE OF QUEUE AFTER ADDING {record_queue.qsize()}")
+                self.log_memory_usage(f"Memory after adding record")
+
             previous_token = copy.deepcopy(next_page_token)
             next_page_token = self.get_next_page_token(
                 response=resp, previous_token=previous_token
@@ -423,7 +450,11 @@ class ConcurrentStream(stripeStream):
                 )
             # Cycle until get_next_page_token() no longer returns a value
             finished = not next_page_token
-        return consolidated_response
+        
+        # mark thread as done
+        self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
+        record_queue.put(None)
+        self.log_memory_usage("After finishing request thread")
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -473,19 +504,22 @@ class ConcurrentStream(stripeStream):
                 req_params = requests_params[i: i + max_requests]
                 batch_start_time = time.time()
 
-                with concurrent.futures.ThreadPoolExecutor(
-                    max_workers=max_requests
-                ) as executor:
-                    futures = {
-                        executor.submit(self.concurrent_request, x): x for x in req_params
-                    }
+                record_queue = queue.Queue(1000)
 
-                    # Process each future as it completes
-                    for future in concurrent.futures.as_completed(futures):
-                        context = futures[future]
-                        # Yield records
-                        for result in future.result():
-                            yield result       
+                self.logger.info("Starting batch of concurrent requests")
+                with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
+                    for context in req_params:
+                        executor.submit(self.concurrent_request, context, record_queue)
+
+                    # Consumer loop for this batch
+                    finished_threads = 0
+                    while finished_threads < len(req_params):
+                        record = record_queue.get()
+                        if record is None:
+                            finished_threads += 1
+                        else:
+                            yield record
+
                 # Enforce rate limit
                 elapsed = time.time() - batch_start_time
                 if elapsed < min_time_per_batch:
