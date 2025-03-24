@@ -433,11 +433,7 @@ class ConcurrentStream(stripeStream):
             )
             resp = decorated_request(prepared_request, context)
             for record in self.parse_response(resp):
-                self.logger.info(f"SIZE OF QUEUE BEFORE ADDING {record_queue.qsize()}")
                 self.safe_put(record_queue, record)
-                # record_queue.put(record)
-                self.logger.info(f"SIZE OF QUEUE AFTER ADDING {record_queue.qsize()}")
-                self.log_memory_usage(f"Memory after adding record")
 
             previous_token = copy.deepcopy(next_page_token)
             next_page_token = self.get_next_page_token(
@@ -452,6 +448,7 @@ class ConcurrentStream(stripeStream):
             finished = not next_page_token
         
         # mark thread as done
+        self.log_memory_usage(f"Memory after adding record")
         self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
         record_queue.put(None)
         self.log_memory_usage("After finishing request thread")
