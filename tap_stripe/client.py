@@ -415,43 +415,51 @@ class ConcurrentStream(stripeStream):
     def safe_put(self, q: queue.Queue, item):
         if q.qsize() == 500:
             raise Exception("Queue is full backing off...")
+        self.logger.info(f"Size before adding record {q.qsize()}")
         q.put(item, timeout=2)
+        self.logger.info(f"Size before adding record {q.qsize()}")
+
     
     def concurrent_request(self, context, record_queue):
-        self.logger.info(f"Started request thread for context {context}")
-        next_page_token: Any = None
-        finished = False
-        decorated_request = self.request_decorator(self._request)
+        try:
+            self.logger.info(f"Started request thread for context {context}")
+            next_page_token: Any = None
+            finished = False
+            decorated_request = self.request_decorator(self._request)
 
-        start_date = datetime.fromtimestamp(context["concurrent_params"]["created[gte]"]).isoformat()
-        end_date = datetime.fromtimestamp(context["concurrent_params"].get("created[lt]", datetime.utcnow().timestamp())).isoformat()
-        self.logger.info(f"Fetching data concurrently from {self.name} from {start_date} to {end_date}")
+            start_date = datetime.fromtimestamp(context["concurrent_params"]["created[gte]"]).isoformat()
+            end_date = datetime.fromtimestamp(context["concurrent_params"].get("created[lt]", datetime.utcnow().timestamp())).isoformat()
+            self.logger.info(f"Fetching data concurrently from {self.name} from {start_date} to {end_date}")
 
-        while not finished:
-            prepared_request = self.prepare_request(
-                context, next_page_token=next_page_token
-            )
-            resp = decorated_request(prepared_request, context)
-            for record in self.parse_response(resp):
-                self.safe_put(record_queue, record)
-
-            previous_token = copy.deepcopy(next_page_token)
-            next_page_token = self.get_next_page_token(
-                response=resp, previous_token=previous_token
-            )
-            if next_page_token and next_page_token == previous_token:
-                raise RuntimeError(
-                    f"Loop detected in pagination. "
-                    f"Pagination token {next_page_token} is identical to prior token."
+            while not finished:
+                prepared_request = self.prepare_request(
+                    context, next_page_token=next_page_token
                 )
-            # Cycle until get_next_page_token() no longer returns a value
-            finished = not next_page_token
-        
-        # mark thread as done
-        self.log_memory_usage(f"Memory after adding record")
-        self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
-        record_queue.put(None)
-        self.log_memory_usage("After finishing request thread")
+                resp = decorated_request(prepared_request, context)
+
+                for record in self.parse_response(resp):
+                    self.safe_put(record_queue, record)
+
+                previous_token = copy.deepcopy(next_page_token)
+                next_page_token = self.get_next_page_token(
+                    response=resp, previous_token=previous_token
+                )
+                if next_page_token and next_page_token == previous_token:
+                    raise RuntimeError(
+                        f"Loop detected in pagination. "
+                        f"Pagination token {next_page_token} is identical to prior token."
+                    )
+                # Cycle until get_next_page_token() no longer returns a value
+                finished = not next_page_token
+        except Exception as e:
+            self.logger.exception(e)
+            raise 
+        finally:
+            # mark thread as done
+            self.log_memory_usage(f"Memory after adding record")
+            self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
+            record_queue.put(None)
+            self.log_memory_usage("After finishing request thread")
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -504,12 +512,12 @@ class ConcurrentStream(stripeStream):
                 record_queue = queue.Queue(1000)
 
                 self.logger.info("Starting batch of concurrent requests")
+                finished_threads = 0
                 with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
                     for context in req_params:
                         executor.submit(self.concurrent_request, context, record_queue)
 
                     # Consumer loop for this batch
-                    finished_threads = 0
                     while finished_threads < len(req_params):
                         record = record_queue.get()
                         if record is None:
@@ -534,40 +542,68 @@ class ConcurrentStream(stripeStream):
         return params
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        # yield from [{"id": "hdhd"}]
+        self.logger.info(f"donde chingaos esta el error 1")
         decorated_request = self.request_decorator(self._request)
+        self.logger.info(f"donde chingaos esta el error 1.1")
         try:
             records = extract_jsonpath(self.records_jsonpath, input=response.json())
         except:
+            self.logger.info(f"donde chingaos esta el error 2")
             records = response
         
+        self.logger.info(f"donde chingaos esta el error 3")
         if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id):
+            self.logger.info(f"donde chingaos esta el error 4")
             decorated_request = self.request_decorator(self._request)
+            self.logger.info(f"donde chingaos esta el error 5")
             records = self.clean_records_from_events(records)
+            self.logger.info(f"donde chingaos esta el error 6")
             # get records from "base_url/record_id" concurrently
             requests_params = self.get_inc_concurrent_params(records, decorated_request)
+            self.logger.info(f"donde chingaos esta el error 7")
             max_requests = self.max_concurrent_requests
+            self.logger.info(f"donde chingaos esta el error 8")
             if len(requests_params):
+                self.logger.info(f"donde chingaos esta el error 9")
                 for i in range(0, len(requests_params), max_requests):
+                    self.logger.info(f"donde chingaos esta el error 10")
                     req_params = requests_params[i: i + max_requests]
+                    self.logger.info(f"donde chingaos esta el error 11")
 
                     with concurrent.futures.ThreadPoolExecutor(
                         max_workers=max_requests
                     ) as executor:
+                        self.logger.info(f"donde chingaos esta el error 12")
                         futures = {
                             executor.submit(self.get_record_from_events, x["record"], x["decorated_request"]): x for x in req_params
                         }
+                        self.logger.info(f"donde chingaos esta el error 13")
                         # Process each future as it completes
                         for future in concurrent.futures.as_completed(futures):
                             # Yield records
+                            self.logger.info(f"donde chingaos esta el error 14")
                             if future.result():
+                                self.logger.info(f"donde chingaos esta el error 15")
                                 yield future.result()
+            self.logger.info(f"donde chingaos esta el error 16")
         else:
+            counter = 0
+            records = list(records)
+            self.logger.info(f"donde chingaos esta el error 17, len {len(records)}")
             for record in records:
+                self.logger.info(f"Counter {counter}, Record {record}")
                 if not record.get("updated") and "created" in record:
+                    self.logger.info(f"donde chingaos esta el error 19")
                     record["updated"] = record["created"]
-                record = self.get_lines(record, decorated_request)
+                    self.logger.info(f"donde chingaos esta el error 20")
+                # _record = self.get_lines(record, decorated_request)
+                # self.logger.info(f"donde chingaos esta el error 21, final record {_record}")
+                counter +=1
                 yield record
 
+        return iter([])
+    
     def mark_last_item(self, generator):
         iterator = iter(generator)
         try:
@@ -689,4 +725,5 @@ class StripeStreamV2(ConcurrentStream):
         for record in super().parse_response(response):
             if self.from_invoice_items:
                 if record["id"] in self.fullsync_ids:
-                    return
+                    continue
+            yield record
