@@ -543,64 +543,39 @@ class ConcurrentStream(stripeStream):
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         # yield from [{"id": "hdhd"}]
-        self.logger.info(f"donde chingaos esta el error 1")
         decorated_request = self.request_decorator(self._request)
-        self.logger.info(f"donde chingaos esta el error 1.1")
         try:
             records = extract_jsonpath(self.records_jsonpath, input=response.json())
         except:
-            self.logger.info(f"donde chingaos esta el error 2")
             records = response
         
-        self.logger.info(f"donde chingaos esta el error 3")
         if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id):
-            self.logger.info(f"donde chingaos esta el error 4")
             decorated_request = self.request_decorator(self._request)
-            self.logger.info(f"donde chingaos esta el error 5")
             records = self.clean_records_from_events(records)
-            self.logger.info(f"donde chingaos esta el error 6")
             # get records from "base_url/record_id" concurrently
             requests_params = self.get_inc_concurrent_params(records, decorated_request)
-            self.logger.info(f"donde chingaos esta el error 7")
             max_requests = self.max_concurrent_requests
-            self.logger.info(f"donde chingaos esta el error 8")
             if len(requests_params):
-                self.logger.info(f"donde chingaos esta el error 9")
                 for i in range(0, len(requests_params), max_requests):
-                    self.logger.info(f"donde chingaos esta el error 10")
                     req_params = requests_params[i: i + max_requests]
-                    self.logger.info(f"donde chingaos esta el error 11")
 
                     with concurrent.futures.ThreadPoolExecutor(
                         max_workers=max_requests
                     ) as executor:
-                        self.logger.info(f"donde chingaos esta el error 12")
                         futures = {
                             executor.submit(self.get_record_from_events, x["record"], x["decorated_request"]): x for x in req_params
                         }
-                        self.logger.info(f"donde chingaos esta el error 13")
                         # Process each future as it completes
                         for future in concurrent.futures.as_completed(futures):
                             # Yield records
-                            self.logger.info(f"donde chingaos esta el error 14")
                             if future.result():
-                                self.logger.info(f"donde chingaos esta el error 15")
                                 yield future.result()
-            self.logger.info(f"donde chingaos esta el error 16")
         else:
-            counter = 0
-            records = list(records)
-            self.logger.info(f"donde chingaos esta el error 17, len {len(records)}")
             for record in records:
-                self.logger.info(f"Counter {counter}, Record {record}")
                 if not record.get("updated") and "created" in record:
-                    self.logger.info(f"donde chingaos esta el error 19")
                     record["updated"] = record["created"]
-                    self.logger.info(f"donde chingaos esta el error 20")
-                # _record = self.get_lines(record, decorated_request)
-                # self.logger.info(f"donde chingaos esta el error 21, final record {_record}")
-                counter +=1
-                yield record
+                _record = self.get_lines(record, decorated_request)
+                yield _record
 
         return iter([])
     
