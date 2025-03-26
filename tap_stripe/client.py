@@ -417,7 +417,7 @@ class ConcurrentStream(stripeStream):
             raise Exception("Queue is full backing off...")
         self.logger.info(f"Size before adding record {q.qsize()}")
         q.put(item, timeout=2)
-        self.logger.info(f"Size before adding record {q.qsize()}")
+        self.logger.info(f"Size after adding record {q.qsize()}")
 
     
     def concurrent_request(self, context, record_queue):
