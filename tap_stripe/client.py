@@ -26,6 +26,7 @@ import time
 import queue
 import psutil
 import os
+import random
 
 from singer_sdk.helpers._state import (
     finalize_state_progress_markers,
@@ -370,6 +371,7 @@ class ConcurrentStream(stripeStream):
         adapter = HTTPAdapter(pool_connections=90, pool_maxsize=90)
         self.requests_session.mount("https://", adapter)
 
+    queue_size = 1000
 
     @property
     def max_concurrent_requests(self):
@@ -378,7 +380,7 @@ class ConcurrentStream(stripeStream):
             return self.config["max_concurrent_requests"]
         # if stream has child streams selected use half of possible connections 
         # for parent and half for child to be able to do concurrent calls in both
-        max_requests = 80 if "live" in self.config.get("client_secret") else 27 # using 80% of rate limit
+        max_requests = 80 if "live" in self.config.get("client_secret") else 20 # using 80% of rate limit
         has_child_selected = any(getattr(obj, 'selected', False) for obj in self.child_streams)
         if has_child_selected:
             max_requests = max_requests/2
@@ -403,21 +405,36 @@ class ConcurrentStream(stripeStream):
             params.update(context["concurrent_params"])
         return params
     
-    @backoff.on_exception(
-        backoff.expo,
-        (
-            Exception
-        ),
-        max_tries=10,
-        factor=3,
-        base=1
-    )
+
     def safe_put(self, q: queue.Queue, item):
-        if q.qsize() == 500:
-            raise Exception("Queue is full backing off...")
-        self.logger.info(f"Size before adding record {q.qsize()}")
-        q.put(item, timeout=2)
-        self.logger.info(f"Size after adding record {q.qsize()}")
+        max_retry_time = 300  # 5 minutes maximum retry time
+        start_time = time.time()
+        base_delay = 1  # Start with 1 second delay
+        max_delay = 30  # Maximum delay of 30 seconds
+        jitter = 0.1  # 10% jitter
+
+        while True:
+            current_time = time.time()
+            if current_time - start_time > max_retry_time:
+                raise Exception(f"Failed to put item in queue after {max_retry_time} seconds")
+
+            try:
+                # Try to put item with a timeout
+                q.put(item, timeout=5)  # 5 second timeout for put operation
+                return
+
+            except queue.Full:
+                # Calculate delay with exponential backoff and jitter
+                delay = min(base_delay * (2 ** (current_time - start_time)), max_delay)
+                jitter_amount = delay * jitter * (random.random() * 2 - 1)  # Random jitter between -10% and +10%
+                delay = delay + jitter_amount
+                
+                self.logger.info(f"Queue full. Backing off for {delay:.2f} seconds")
+                time.sleep(delay)
+                continue
+            except Exception as e:
+                self.logger.error(f"Error putting item in queue: {str(e)}")
+                raise
 
     
     def concurrent_request(self, context, record_queue):
@@ -453,13 +470,13 @@ class ConcurrentStream(stripeStream):
                 finished = not next_page_token
         except Exception as e:
             self.logger.exception(e)
+            record_queue.put(("ERROR", str(e)))
             raise 
         finally:
             # mark thread as done
-            self.log_memory_usage(f"Memory after adding record")
             self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
             record_queue.put(None)
-            self.log_memory_usage("After finishing request thread")
+            self.log_memory_usage("Memory after finishing request thread")
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -509,21 +526,41 @@ class ConcurrentStream(stripeStream):
                 req_params = requests_params[i: i + max_requests]
                 batch_start_time = time.time()
 
-                record_queue = queue.Queue(1000)
+                record_queue = queue.Queue(self.queue_size)
 
                 self.logger.info("Starting batch of concurrent requests")
                 finished_threads = 0
                 with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
+                    # Store futures to check for errors
+                    futures = []
                     for context in req_params:
-                        executor.submit(self.concurrent_request, context, record_queue)
+                        future = executor.submit(self.concurrent_request, context, record_queue)
+                        futures.append(future)
 
                     # Consumer loop for this batch
                     while finished_threads < len(req_params):
-                        record = record_queue.get()
-                        if record is None:
-                            finished_threads += 1
-                        else:
-                            yield record
+                        # Check futures for errors first
+                        for future in futures:
+                            if future.done():
+                                try:
+                                    future.result()  # This will raise any exceptions from the thread, including parse_response errors
+                                except Exception as e:
+                                    self.logger.exception(f"Error in worker thread: {str(e)}")
+                                    raise Exception(f"Worker thread error: {str(e)}")
+
+                        # Then check queue for records and errors
+                        try:
+                            record = record_queue.get(timeout=1)  # 1 second timeout to allow checking futures
+                            if record is None:
+                                finished_threads += 1
+                            elif isinstance(record, tuple) and record[0] == "ERROR":
+                                # Handle error from worker thread
+                                self.logger.exception(f"Received error from worker thread: {record[1]}")
+                                raise Exception(f"Worker thread error: {record[1]}")
+                            else:
+                                yield record
+                        except queue.Empty:
+                            continue  # Continue checking futures if queue is empty
 
                 # Enforce rate limit
                 elapsed = time.time() - batch_start_time
