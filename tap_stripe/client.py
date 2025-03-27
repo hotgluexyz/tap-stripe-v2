@@ -439,7 +439,6 @@ class ConcurrentStream(stripeStream):
     
     def concurrent_request(self, context, record_queue):
         try:
-            self.logger.info(f"Started request thread for context {context}")
             next_page_token: Any = None
             finished = False
             decorated_request = self.request_decorator(self._request)
@@ -474,9 +473,7 @@ class ConcurrentStream(stripeStream):
             raise 
         finally:
             # mark thread as done
-            self.logger.info(f"Size of queue before completing thread {record_queue.qsize()}")
             record_queue.put(None)
-            self.log_memory_usage("Memory after finishing request thread")
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -528,7 +525,6 @@ class ConcurrentStream(stripeStream):
 
                 record_queue = queue.Queue(self.queue_size)
 
-                self.logger.info("Starting batch of concurrent requests")
                 finished_threads = 0
                 with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
                     # Store futures to check for errors
