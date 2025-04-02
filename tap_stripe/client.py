@@ -27,7 +27,7 @@ import queue
 import psutil
 import os
 import random
-
+import threading
 from singer_sdk.helpers._state import (
     finalize_state_progress_markers,
     log_sort_error,
@@ -482,7 +482,7 @@ class ConcurrentStream(stripeStream):
 
         current_start = start_date_timestamp
         max_size = 2592000 # one month as maximum
-        min_size = 604800 # one week as minimum
+        min_size = 86400 # one day as minimum
         partition_size = math.ceil((end_date_timestamp - start_date_timestamp) / max_requests)
         partition_size = max_size if partition_size > max_size else min_size if partition_size < min_size else partition_size
 
@@ -512,6 +512,8 @@ class ConcurrentStream(stripeStream):
             "subscription_schedules",
             "tax_rates",
             "balance_transactions",
+            "products",
+            "plans",
         ]) and not self.parent_stream_type:
             max_requests = self.max_concurrent_requests
             requests_params = self.get_concurrent_params(context, max_requests)
@@ -589,6 +591,11 @@ class ConcurrentStream(stripeStream):
             requests_params = self.get_inc_concurrent_params(records, decorated_request)
             max_requests = self.max_concurrent_requests
             if len(requests_params):
+                # calculate how many concurrent requests to fetch record by id we can make, based on the number of active threads and the max_concurrent_requests
+                threads = threading.active_count()
+                self.logger.info(f"Active threads: {threads}")
+                max_requests = max_requests - threads
+                self.logger.info(f"Max concurrent requests available to fetch event records by id: {max_requests}")
                 for i in range(0, len(requests_params), max_requests):
                     req_params = requests_params[i: i + max_requests]
 
@@ -727,7 +734,9 @@ class StripeStreamV2(ConcurrentStream):
             self.from_invoice_items = False
             yield from super().request_records(context)
         else:
-            yield from super().request_records(context)
+            for filter in self.event_filters:
+                self.event_filter = filter
+                yield from super().request_records(context)
 
     def parse_response(self, response) -> Iterable[dict]:
         for record in super().parse_response(response):
