@@ -1452,7 +1452,7 @@ class DisputesStream(ConcurrentStream):
     ).to_dict()
 
 
-class Discounts(stripeStream):
+class Discounts(ConcurrentStream):
     """Define Products stream."""
 
     name = "discounts"
@@ -1513,7 +1513,10 @@ class Discounts(stripeStream):
         discounts = []
         for invoice in response:
             invoice_discounts = []
-            updated = invoice["updated"]
+            if not invoice.get("updated"):
+                updated = invoice["created"] # most records don't have updated field, so we use created for fullsyncs and event date for incremental syncs
+            else:
+                updated = invoice["updated"] # if updated field is present, use it -> added in parent post process
             # add header discounts to invoice discounts list
             invoice_discounts.extend(invoice["discounts"])
             # add line discounts to invoice discounts list
