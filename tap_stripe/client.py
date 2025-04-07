@@ -177,11 +177,13 @@ class stripeStream(RESTStream):
         if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id): 
             clean_records = []
             for record in records:
+                event_created_date = record["created"]
                 if self.name not in ["plans", "products"]:
                     record = record["data"]["object"]
                 record_id = record.get("id")
                 if record_id not in self.event_ids:
                     self.event_ids.append(record_id)
+                    record["created"] = event_created_date
                     clean_records.append(record)
             return clean_records
         else:
@@ -210,7 +212,7 @@ class stripeStream(RESTStream):
     def get_record_from_events(self, record, decorated_request):
         # logic for incremental syncs
         base_url = self.url_base
-        if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id): 
+        if self.name != "events" and ((self.path == "events" and self.get_from_events) or self.get_data_from_id):
             event_date = record["created"]
             record_id = record.get("id")
             if (
