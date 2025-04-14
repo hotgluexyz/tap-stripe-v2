@@ -354,7 +354,7 @@ class stripeStream(RESTStream):
         if tap_state and tap_state.get("bookmarks"):
             for stream_name in tap_state.get("bookmarks").keys():
                 if tap_state["bookmarks"][stream_name].get("partitions"):
-                    tap_state["bookmarks"][stream_name] = {"partitions": []}
+                    tap_state["bookmarks"][stream_name]["partitions"] = []
 
         singer.write_message(StateMessage(value=tap_state))
 
@@ -596,7 +596,7 @@ class ConcurrentStream(stripeStream):
                 # calculate how many concurrent requests to fetch record by id we can make, based on the number of active threads and the max_concurrent_requests
                 threads = threading.active_count()
                 self.logger.info(f"Active threads: {threads}")
-                max_requests = max_requests - threads
+                max_requests = max(max_requests - threads, 1)
                 self.logger.info(f"Max concurrent requests available to fetch event records by id: {max_requests}")
                 for i in range(0, len(requests_params), max_requests):
                     req_params = requests_params[i: i + max_requests]
