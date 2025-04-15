@@ -1081,6 +1081,7 @@ class PayoutsStream(ConcurrentStream):
     name = "payouts"
     object = "payout"
     replication_key = "updated"
+    event_filter = "payout.*"
     
     @property
     def path(self):
@@ -1119,6 +1120,7 @@ class PromotionCodesStream(ConcurrentStream):
     name = "promotion_codes"
     object = "promotion_code"
     replication_key = "updated"
+    event_filter = "promotion_code.*"
     
     @property
     def path(self):
@@ -1148,6 +1150,7 @@ class TransfersStream(ConcurrentStream):
     name = "transfers"
     object = "transfer"
     replication_key = "updated"
+    event_filter = "transfer.*"
     
     @property
     def path(self):
@@ -1180,6 +1183,7 @@ class RefundsStream(ConcurrentStream):
     name = "refunds"
     replication_key = "updated"
     object = "refund"
+    event_filter = "refund.*"
     
     @property
     def path(self):
