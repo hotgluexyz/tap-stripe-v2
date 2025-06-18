@@ -326,7 +326,7 @@ class stripeStream(RESTStream):
                         if "replication_key" not in tap_state["bookmarks"][stream_name]:
                             tap_state["bookmarks"][stream_name]["replication_key"] = self.replication_key
                         continue
-                    tap_state["bookmarks"][stream_name] = {"partitions": []}
+                    tap_state["bookmarks"][stream_name]["partitions"] = []
 
         singer.write_message(StateMessage(value=tap_state))
 

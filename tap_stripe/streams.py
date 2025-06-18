@@ -530,7 +530,9 @@ class Plans(StripeStreamV2):
                     yield record
         else:
             for record in super().parse_response(response):
-                yield record
+                if record["id"] not in self.fullsync_ids:
+                    self.fullsync_ids.append(record["id"])
+                    yield record
 
 
 
@@ -1515,5 +1517,3 @@ class Discounts(stripeStream):
             # add invoice discounts to discounts list
             discounts.extend(invoice_discounts)
         return discounts
-
-
