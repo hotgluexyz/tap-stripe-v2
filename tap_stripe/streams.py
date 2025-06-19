@@ -219,6 +219,12 @@ class InvoiceItems(stripeStream):
         if self.fetch_from_parent_stream:
             path = "invoiceitems/{invoice_item_id}"
         return path
+    
+    @property
+    def records_jsonpath(self):
+        if not self.fetch_from_parent_stream:
+            return "$.data[*]"
+        return "$.[*]"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
