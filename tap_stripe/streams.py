@@ -219,6 +219,12 @@ class InvoiceItems(stripeStream):
         if self.fetch_from_parent_stream:
             path = "invoiceitems/{invoice_item_id}"
         return path
+    
+    @property
+    def records_jsonpath(self):
+        if not self.fetch_from_parent_stream:
+            return "$.data[*]"
+        return "$.[*]"
 
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
@@ -253,6 +259,11 @@ class InvoiceItems(stripeStream):
         # 1. fetch all invoices using rep key
         invoice_item_id = None
         if not self.fetch_from_parent_stream:
+            # invoice_items is a child stream but it also fetches data using its own rep key
+            # so we need to keep the rep_key_value at the header level
+            if "replication_key_value" in self.stream_state:
+                self.stream_state['starting_replication_value'] = self.stream_state['replication_key_value']
+            #---
             invoice_item_id = context.pop("invoice_item_id")
             yield from super().request_records(context)
             self.fetch_from_parent_stream = True

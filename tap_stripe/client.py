@@ -316,6 +316,16 @@ class stripeStream(RESTStream):
         if tap_state and tap_state.get("bookmarks"):
             for stream_name in tap_state.get("bookmarks").keys():
                 if tap_state["bookmarks"][stream_name].get("partitions"):
+                    # invoice_items is a child stream but it also fetches data using its own rep key
+                    # so we need to keep the rep_key_value at the header level and clean partitions too
+                    if self.name == "invoice_items" and stream_name == "invoice_items":
+                        if "progress_markers" in self.stream_state:
+                            tap_state["bookmarks"][stream_name].update({"replication_key_value": self.stream_state["progress_markers"].get("replication_key_value")})
+
+                            tap_state["bookmarks"][stream_name].update({"partitions": []})
+                        if "replication_key" not in tap_state["bookmarks"][stream_name]:
+                            tap_state["bookmarks"][stream_name]["replication_key"] = self.replication_key
+                        continue
                     tap_state["bookmarks"][stream_name]["partitions"] = []
 
         singer.write_message(StateMessage(value=tap_state))
