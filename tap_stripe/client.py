@@ -416,6 +416,7 @@ class ConcurrentStream(stripeStream):
                 continue
     
     def concurrent_request(self, context, record_queue):
+        error = None
         try:
             next_page_token: Any = None
             finished = False
@@ -447,15 +448,13 @@ class ConcurrentStream(stripeStream):
                 finished = not next_page_token
         except Exception as e:
             self.logger.exception(e)
-            if record_queue.full():
-                record_queue = queue.Queue(self.queue_size)
-            record_queue.put(("ERROR", str(e)))
-            raise 
+            try:
+                record_queue.put(("ERROR", str(e)), timeout=3)
+            except queue.Full:
+                error = e
         finally:
-            if record_queue.full():
-                record_queue = queue.Queue(self.queue_size)
-            # mark thread as done
-            record_queue.put(None)
+            if error is not None:
+                raise error
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -509,7 +508,6 @@ class ConcurrentStream(stripeStream):
 
                 record_queue = queue.Queue(self.queue_size)
 
-                finished_threads = 0
                 with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
                     futures = []
                     for context in req_params:
@@ -517,7 +515,7 @@ class ConcurrentStream(stripeStream):
                         futures.append(future)
 
                     # Consumer loop for this batch
-                    while finished_threads < len(req_params):
+                    while not all(f.done() for f in futures):
                         # Check futures for errors first
                         for future in futures:
                             if future.done():
@@ -528,10 +526,8 @@ class ConcurrentStream(stripeStream):
                                     raise Exception(f"Worker thread error: {str(e)}")
 
                         try:
-                            record = record_queue.get(timeout=1)  # 1 second timeout to allow checking futures
-                            if record is None:
-                                finished_threads += 1
-                            elif isinstance(record, tuple) and record[0] == "ERROR":
+                            record = record_queue.get(timeout=5)  # 5 second timeout to allow checking futures
+                            if isinstance(record, tuple) and record[0] == "ERROR":
                                 # If an error is encountered, cancel all pending futures and drain the queue
                                 self.logger.exception(f"Error from thread: {record[1]}")
                                 for f in futures:
