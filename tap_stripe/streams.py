@@ -105,7 +105,10 @@ class Invoices(ConcurrentStream):
         th.Property("test_clock", th.StringType),
         th.Property("total", th.IntegerType),
         th.Property("total_excluding_tax", th.IntegerType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.CustomType({"type": ["object", "string"]})),
+        )),
         th.Property("webhooks_delivered_at", th.DateTimeType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property(
@@ -333,7 +336,10 @@ class Subscriptions(ConcurrentStream):
         th.Property("next_pending_invoice_item_invoice", th.StringType),
         th.Property("pause_collection", th.CustomType({"type": ["object", "string"]})),
         th.Property("payment_settings", th.CustomType({"type": ["object", "string"]})),
-        th.Property("pending_invoice_item_interval", th.StringType),
+        th.Property("pending_invoice_item_interval", th.ObjectType(
+            th.Property("interval", th.StringType),
+            th.Property("interval_count", th.IntegerType),
+        )),
         th.Property("pending_setup_intent", th.StringType),
         th.Property("pending_update", th.CustomType({"type": ["object", "string"]})),
         th.Property("plan", th.CustomType({"type": ["object", "string"]})),
@@ -342,7 +348,10 @@ class Subscriptions(ConcurrentStream):
         th.Property("start_date", th.DateTimeType),
         th.Property("status", th.StringType),
         th.Property("test_clock", th.StringType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.CustomType({"type": ["object", "string"]})),
+        )),
         th.Property("trial_end", th.DateTimeType),
         th.Property("trial_start", th.DateTimeType),
     ).to_dict()
@@ -892,7 +901,6 @@ class ChargesStream(ConcurrentStream):
         th.Property("livemode", th.BooleanType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("on_behalf_of", th.StringType),
-        th.Property("on_behalf_of", th.StringType),
         th.Property("outcome", th.CustomType({"type": ["object", "string"]})),
         th.Property("paid", th.BooleanType),
         th.Property("payment_intent", th.StringType),
@@ -906,8 +914,10 @@ class ChargesStream(ConcurrentStream):
         th.Property("statement_descriptor", th.StringType),
         th.Property("statement_descriptor_suffix", th.StringType),
         th.Property("status", th.StringType),
-        th.Property("transfer_data", th.StringType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.StringType),
+        )),
         th.Property("transfer_group", th.StringType),
     ).to_dict()
 
@@ -1045,7 +1055,6 @@ class PaymentIntentsStream(ConcurrentStream):
         th.Property("amount_details", th.CustomType({"type": ["object", "string"]})),
         th.Property("application", th.StringType),
         th.Property("application_fee_amount", th.NumberType),
-        th.Property("application", th.StringType),
         th.Property("automatic_payment_methods", th.CustomType({"type": ["object", "string"]})),
         th.Property("canceled_at", th.NumberType),
         th.Property("cancellation_reason", th.StringType),
@@ -1208,7 +1217,7 @@ class RefundsStream(ConcurrentStream):
             th.Property("type", th.StringType)
         )),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
-        th.Property("payment_intent", th.StringType),
+        th.Property("payment_intent", th.CustomType({"type": ["object", "string"]})),
         th.Property("reason", th.StringType),
         th.Property("receipt_number", th.StringType),
         th.Property("source_transfer_reversal", th.StringType),
