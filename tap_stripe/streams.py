@@ -720,7 +720,12 @@ class Customers(stripeStream):
         th.Property("shipping", th.CustomType({"type": ["object", "string"]})),
         th.Property("tax_exempt", th.StringType),
         th.Property("test_clock", th.StringType),
+        th.Property("deleted", th.BooleanType),
     ).to_dict()
+
+    def post_process(self, row, context) -> dict:
+        row["deleted"] = row.get("deleted", False)
+        return super().post_process(row, context)
 
 
 class Events(stripeStream):
