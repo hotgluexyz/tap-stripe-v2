@@ -424,6 +424,8 @@ class Plans(StripeStreamV2):
     object = "plan"
     from_invoice_items = False
     event_filters = ["price.created", "price.updated", "customer.subscription.updated", "invoice.updated"]
+    plan_ids = set()
+    
 
     @property
     def expand(self):
@@ -509,6 +511,12 @@ class Plans(StripeStreamV2):
 
     def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
         row = super().post_process(row, context)
+
+        if row["id"] in self.plan_ids:
+            return None
+        else:
+            self.plan_ids.add(row["id"])
+        
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
         row.update({"transform_usage": row.get("transform_quantity")})
