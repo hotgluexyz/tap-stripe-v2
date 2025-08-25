@@ -338,7 +338,6 @@ class stripeStream(RESTStream):
         )
 
     def validate_response(self, response: requests.Response) -> None:
-        raise RetriableAPIError("429")
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
