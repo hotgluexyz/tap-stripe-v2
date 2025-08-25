@@ -300,9 +300,10 @@ class stripeStream(RESTStream):
                 requests.exceptions.RequestException,
                 ConnectionError,
             ),
-            max_tries=5,
-            factor=3,
-            base=1
+            max_tries=10,
+            factor=2,
+            base=10,
+            max_value=300
         )(func)
         return decorator
 
