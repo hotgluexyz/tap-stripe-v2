@@ -300,9 +300,10 @@ class stripeStream(RESTStream):
                 requests.exceptions.RequestException,
                 ConnectionError,
             ),
-            max_tries=5,
-            factor=3,
-            base=1
+            max_tries=10,
+            factor=2,
+            base=10,
+            max_value=300
         )(func)
         return decorator
 
@@ -337,6 +338,7 @@ class stripeStream(RESTStream):
         )
 
     def validate_response(self, response: requests.Response) -> None:
+        raise RetriableAPIError("429")
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
