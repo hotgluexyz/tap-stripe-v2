@@ -4,6 +4,7 @@ from typing import List
 
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
+import signal
 
 from tap_stripe.streams import (
     Coupons,
@@ -85,6 +86,9 @@ class Tapstripe(Tap):
         """Return a list of discovered streams."""
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]
 
+
+# Allow broken pipe to terminate the process cleanly
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 if __name__ == "__main__":
     Tapstripe.cli()
