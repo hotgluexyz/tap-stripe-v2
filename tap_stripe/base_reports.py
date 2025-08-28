@@ -6,42 +6,10 @@ import time
 from typing import Any, Dict, Iterable, Optional
 import requests
 from dateutil.parser import parse
-from tap_stripe.report_schemas.payouts import payouts_report_schema
-from tap_stripe.report_schemas.tax import tax_report_schema
-from tap_stripe.report_schemas.balance import balance_report_schema
 from tap_stripe.client import stripeStream
 
 
-class CustomReportStream(stripeStream):
-    def __init__(self, tap, report_config):
-        self.report_config = report_config
-
-        # Set attributes that Singer SDK expects
-        self.primary_keys = report_config.get("primary_keys", [])
-        self.replication_key = report_config.get("replication_key", None)
-
-        # Now call parent init
-        super().__init__(tap)
-
-    @property
-    def name(self):
-        """Return the stream name, generating it if needed."""
-        if not hasattr(self, "_name") or self._name is None:
-            self._name = self.report_config["name"]
-        return self._name
-
-    @property
-    def report_type(self):
-        return self.report_config["report_type"]
-
-    @property
-    def schema(self):
-        """Generate schema from report config or use default."""
-        if "schema" in self.report_config:
-            return self.report_config["schema"]
-
-        raise ValueError(f"Schema not found for {self.name}")
-
+class BaseReportsStream(stripeStream):
     def get_custom_headers(self):
         headers = self.http_headers
         # get the headers with auth token populated
@@ -161,38 +129,3 @@ class CustomReportStream(stripeStream):
                 # Record filtered out during post_process()
                 continue
             yield transformed_record
-
-
-# Report configuration templates
-REPORT_CONFIGS = {
-    "payouts": {
-        "name": "report_payout_reconciliation",
-        "report_type": "payout_reconciliation.itemized.5",
-        "schema": payouts_report_schema,
-        "replication_key": None,
-    },
-    "tax": {
-        "name": "report_tax",
-        "report_type": "tax.transactions.itemized.2",
-        "schema": tax_report_schema,
-        "replication_key": None,
-    },
-    "balance": {
-        "name": "report_balance",
-        "report_type": "balance_change_from_activity.itemized.6",
-        "schema": balance_report_schema,
-        "replication_key": None,
-    },
-}
-
-
-def create_report_config(report_type):
-    """Create a complete report config from a report type and period."""
-    if report_type not in REPORT_CONFIGS:
-        raise ValueError(
-            f"Unsupported report type: {report_type}. Available: {list(REPORT_CONFIGS.keys())}"
-        )
-
-    config = REPORT_CONFIGS[report_type].copy()
-
-    return config

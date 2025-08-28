@@ -5,11 +5,6 @@ from typing import List
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
 
-from tap_stripe.custom_reports import (
-    REPORT_CONFIGS,
-    CustomReportStream,
-    create_report_config,
-)
 from tap_stripe.streams import (
     Coupons,
     CreditNotes,
@@ -37,6 +32,9 @@ from tap_stripe.streams import (
     RefundsStream,
     DisputesIssuingStream,
     Discounts,
+    PayoutReportsStream,
+    TaxReportsStream,
+    BalanceReportsStream,
 )
 
 STREAM_TYPES = [
@@ -66,6 +64,9 @@ STREAM_TYPES = [
     RefundsStream,
     DisputesIssuingStream,
     Discounts,
+    PayoutReportsStream,
+    TaxReportsStream,
+    BalanceReportsStream,
 ]
 
 default_reports = [{"report": "payouts"}]
@@ -83,49 +84,13 @@ class Tapstripe(Tap):
             th.DateTimeType,
             default="2000-01-01T00:00:00.000Z",
             description="The earliest record date to sync",
-        ),
-        th.Property(
-            "custom_reports",
-            th.ArrayType(
-                th.ObjectType(th.Property("report", th.StringType, required=True))
-            ),
-        ),
+        )
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
-        streams = [stream_class(tap=self) for stream_class in STREAM_TYPES]
-        streams = []
-
-        # Add custom report streams if configured
-        custom_reports = self.config.get("custom_reports", default_reports)
-        for custom_report in custom_reports:
-            report_type = custom_report.get("report")
-            if report_type not in REPORT_CONFIGS:
-                raise ValueError(
-                    f"Invalid report type: {report_type}. Must be one of: {', '.join(REPORT_CONFIGS.keys())}"
-                )
-            if report_type:
-                # Create the report config
-                report_config = create_report_config(report_type)
-
-                # Create the custom stream
-                custom_stream = CustomReportStream(self, report_config)
-                custom_stream.replication_key = REPORT_CONFIGS[report_type].get(
-                    "replication_key"
-                )
-                streams.append(custom_stream)
-
-                self.logger.info(
-                    f"Added custom report stream: {custom_stream.name} (report={report_type})"
-                )
-            else:
-                self.logger.warning(
-                    f"Invalid custom report config: {custom_report}. "
-                    "Must have 'report' fields."
-                )
-        return streams
-
+        # Add standard streams
+        return [stream_class(tap=self) for stream_class in STREAM_TYPES]
 
 if __name__ == "__main__":
     Tapstripe.cli()

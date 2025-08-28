@@ -6,6 +6,7 @@ from singer_sdk.exceptions import RetriableAPIError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
 from singer_sdk.helpers.jsonpath import extract_jsonpath
+from tap_stripe.base_reports import BaseReportsStream
 
 class Invoices(stripeStream):
     """Define Invoices stream."""
@@ -1210,6 +1211,218 @@ class RefundsStream(stripeStream):
         th.Property("status", th.StringType),
         th.Property("transfer_reversal", th.StringType)
 ).to_dict()   
+    
+class PayoutReportsStream(BaseReportsStream):
+
+    name = "report_payout_reconciliation"
+    #although update is mentioned in docs, it is not part of report's response for some reason. Disabling until requested
+    # replication_key = "created"
+    """
+    There are five types of report mentioned here https://docs.stripe.com/reports/report-types/payout-reconciliation
+    For now we shortlisted payout_reconciliation.itemized.5 as our report type. This could be potentially configurable using the `report_type` property in config.py
+    """
+    report_type = "payout_reconciliation.itemized.5"
+
+    schema = th.PropertiesList(
+        th.Property("automatic_payout_id", th.StringType),
+        th.Property("automatic_payout_effective_at", th.StringType),
+        th.Property("balance_transaction_id", th.StringType),
+        th.Property("created_utc", th.DateTimeType),
+        th.Property("created", th.DateTimeType),
+        th.Property("available_on_utc", th.DateTimeType),
+        th.Property("available_on", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("gross", th.StringType),
+        th.Property("fee", th.StringType),
+        th.Property("net", th.StringType),
+        th.Property("reporting_category", th.StringType),
+        th.Property("source_id", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("customer_facing_amount", th.StringType),
+        th.Property("customer_facing_currency", th.StringType),
+        th.Property("regulatory_tag", th.StringType),
+        th.Property("automatic_payout_effective_at_utc", th.StringType),
+        th.Property("customer_id", th.StringType),
+        th.Property("customer_email", th.StringType),
+        th.Property("customer_name", th.StringType),
+        th.Property("customer_description", th.StringType),
+        th.Property("customer_shipping_address_line1", th.StringType),
+        th.Property("customer_shipping_address_line2", th.StringType),
+        th.Property("customer_shipping_address_city", th.StringType),
+        th.Property("customer_shipping_address_state", th.StringType),
+        th.Property("customer_shipping_address_postal_code", th.StringType),
+        th.Property("customer_shipping_address_country", th.StringType),
+        th.Property("customer_address_line1", th.StringType),
+        th.Property("customer_address_line2", th.StringType),
+        th.Property("customer_address_city", th.StringType),
+        th.Property("customer_address_state", th.StringType),
+        th.Property("customer_address_postal_code", th.StringType),
+        th.Property("customer_address_country", th.StringType),
+        th.Property("shipping_address_line1", th.StringType),
+        th.Property("shipping_address_line2", th.StringType),
+        th.Property("shipping_address_city", th.StringType),
+        th.Property("shipping_address_state", th.StringType),
+        th.Property("shipping_address_postal_code", th.StringType),
+        th.Property("shipping_address_country", th.StringType),
+        th.Property("card_address_line1", th.StringType),
+        th.Property("card_address_line2", th.StringType),
+        th.Property("card_address_city", th.StringType),
+        th.Property("card_address_state", th.StringType),
+        th.Property("card_address_postal_code", th.StringType),
+        th.Property("card_address_country", th.StringType),
+        th.Property("charge_id", th.StringType),
+        th.Property("payment_intent_id", th.StringType),
+        th.Property("charge_created_utc", th.StringType),
+        th.Property("charge_created", th.StringType),
+        th.Property("invoice_id", th.StringType),
+        th.Property("invoice_number", th.StringType),
+        th.Property("subscription_id", th.StringType),
+        th.Property("order_id", th.StringType),
+        th.Property("payment_method_type", th.StringType),
+        th.Property("is_link", th.StringType),
+        th.Property("card_brand", th.StringType),
+        th.Property("card_funding", th.StringType),
+        th.Property("card_country", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("dispute_reason", th.StringType),
+        th.Property("connected_account_id", th.StringType),
+        th.Property("connected_account_name", th.StringType),
+        th.Property("connected_account_country", th.StringType),
+        th.Property("connected_account_direct_charge_id", th.StringType),
+        th.Property("destination_payment_id", th.StringType),
+        th.Property(
+            "payment_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property(
+            "refund_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property(
+            "transfer_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+    ).to_dict()
+    
+class TaxReportsStream(BaseReportsStream):
+    name = "report_tax"
+    report_type = "tax.transactions.itemized.2"
+
+    schema = th.PropertiesList(
+        th.Property("country_code", th.StringType),
+        th.Property(
+            "credit_note_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property("currency", th.StringType),
+        th.Property("customer_tax_id", th.StringType),
+        th.Property("destination_resolved_address_country", th.StringType),
+        th.Property("destination_resolved_address_state", th.StringType),
+        th.Property("filing_currency", th.StringType),
+        th.Property("filing_exchange_rate", th.StringType),
+        th.Property("filing_non_taxable_amount", th.StringType),
+        th.Property("filing_tax_amount", th.StringType),
+        th.Property("filing_taxable_amount", th.StringType),
+        th.Property("filing_total", th.StringType),
+        th.Property("id", th.StringType),
+        th.Property("invoice_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("jurisdiction_level", th.StringType),
+        th.Property("jurisdiction_name", th.StringType),
+        th.Property("line_item_id", th.StringType),
+        th.Property("non_taxable_amount", th.StringType),
+        th.Property("origin_resolved_address_country", th.StringType),
+        th.Property("origin_resolved_address_state", th.StringType),
+        th.Property("quantity", th.StringType),
+        th.Property("quantity_decimal", th.StringType),
+        th.Property("refund_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("state_code", th.StringType),
+        th.Property("subtotal", th.StringType),
+        th.Property("tax_amount", th.StringType),
+        th.Property("tax_code", th.StringType),
+        th.Property("tax_date", th.DateTimeType),
+        th.Property("tax_name", th.StringType),
+        th.Property("tax_rate", th.StringType),
+        th.Property(
+            "tax_transaction_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+        th.Property("taxability", th.StringType),
+        th.Property("taxability_reason", th.StringType),
+        th.Property("taxable_amount", th.StringType),
+        th.Property("total", th.StringType),
+        th.Property("transaction_date", th.DateTimeType),
+        th.Property("type", th.StringType),
+    ).to_dict()
+
+class BalanceReportsStream(BaseReportsStream):
+    name = "report_balance"
+    report_type = "balance_change_from_activity.itemized.6"
+
+    schema = th.PropertiesList(
+        th.Property("automatic_payout_effective_at", th.DateTimeType),
+        th.Property("automatic_payout_id", th.StringType),
+        th.Property("available_on_utc", th.DateTimeType),
+        th.Property("balance_transaction_id", th.StringType),
+        th.Property("card_address_city", th.StringType),
+        th.Property("card_address_country", th.StringType),
+        th.Property("card_address_line1", th.StringType),
+        th.Property("card_address_line2", th.StringType),
+        th.Property("card_address_postal_code", th.StringType),
+        th.Property("card_address_state", th.StringType),
+        th.Property("card_brand", th.StringType),
+        th.Property("card_country", th.StringType),
+        th.Property("card_funding", th.StringType),
+        th.Property("charge_created_utc", th.DateTimeType),
+        th.Property("charge_id", th.StringType),
+        th.Property("connected_account_country", th.StringType),
+        th.Property("connected_account_direct_charge_id", th.StringType),
+        th.Property("connected_account_id", th.StringType),
+        th.Property("connected_account_name", th.StringType),
+        th.Property("created_utc", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("customer_address_city", th.StringType),
+        th.Property("customer_address_country", th.StringType),
+        th.Property("customer_address_line1", th.StringType),
+        th.Property("customer_address_line2", th.StringType),
+        th.Property("customer_address_postal_code", th.StringType),
+        th.Property("customer_address_state", th.StringType),
+        th.Property("customer_description", th.StringType),
+        th.Property("customer_email", th.StringType),
+        th.Property("customer_facing_amount", th.StringType),
+        th.Property("customer_facing_currency", th.StringType),
+        th.Property("customer_id", th.StringType),
+        th.Property("customer_name", th.StringType),
+        th.Property("customer_shipping_address_city", th.StringType),
+        th.Property("customer_shipping_address_country", th.StringType),
+        th.Property("customer_shipping_address_line1", th.StringType),
+        th.Property("customer_shipping_address_line2", th.StringType),
+        th.Property("customer_shipping_address_postal_code", th.StringType),
+        th.Property("customer_shipping_address_state", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("dispute_reason", th.StringType),
+        th.Property("fee", th.StringType),
+        th.Property("gross", th.StringType),
+        th.Property("invoice_id", th.StringType),
+        th.Property("invoice_number", th.StringType),
+        th.Property("is_link", th.StringType),
+        th.Property("net", th.StringType),
+        th.Property("payment_intent_id", th.StringType),
+        th.Property("payment_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payment_method_type", th.StringType),
+        th.Property("refund_metadata[key]", th.CustomType({"type": ["object", "string"]})),
+        th.Property("regulatory_tag", th.StringType),
+        th.Property("reporting_category", th.StringType),
+        th.Property("shipping_address_city", th.StringType),
+        th.Property("shipping_address_country", th.StringType),
+        th.Property("shipping_address_line1", th.StringType),
+        th.Property("shipping_address_line2", th.StringType),
+        th.Property("shipping_address_postal_code", th.StringType),
+        th.Property("shipping_address_state", th.StringType),
+        th.Property("source_id", th.StringType),
+        th.Property("statement_descriptor", th.StringType),
+        th.Property("subscription_id", th.StringType),
+        th.Property("trace_id", th.StringType),
+        th.Property("trace_id_status", th.StringType),
+        th.Property(
+            "transfer_metadata[key]", th.CustomType({"type": ["object", "string"]})
+        ),
+    ).to_dict()
+
 class DisputesStream(stripeStream):
     name = "disputes"
     object = "dispute"
