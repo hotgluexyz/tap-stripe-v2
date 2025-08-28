@@ -69,9 +69,6 @@ STREAM_TYPES = [
     BalanceReportsStream,
 ]
 
-default_reports = [{"report": "payouts"}]
-
-
 class Tapstripe(Tap):
     """stripe tap class."""
 
@@ -84,13 +81,13 @@ class Tapstripe(Tap):
             th.DateTimeType,
             default="2000-01-01T00:00:00.000Z",
             description="The earliest record date to sync",
-        )
+        ),
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
-        # Add standard streams
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]
+
 
 if __name__ == "__main__":
     Tapstripe.cli()
