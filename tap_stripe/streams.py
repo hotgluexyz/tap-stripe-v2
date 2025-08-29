@@ -15,6 +15,39 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
+class Accounts(stripeStream):
+    """Define Accounts stream."""
+
+    name = "accounts"
+    replication_key = None
+    object = "account"
+    path = "accounts"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("business_profile", th.CustomType({"type": ["object", "string"]})),
+        th.Property("business_type", th.StringType),
+        th.Property("capabilities", th.CustomType({"type": ["object", "string"]})),
+        th.Property("charges_enabled", th.BooleanType),
+        th.Property("controller", th.CustomType({"type": ["object", "string"]})),
+        th.Property("country", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("default_currency", th.StringType),
+        th.Property("details_submitted", th.BooleanType),
+        th.Property("email", th.StringType),
+        th.Property("external_accounts", th.CustomType({"type": ["object", "string"]})),
+        th.Property("future_requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("login_links", th.CustomType({"type": ["object", "string"]})),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payouts_enabled", th.BooleanType),
+        th.Property("requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("settings", th.CustomType({"type": ["object", "string"]})),
+        th.Property("tos_acceptance", th.CustomType({"type": ["object", "string"]})),
+        th.Property("type", th.StringType),
+        th.Property("updated", th.DateTimeType)
+    ).to_dict()
+
 class Invoices(ConcurrentStream):
     """Define Invoices stream."""
 
