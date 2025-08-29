@@ -7,6 +7,7 @@ from singer_sdk import typing as th
 import signal
 
 from tap_stripe.streams import (
+    Accounts,
     Coupons,
     CreditNotes,
     Customers,
@@ -37,6 +38,7 @@ from tap_stripe.streams import (
 )
 
 STREAM_TYPES = [
+    Accounts,
     Coupons,
     CreditNotes,
     Customers,
