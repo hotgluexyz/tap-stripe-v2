@@ -6,6 +6,7 @@ from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
 
 from tap_stripe.streams import (
+    Accounts,
     Coupons,
     CreditNotes,
     Customers,
@@ -36,6 +37,7 @@ from tap_stripe.streams import (
 )
 
 STREAM_TYPES = [
+    Accounts,
     Coupons,
     CreditNotes,
     Customers,
