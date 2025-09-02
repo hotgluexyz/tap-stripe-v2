@@ -1513,6 +1513,7 @@ class Discounts(ConcurrentStream):
     replication_key = "updated"
     object = "invoice"
     event_filter = "invoice.*"
+    discount_ids = set()
     
     @property
     def path(self):
@@ -1577,8 +1578,15 @@ class Discounts(ConcurrentStream):
             [invoice_discounts.extend(line["discounts"]) for line in invoice["lines"]["data"]]
             # add updated rep key to all invoice discounts
             [discount.update({"updated": updated}) for discount in invoice_discounts]
-            # add invoice discounts to discounts list
-            discounts.extend(invoice_discounts)
+
+            # check for duplicates
+            for discount in invoice_discounts:
+                if discount["id"] not in self.discount_ids:
+                    self.discount_ids.add(discount["id"])
+                    
+                    # add invoice discounts to discounts list
+                    discounts.append(discount)
+
         return discounts
 
 
