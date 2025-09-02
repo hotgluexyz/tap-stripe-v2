@@ -545,7 +545,7 @@ class ConcurrentStream(stripeStream):
                             continue  # Continue checking futures if queue is empty
 
                 while not record_queue.empty():
-                    record = record_queue.get(timeout=5)
+                    record = record_queue.get()
                     yield record
 
                 # Enforce rate limit
