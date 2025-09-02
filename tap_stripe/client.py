@@ -544,6 +544,10 @@ class ConcurrentStream(stripeStream):
                         except queue.Empty:
                             continue  # Continue checking futures if queue is empty
 
+                while not record_queue.empty():
+                    record = record_queue.get(timeout=5)
+                    yield record
+
                 # Enforce rate limit
                 elapsed = time.time() - batch_start_time
                 if elapsed < min_time_per_batch:
