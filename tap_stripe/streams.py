@@ -1485,7 +1485,7 @@ class DisputesStream(ConcurrentStream):
         th.Property("payment_intent", th.StringType),
         th.Property("reason", th.StringType),
         th.Property("status", th.StringType),
-        th.Property("balance_transactions", BalanceTransactionType()),
+        th.Property("balance_transactions", th.ArrayType(BalanceTransactionType())),
     ).to_dict()
 
 
