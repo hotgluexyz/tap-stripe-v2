@@ -15,7 +15,6 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
-
 class Accounts(stripeStream):
     """Define Accounts stream."""
 
@@ -894,7 +893,7 @@ class BalanceTransactionsStream(ConcurrentStream):
         th.Property("period", th.CustomType({"type": ["object", "string"]})),
         th.Property("subscription_item", th.StringType),
         th.Property("total_usage", th.IntegerType),
-        th.Property("exchange_rate", th.NumberType)
+        th.Property("exchange_rate", th.NumberType),
     ).to_dict()
 
     def apply_catalog(self, catalog) -> None:
