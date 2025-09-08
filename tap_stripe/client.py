@@ -527,26 +527,23 @@ class ConcurrentStream(stripeStream):
                                     raise Exception(f"Worker thread error: {str(e)}")
 
                         try:
-                            record = record_queue.get(timeout=5)  # 5 second timeout to allow checking futures
-                            if isinstance(record, tuple) and record[0] == "ERROR":
-                                # If an error is encountered, cancel all pending futures and drain the queue
-                                self.logger.exception(f"Error from thread: {record[1]}")
-                                for f in futures:
-                                    f.cancel()
-                                while not record_queue.empty():
-                                    try:
-                                        record_queue.get_nowait()
-                                    except queue.Empty:
-                                        break
-                                raise Exception(f"Thread error: {record[1]}")
-                            else:
-                                yield record
+                            while not record_queue.empty():
+                                record = record_queue.get(timeout=5)  # 5 second timeout to allow checking futures
+                                if isinstance(record, tuple) and record[0] == "ERROR":
+                                    # If an error is encountered, cancel all pending futures and drain the queue
+                                    self.logger.exception(f"Error from thread: {record[1]}")
+                                    for f in futures:
+                                        f.cancel()
+                                    while not record_queue.empty():
+                                        try:
+                                            record_queue.get_nowait()
+                                        except queue.Empty:
+                                            break
+                                    raise Exception(f"Thread error: {record[1]}")
+                                else:
+                                    yield record
                         except queue.Empty:
                             continue  # Continue checking futures if queue is empty
-
-                while not record_queue.empty():
-                    record = record_queue.get()
-                    yield record
 
                 # Enforce rate limit
                 elapsed = time.time() - batch_start_time
