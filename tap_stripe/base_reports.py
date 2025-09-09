@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime
-from functools import cached_property
+from backports.cached_property import cached_property
 
 import os
 import tempfile
@@ -42,7 +42,6 @@ class BaseReportsStream(stripeStream):
         return selected_properties
 
     def create_report(self, start_date, end_date):
-        # return {"id": "frr_1S1CZWJAmnYVOvfn539yWWPr"}
         url = f"{self.url_base}reporting/report_runs"
         headers = self.get_custom_headers()
         body = {}
