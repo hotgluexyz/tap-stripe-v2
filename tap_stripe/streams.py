@@ -1528,6 +1528,16 @@ class DisputesStream(ConcurrentStream):
         )),
     ).to_dict()
 
+    def post_process(self, row: dict, context: Optional[dict]) -> dict:
+        """Process date in balance_transactions field."""
+        row = super().post_process(row, context)
+        
+        for balance_transaction in row.get("balance_transactions", []):
+            if balance_transaction.get("created"):
+                dt_field = datetime.utcfromtimestamp(int(balance_transaction["created"]))
+                balance_transaction["created"] = dt_field.isoformat()
+        return row
+
 
 class Discounts(ConcurrentStream):
     """Define Products stream."""
