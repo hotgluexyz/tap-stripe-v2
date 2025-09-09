@@ -15,7 +15,7 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
-class Accounts(stripeStream):
+class Accounts(ConcurrentStream):
     """Define Accounts stream."""
 
     name = "accounts"
