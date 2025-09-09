@@ -1503,7 +1503,40 @@ class DisputesStream(ConcurrentStream):
         th.Property("payment_intent", th.StringType),
         th.Property("reason", th.StringType),
         th.Property("status", th.StringType),
+        th.Property("balance_transactions", th.ArrayType(
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("object", th.StringType),
+                th.Property("amount", th.NumberType),
+                th.Property("available_on", th.NumberType),
+                th.Property("created", th.DateTimeType),
+                th.Property("currency", th.StringType),
+                th.Property("description", th.StringType),
+                th.Property("fee", th.NumberType),
+                th.Property("fee_details", th.CustomType({"type": ["array", "string"]})),
+                th.Property("net", th.NumberType),
+                th.Property("reporting_category", th.StringType),
+                th.Property("source", th.StringType),
+                th.Property("status", th.StringType),
+                th.Property("type", th.StringType),
+                th.Property("livemode", th.BooleanType),
+                th.Property("period", th.CustomType({"type": ["object", "string"]})),
+                th.Property("subscription_item", th.StringType),
+                th.Property("total_usage", th.IntegerType),
+                th.Property("exchange_rate", th.NumberType)
+            )
+        )),
     ).to_dict()
+
+    def post_process(self, row: dict, context: Optional[dict]) -> dict:
+        """Process date in balance_transactions field."""
+        row = super().post_process(row, context)
+        
+        for balance_transaction in row.get("balance_transactions", []):
+            if balance_transaction.get("created"):
+                dt_field = datetime.utcfromtimestamp(int(balance_transaction["created"]))
+                balance_transaction["created"] = dt_field.isoformat()
+        return row
 
 
 class Discounts(ConcurrentStream):
@@ -1513,6 +1546,7 @@ class Discounts(ConcurrentStream):
     replication_key = "updated"
     object = "invoice"
     event_filter = "invoice.*"
+    discount_ids = set()
     
     @property
     def path(self):
@@ -1577,8 +1611,15 @@ class Discounts(ConcurrentStream):
             [invoice_discounts.extend(line["discounts"]) for line in invoice["lines"]["data"]]
             # add updated rep key to all invoice discounts
             [discount.update({"updated": updated}) for discount in invoice_discounts]
-            # add invoice discounts to discounts list
-            discounts.extend(invoice_discounts)
+
+            # check for duplicates
+            for discount in invoice_discounts:
+                if discount["id"] not in self.discount_ids:
+                    self.discount_ids.add(discount["id"])
+                    
+                    # add invoice discounts to discounts list
+                    discounts.append(discount)
+
         return discounts
 
 
