@@ -44,6 +44,7 @@ class Accounts(ConcurrentStream):
         th.Property("external_accounts", th.CustomType({"type": ["object", "string"]})),
         th.Property("future_requirements", th.CustomType({"type": ["object", "string"]})),
         th.Property("groups", th.CustomType({"type": ["object", "string"]})),
+        th.Property("individual", th.CustomType({"type": ["object", "string"]})),
         th.Property("login_links", th.CustomType({"type": ["object", "string"]})),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("payouts_enabled", th.BooleanType),
