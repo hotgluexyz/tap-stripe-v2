@@ -300,9 +300,10 @@ class stripeStream(RESTStream):
                 requests.exceptions.RequestException,
                 ConnectionError,
             ),
-            max_tries=5,
-            factor=3,
-            base=1
+            max_tries=10,
+            factor=2,
+            base=10,
+            max_value=300
         )(func)
         return decorator
 
@@ -373,7 +374,7 @@ class ConcurrentStream(stripeStream):
         adapter = HTTPAdapter(pool_connections=90, pool_maxsize=90)
         self.requests_session.mount("https://", adapter)
 
-    queue_size = 1000
+    queue_size = 2000
 
     @property
     def max_concurrent_requests(self):
@@ -407,39 +408,16 @@ class ConcurrentStream(stripeStream):
             params.update(context["concurrent_params"])
         return params
     
-
     def safe_put(self, q: queue.Queue, item):
-        max_retry_time = 300  # 5 minutes maximum retry time
-        start_time = time.time()
-        base_delay = 1  # Start with 1 second delay
-        max_delay = 30  # Maximum delay of 30 seconds
-        jitter = 0.1  # 10% jitter
-
         while True:
-            current_time = time.time()
-            if current_time - start_time > max_retry_time:
-                raise Exception(f"Failed to put item in queue after {max_retry_time} seconds")
-
             try:
-                # Try to put item with a timeout
-                q.put(item, timeout=5)  # 5 second timeout for put operation
-                return
-
+                q.put(item, timeout=1)
+                break
             except queue.Full:
-                # Calculate delay with exponential backoff and jitter
-                delay = min(base_delay * (2 ** (current_time - start_time)), max_delay)
-                jitter_amount = delay * jitter * (random.random() * 2 - 1)  # Random jitter between -10% and +10%
-                delay = delay + jitter_amount
-                
-                self.logger.info(f"Queue full. Backing off for {delay:.2f} seconds")
-                time.sleep(delay)
                 continue
-            except Exception as e:
-                self.logger.error(f"Error putting item in queue: {str(e)}")
-                raise
-
     
     def concurrent_request(self, context, record_queue):
+        error = None
         try:
             next_page_token: Any = None
             finished = False
@@ -471,11 +449,13 @@ class ConcurrentStream(stripeStream):
                 finished = not next_page_token
         except Exception as e:
             self.logger.exception(e)
-            record_queue.put(("ERROR", str(e)))
-            raise 
+            try:
+                record_queue.put(("ERROR", str(e)), timeout=3)
+            except queue.Full:
+                error = e
         finally:
-            # mark thread as done
-            record_queue.put(None)
+            if error is not None:
+                raise error
     
     def get_concurrent_params(self, context, max_requests):
         start_date = self.get_starting_time(context)
@@ -529,16 +509,14 @@ class ConcurrentStream(stripeStream):
 
                 record_queue = queue.Queue(self.queue_size)
 
-                finished_threads = 0
                 with concurrent.futures.ThreadPoolExecutor(max_workers=max_requests) as executor:
-                    # Store futures to check for errors
                     futures = []
                     for context in req_params:
                         future = executor.submit(self.concurrent_request, context, record_queue)
                         futures.append(future)
 
                     # Consumer loop for this batch
-                    while finished_threads < len(req_params):
+                    while not all(f.done() for f in futures):
                         # Check futures for errors first
                         for future in futures:
                             if future.done():
@@ -548,17 +526,22 @@ class ConcurrentStream(stripeStream):
                                     self.logger.exception(f"Error in worker thread: {str(e)}")
                                     raise Exception(f"Worker thread error: {str(e)}")
 
-                        # Then check queue for records and errors
                         try:
-                            record = record_queue.get(timeout=1)  # 1 second timeout to allow checking futures
-                            if record is None:
-                                finished_threads += 1
-                            elif isinstance(record, tuple) and record[0] == "ERROR":
-                                # Handle error from worker thread
-                                self.logger.exception(f"Received error from worker thread: {record[1]}")
-                                raise Exception(f"Worker thread error: {record[1]}")
-                            else:
-                                yield record
+                            while not record_queue.empty():
+                                record = record_queue.get(timeout=5)  # 5 second timeout to allow checking futures
+                                if isinstance(record, tuple) and record[0] == "ERROR":
+                                    # If an error is encountered, cancel all pending futures and drain the queue
+                                    self.logger.exception(f"Error from thread: {record[1]}")
+                                    for f in futures:
+                                        f.cancel()
+                                    while not record_queue.empty():
+                                        try:
+                                            record_queue.get_nowait()
+                                        except queue.Empty:
+                                            break
+                                    raise Exception(f"Thread error: {record[1]}")
+                                else:
+                                    yield record
                         except queue.Empty:
                             continue  # Continue checking futures if queue is empty
 

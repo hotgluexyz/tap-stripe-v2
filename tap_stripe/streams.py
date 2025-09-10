@@ -15,6 +15,46 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
+class Accounts(ConcurrentStream):
+    """Define Accounts stream."""
+
+    name = "accounts"
+    replication_key = None
+    object = "account"
+    path = "accounts"
+
+    @property
+    def expand(self):
+        return ["data.groups"]
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("business_profile", th.CustomType({"type": ["object", "string"]})),
+        th.Property("business_type", th.StringType),
+        th.Property("capabilities", th.CustomType({"type": ["object", "string"]})),
+        th.Property("company", th.CustomType({"type": ["object", "string"]})),
+        th.Property("charges_enabled", th.BooleanType),
+        th.Property("controller", th.CustomType({"type": ["object", "string"]})),
+        th.Property("country", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("default_currency", th.StringType),
+        th.Property("details_submitted", th.BooleanType),
+        th.Property("email", th.StringType),
+        th.Property("external_accounts", th.CustomType({"type": ["object", "string"]})),
+        th.Property("future_requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("groups", th.CustomType({"type": ["object", "string"]})),
+        th.Property("individual", th.CustomType({"type": ["object", "string"]})),
+        th.Property("login_links", th.CustomType({"type": ["object", "string"]})),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("payouts_enabled", th.BooleanType),
+        th.Property("requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("settings", th.CustomType({"type": ["object", "string"]})),
+        th.Property("tos_acceptance", th.CustomType({"type": ["object", "string"]})),
+        th.Property("type", th.StringType),
+        th.Property("updated", th.DateTimeType)
+    ).to_dict()
+
 class Invoices(ConcurrentStream):
     """Define Invoices stream."""
 
@@ -79,7 +119,7 @@ class Invoices(ConcurrentStream):
         th.Property("footer", th.StringType),
         th.Property("hosted_invoice_url", th.StringType),
         th.Property("invoice_pdf", th.StringType),
-        th.Property("last_finalization_error", th.StringType),
+        th.Property("last_finalization_error", th.CustomType({"type": ["object", "string"]})),
         th.Property("livemode", th.BooleanType),
         th.Property("next_payment_attempt", th.DateTimeType),
         th.Property("number", th.StringType),
@@ -105,7 +145,10 @@ class Invoices(ConcurrentStream):
         th.Property("test_clock", th.StringType),
         th.Property("total", th.IntegerType),
         th.Property("total_excluding_tax", th.IntegerType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.CustomType({"type": ["object", "string"]})),
+        )),
         th.Property("webhooks_delivered_at", th.DateTimeType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property(
@@ -333,7 +376,10 @@ class Subscriptions(ConcurrentStream):
         th.Property("next_pending_invoice_item_invoice", th.StringType),
         th.Property("pause_collection", th.CustomType({"type": ["object", "string"]})),
         th.Property("payment_settings", th.CustomType({"type": ["object", "string"]})),
-        th.Property("pending_invoice_item_interval", th.StringType),
+        th.Property("pending_invoice_item_interval", th.ObjectType(
+            th.Property("interval", th.StringType),
+            th.Property("interval_count", th.IntegerType),
+        )),
         th.Property("pending_setup_intent", th.StringType),
         th.Property("pending_update", th.CustomType({"type": ["object", "string"]})),
         th.Property("plan", th.CustomType({"type": ["object", "string"]})),
@@ -342,7 +388,10 @@ class Subscriptions(ConcurrentStream):
         th.Property("start_date", th.DateTimeType),
         th.Property("status", th.StringType),
         th.Property("test_clock", th.StringType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.CustomType({"type": ["object", "string"]})),
+        )),
         th.Property("trial_end", th.DateTimeType),
         th.Property("trial_start", th.DateTimeType),
     ).to_dict()
@@ -415,6 +464,8 @@ class Plans(StripeStreamV2):
     object = "plan"
     from_invoice_items = False
     event_filters = ["price.created", "price.updated", "customer.subscription.updated", "invoice.updated"]
+    plan_ids = set()
+    
 
     @property
     def expand(self):
@@ -500,6 +551,12 @@ class Plans(StripeStreamV2):
 
     def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
         row = super().post_process(row, context)
+
+        if row["id"] in self.plan_ids:
+            return None
+        else:
+            self.plan_ids.add(row["id"])
+        
         row.update({"amount": row.get("unit_amount")})
         row.update({"amount_decimal": row.get("unit_amount_decimal")})
         row.update({"transform_usage": row.get("transform_quantity")})
@@ -892,7 +949,6 @@ class ChargesStream(ConcurrentStream):
         th.Property("livemode", th.BooleanType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("on_behalf_of", th.StringType),
-        th.Property("on_behalf_of", th.StringType),
         th.Property("outcome", th.CustomType({"type": ["object", "string"]})),
         th.Property("paid", th.BooleanType),
         th.Property("payment_intent", th.StringType),
@@ -906,8 +962,10 @@ class ChargesStream(ConcurrentStream):
         th.Property("statement_descriptor", th.StringType),
         th.Property("statement_descriptor_suffix", th.StringType),
         th.Property("status", th.StringType),
-        th.Property("transfer_data", th.StringType),
-        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.ObjectType(
+            th.Property("amount", th.IntegerType),
+            th.Property("destination", th.StringType),
+        )),
         th.Property("transfer_group", th.StringType),
     ).to_dict()
 
@@ -1045,7 +1103,6 @@ class PaymentIntentsStream(ConcurrentStream):
         th.Property("amount_details", th.CustomType({"type": ["object", "string"]})),
         th.Property("application", th.StringType),
         th.Property("application_fee_amount", th.NumberType),
-        th.Property("application", th.StringType),
         th.Property("automatic_payment_methods", th.CustomType({"type": ["object", "string"]})),
         th.Property("canceled_at", th.NumberType),
         th.Property("cancellation_reason", th.StringType),
@@ -1208,7 +1265,7 @@ class RefundsStream(ConcurrentStream):
             th.Property("type", th.StringType)
         )),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
-        th.Property("payment_intent", th.StringType),
+        th.Property("payment_intent", th.CustomType({"type": ["object", "string"]})),
         th.Property("reason", th.StringType),
         th.Property("receipt_number", th.StringType),
         th.Property("source_transfer_reversal", th.StringType),
@@ -1453,7 +1510,40 @@ class DisputesStream(ConcurrentStream):
         th.Property("payment_intent", th.StringType),
         th.Property("reason", th.StringType),
         th.Property("status", th.StringType),
+        th.Property("balance_transactions", th.ArrayType(
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("object", th.StringType),
+                th.Property("amount", th.NumberType),
+                th.Property("available_on", th.NumberType),
+                th.Property("created", th.DateTimeType),
+                th.Property("currency", th.StringType),
+                th.Property("description", th.StringType),
+                th.Property("fee", th.NumberType),
+                th.Property("fee_details", th.CustomType({"type": ["array", "string"]})),
+                th.Property("net", th.NumberType),
+                th.Property("reporting_category", th.StringType),
+                th.Property("source", th.StringType),
+                th.Property("status", th.StringType),
+                th.Property("type", th.StringType),
+                th.Property("livemode", th.BooleanType),
+                th.Property("period", th.CustomType({"type": ["object", "string"]})),
+                th.Property("subscription_item", th.StringType),
+                th.Property("total_usage", th.IntegerType),
+                th.Property("exchange_rate", th.NumberType)
+            )
+        )),
     ).to_dict()
+
+    def post_process(self, row: dict, context: Optional[dict]) -> dict:
+        """Process date in balance_transactions field."""
+        row = super().post_process(row, context)
+        
+        for balance_transaction in row.get("balance_transactions", []):
+            if balance_transaction.get("created"):
+                dt_field = datetime.utcfromtimestamp(int(balance_transaction["created"]))
+                balance_transaction["created"] = dt_field.isoformat()
+        return row
 
 
 class Discounts(ConcurrentStream):
@@ -1463,6 +1553,7 @@ class Discounts(ConcurrentStream):
     replication_key = "updated"
     object = "invoice"
     event_filter = "invoice.*"
+    discount_ids = set()
     
     @property
     def path(self):
@@ -1527,8 +1618,15 @@ class Discounts(ConcurrentStream):
             [invoice_discounts.extend(line["discounts"]) for line in invoice["lines"]["data"]]
             # add updated rep key to all invoice discounts
             [discount.update({"updated": updated}) for discount in invoice_discounts]
-            # add invoice discounts to discounts list
-            discounts.extend(invoice_discounts)
+
+            # check for duplicates
+            for discount in invoice_discounts:
+                if discount["id"] not in self.discount_ids:
+                    self.discount_ids.add(discount["id"])
+                    
+                    # add invoice discounts to discounts list
+                    discounts.append(discount)
+
         return discounts
 
 
