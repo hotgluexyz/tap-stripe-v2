@@ -23,12 +23,17 @@ class Accounts(stripeStream):
     object = "account"
     path = "accounts"
 
+    @property
+    def expand(self):
+        return ["data.groups"]
+
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
         th.Property("business_profile", th.CustomType({"type": ["object", "string"]})),
         th.Property("business_type", th.StringType),
         th.Property("capabilities", th.CustomType({"type": ["object", "string"]})),
+        th.Property("company", th.CustomType({"type": ["object", "string"]})),
         th.Property("charges_enabled", th.BooleanType),
         th.Property("controller", th.CustomType({"type": ["object", "string"]})),
         th.Property("country", th.StringType),
@@ -38,6 +43,8 @@ class Accounts(stripeStream):
         th.Property("email", th.StringType),
         th.Property("external_accounts", th.CustomType({"type": ["object", "string"]})),
         th.Property("future_requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("groups", th.CustomType({"type": ["object", "string"]})),
+        th.Property("individual", th.CustomType({"type": ["object", "string"]})),
         th.Property("login_links", th.CustomType({"type": ["object", "string"]})),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("payouts_enabled", th.BooleanType),
