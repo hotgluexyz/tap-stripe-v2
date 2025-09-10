@@ -23,6 +23,10 @@ class Accounts(stripeStream):
     object = "account"
     path = "accounts"
 
+    @property
+    def expand(self):
+        return ["data.groups"]
+
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
@@ -39,6 +43,7 @@ class Accounts(stripeStream):
         th.Property("email", th.StringType),
         th.Property("external_accounts", th.CustomType({"type": ["object", "string"]})),
         th.Property("future_requirements", th.CustomType({"type": ["object", "string"]})),
+        th.Property("groups", th.CustomType({"type": ["object", "string"]})),
         th.Property("login_links", th.CustomType({"type": ["object", "string"]})),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property("payouts_enabled", th.BooleanType),
