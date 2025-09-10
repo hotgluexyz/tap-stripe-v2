@@ -29,6 +29,7 @@ class Accounts(stripeStream):
         th.Property("business_profile", th.CustomType({"type": ["object", "string"]})),
         th.Property("business_type", th.StringType),
         th.Property("capabilities", th.CustomType({"type": ["object", "string"]})),
+        th.Property("company", th.CustomType({"type": ["object", "string"]})),
         th.Property("charges_enabled", th.BooleanType),
         th.Property("controller", th.CustomType({"type": ["object", "string"]})),
         th.Property("country", th.StringType),
