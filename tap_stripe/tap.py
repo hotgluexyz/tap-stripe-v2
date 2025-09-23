@@ -31,9 +31,11 @@ from tap_stripe.streams import (
     TransfersStream,
     TaxRatesStream,
     RefundsStream,
-    PayoutReportsStream,
     DisputesIssuingStream,
-    Discounts
+    Discounts,
+    PayoutReportsStream,
+    TaxReportsStream,
+    BalanceReportsStream,
 )
 
 STREAM_TYPES = [
@@ -62,11 +64,12 @@ STREAM_TYPES = [
     TransfersStream,
     TaxRatesStream,
     RefundsStream,
-    PayoutReportsStream,
     DisputesIssuingStream,
-    Discounts
+    Discounts,
+    PayoutReportsStream,
+    TaxReportsStream,
+    BalanceReportsStream,
 ]
-
 
 class Tapstripe(Tap):
     """stripe tap class."""
