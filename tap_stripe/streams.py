@@ -568,9 +568,9 @@ class Plans(StripeStreamV2):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         if self.from_invoice_items:
             items = response.json()["data"]
-            prices = [item["price"] for item in items]
+            prices = [item["price"] for item in items if item["price"] is not None]
             for record in prices:
-                # clean dupplicate prices from invoice items
+                # clean duplicate prices from invoice items
                 if record["id"] not in self.fullsync_ids:
                     self.fullsync_ids.append(record["id"])
                     yield record
