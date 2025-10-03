@@ -394,6 +394,7 @@ class Subscriptions(stripeStream):
         th.Property("transfer_data", th.StringType),
         th.Property("trial_end", th.DateTimeType),
         th.Property("trial_start", th.DateTimeType),
+        th.Property("cancellation_details", th.CustomType({"type": ["object", "string"]})),
     ).to_dict()
 
     def get_url_params(self, context, next_page_token):
