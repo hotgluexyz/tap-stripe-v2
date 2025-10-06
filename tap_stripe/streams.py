@@ -716,7 +716,7 @@ class Products(StripeStreamV2):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         if self.from_invoice_items:
             self.get_data_from_id = True
-            products = [item["price"] for item in response.json()["data"]]
+            products = [item["price"] for item in response.json()["data"] if item["price"] is not None]
             [item.update({"id": item["product"]}) for item in products]
             for record in super().parse_response(products):
                 yield record
