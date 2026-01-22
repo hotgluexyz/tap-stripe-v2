@@ -1,5 +1,6 @@
 """REST client handling, including stripeStream base class."""
 
+import csv
 from datetime import datetime
 from typing import Any, Dict, Iterable, Optional, cast
 
@@ -23,6 +24,9 @@ class stripeStream(RESTStream):
 
     url_base = "https://api.stripe.com/v1/"
     _page_size = 100
+
+    # default to false
+    is_csv_stream = False
 
     records_jsonpath = "$.data[*]"
     primary_keys = ["id"]
@@ -308,6 +312,12 @@ class stripeStream(RESTStream):
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
             msg = self.response_error_message(response)
             raise FatalAPIError(msg)
+
+        if not self.is_csv_stream:
+            try:
+                response.json()
+            except JSONDecodeError:
+                raise RetriableAPIError(f"Invalid JSON response: {response.text} from API in stream {self.name}.", response)
 
     def _write_state_message(self) -> None:
         """Write out a STATE message with the latest state."""

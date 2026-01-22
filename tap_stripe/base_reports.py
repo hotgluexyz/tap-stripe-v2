@@ -12,6 +12,9 @@ from tap_stripe.client import stripeStream
 
 
 class BaseReportsStream(stripeStream):
+
+    is_csv_stream = True
+    
     def get_custom_headers(self):
         headers = self.http_headers
         # get the headers with auth token populated
