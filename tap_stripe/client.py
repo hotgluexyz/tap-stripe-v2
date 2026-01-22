@@ -1,6 +1,5 @@
 """REST client handling, including stripeStream base class."""
 
-import csv
 from datetime import datetime
 from typing import Any, Dict, Iterable, Optional, cast
 
