@@ -312,7 +312,7 @@ class stripeStream(RESTStream):
             msg = self.response_error_message(response)
             raise FatalAPIError(msg)
 
-        if not self.is_csv_stream:
+        if not self.is_csv_stream and response.status_code == 200:
             try:
                 response.json()
             except JSONDecodeError:
