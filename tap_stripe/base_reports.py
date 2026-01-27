@@ -12,8 +12,6 @@ from tap_stripe.client import stripeStream
 
 
 class BaseReportsStream(stripeStream):
-
-    is_csv_stream = True
     
     def get_custom_headers(self):
         headers = self.http_headers
@@ -30,10 +28,8 @@ class BaseReportsStream(stripeStream):
             available starting and ending date ranges.
         """
         url = f"{self.url_base}reporting/report_types/{self.report_type}"
-        self.is_csv_stream = False
         resp = requests.get(url=url, headers=self.get_custom_headers())
         self.validate_response(resp)
-        self.is_csv_stream = True
         data = resp.json()
         return data["data_available_start"], data["data_available_end"]
 
@@ -60,10 +56,8 @@ class BaseReportsStream(stripeStream):
             body.append(("parameters[columns][]", column))
 
         # Make the request
-        self.is_csv_stream = False
         response = requests.post(url=url, headers=headers, data=body)
         self.validate_response(response)
-        self.is_csv_stream = True
         data = response.json()
         return data
 
@@ -73,10 +67,8 @@ class BaseReportsStream(stripeStream):
         while True:
             headers = self.get_custom_headers()
             url = f"{self.url_base}reporting/report_runs/{report_id}"
-            self.is_csv_stream = False
             response = requests.get(url, headers=headers)
             self.validate_response(response)
-            self.is_csv_stream = True
             data = response.json()
             # Stripe will return processing status in "status" property of the response
             if data["status"] == "succeeded" and "result" in data:
@@ -94,7 +86,7 @@ class BaseReportsStream(stripeStream):
             self.logger.info("Starting CSV download from Stripe...")
             
             response = requests.get(url, headers=headers, stream=True)
-            self.validate_response(response)
+            self.validate_response(response, is_csv_stream=True)
             
             # Check content encoding and type
             content_encoding = response.headers.get('content-encoding', '').lower()

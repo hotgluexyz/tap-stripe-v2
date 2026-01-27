@@ -24,8 +24,6 @@ class stripeStream(RESTStream):
     url_base = "https://api.stripe.com/v1/"
     _page_size = 100
 
-    # default to false
-    is_csv_stream = False
 
     records_jsonpath = "$.data[*]"
     primary_keys = ["id"]
@@ -301,7 +299,7 @@ class stripeStream(RESTStream):
             f"{response.text} for path: {self.path}"
         )
 
-    def validate_response(self, response: requests.Response) -> None:
+    def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
@@ -312,7 +310,7 @@ class stripeStream(RESTStream):
             msg = self.response_error_message(response)
             raise FatalAPIError(msg)
 
-        if not self.is_csv_stream and response.status_code == 200:
+        if not is_csv_stream and response.status_code == 200:
             try:
                 response.json()
             except JSONDecodeError:
