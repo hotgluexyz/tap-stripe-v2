@@ -298,7 +298,7 @@ class stripeStream(RESTStream):
             f"{response.text} for path: {self.path}"
         )
 
-    def validate_response(self, response: requests.Response) -> None:
+    def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600
@@ -308,6 +308,12 @@ class stripeStream(RESTStream):
         elif 400 <= response.status_code < 500 and response.status_code not in self.ignore_statuscode:
             msg = self.response_error_message(response)
             raise FatalAPIError(msg)
+
+        if not is_csv_stream and response.status_code == 200:
+            try:
+                response.json()
+            except JSONDecodeError:
+                raise RetriableAPIError(f"Invalid JSON response: {response.text} from API in stream {self.name}.", response)
 
     def _write_state_message(self) -> None:
         """Write out a STATE message with the latest state."""

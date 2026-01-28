@@ -12,6 +12,7 @@ from tap_stripe.client import stripeStream
 
 
 class BaseReportsStream(stripeStream):
+    
     def get_custom_headers(self):
         headers = self.http_headers
         # get the headers with auth token populated
@@ -85,7 +86,7 @@ class BaseReportsStream(stripeStream):
             self.logger.info("Starting CSV download from Stripe...")
             
             response = requests.get(url, headers=headers, stream=True)
-            self.validate_response(response)
+            self.validate_response(response, is_csv_stream=True)
             
             # Check content encoding and type
             content_encoding = response.headers.get('content-encoding', '').lower()
