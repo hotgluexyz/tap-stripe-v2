@@ -1,11 +1,11 @@
 """Stream type classes for tap-stripe-v2."""
 
 from typing import Any, Optional, Iterable, Dict
-from singer_sdk import typing as th
-from singer_sdk.exceptions import RetriableAPIError
+from hotglue_singer_sdk import typing as th
+from hotglue_singer_sdk.exceptions import RetriableAPIError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
-from singer_sdk.helpers.jsonpath import extract_jsonpath
+from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
 from tap_stripe.base_reports import BaseReportsStream
 
 class Accounts(stripeStream):

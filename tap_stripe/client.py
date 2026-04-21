@@ -7,13 +7,13 @@ import requests
 from requests.exceptions import JSONDecodeError
 from memoization import cached
 from backports.cached_property import cached_property
-from singer_sdk.authenticators import BearerTokenAuthenticator
-from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.streams import RESTStream
+from hotglue_singer_sdk.authenticators import BearerTokenAuthenticator
+from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
+from hotglue_singer_sdk.streams import RESTStream
 from pendulum import parse
 from typing import Any, Callable, Dict, Iterable, Optional
 import backoff
-from singer_sdk.exceptions import RetriableAPIError, FatalAPIError
+from hotglue_singer_sdk.exceptions import RetriableAPIError, FatalAPIError
 
 import singer
 from singer import StateMessage
