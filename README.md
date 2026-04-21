@@ -3,7 +3,7 @@
 **tap-stripe-v2** is a Singer Tap capable of syncing data from Stripe. 
 **tap-stripe-v2** can be run on [hotglue](https://hotglue.com), an embedded integration platform for running Singer Taps and Targets.
 
-This tap is built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
+This tap is built with the [Hotglue Singer SDK](https://github.com/hotgluexyz/HotglueSingerSDK) for Singer Taps.
 
 ## Installation
 
@@ -15,26 +15,49 @@ pipx install tap-stripe-v2
 
 ## Configuration
 
-### Accepted Config Options
+| Name                              | Required | Description                                                                                                                                | Example                                          |
+| --------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| `client_secret`                   | Yes\*    | Stripe API secret key used as a bearer token. Either `client_secret` or `access_token` must be provided.                                   | `<STRIPE_SECRET_KEY>`                            |
+| `access_token`                    | No\*     | Stripe OAuth access token. Used as a bearer token in place of `client_secret` (e.g. for Stripe Connect).                                   | `<STRIPE_ACCESS_TOKEN>`                          |
+| `account_id`                      | No       | Stripe connected account ID. When set, requests are made on behalf of that account via the `Stripe-Account` header.                        | `acct_xxxxxxxxxxxxxxxx`                          |
+| `start_date`                      | No       | The earliest record date to sync. Defaults to `2000-01-01T00:00:00.000Z`.                                                                  | `2024-01-01T00:00:00Z`                           |
+| `inc_sync_ignore_invoice_status`  | No       | Comma-separated list of invoice statuses to skip during incremental syncs. Defaults to `deleted`.                                          | `deleted,draft`                                  |
+| `incremental_balance_transactions`| No       | When `true`, the `balance_transactions` stream syncs incrementally using `created` as the replication key. Defaults to full-table sync.    | `true`                                           |
 
-- [ ] `Developer TODO:` Provide a list of config options accepted by the tap.
+\* Exactly one of `client_secret` or `access_token` is required.
 
-A full list of supported settings and capabilities for this
-tap is available by running:
+### Notes
+
+- `client_secret` and `access_token` are functionally equivalent — both are sent as the bearer token in the `Authorization` header. Use whichever matches how you obtained the credential (direct API key vs. Stripe Connect OAuth).
+- Setting `account_id` is only relevant when authenticating against the Stripe platform account and syncing data for a specific connected account.
+- Setting `incremental_balance_transactions` to `true` is recommended for large Stripe accounts where syncing the full `balance_transactions` history on every run is too slow.
+
+### Example config (minimum)
+
+```json
+{
+  "client_secret": "<STRIPE_SECRET_KEY>",
+  "start_date": "2024-01-01T00:00:00Z"
+}
+```
+
+### Example config (Stripe Connect with all options)
+
+```json
+{
+  "access_token": "<STRIPE_ACCESS_TOKEN>",
+  "account_id": "acct_xxxxxxxxxxxxxxxx",
+  "start_date": "2024-01-01T00:00:00Z",
+  "inc_sync_ignore_invoice_status": "deleted,draft",
+  "incremental_balance_transactions": true
+}
+```
+
+A full list of supported settings and capabilities is also available via:
 
 ```bash
 tap-stripe-v2 --about
 ```
-
-### Configure using environment variables
-
-This Singer tap will automatically import any environment variables within the working directory's
-`.env` if the `--config=ENV` is provided, such that config values will be considered if a matching
-environment variable is set either in the terminal context or in the `.env` file.
-
-### Source Authentication and Authorization
-
-- [ ] `Developer TODO:` If your tap requires special access on the source system, or any special authentication requirements, provide those here.
 
 ## Usage
 
