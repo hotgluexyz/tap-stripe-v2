@@ -37,3 +37,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 # CLI declaration
 tap-stripe-v2 = 'tap_stripe.tap:Tapstripe.cli'
+tap-stripe = 'tap_stripe.tap:Tapstripe.cli'
