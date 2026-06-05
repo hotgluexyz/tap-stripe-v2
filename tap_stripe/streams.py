@@ -462,12 +462,12 @@ class Plans(StripeStreamV2):
     @property
     def expand(self):
         if self.get_from_events:
-            return ["tiers"]
+            return ["tiers", "currency_options"]
         else:
             if self.from_invoice_items:
-                return ["data.price.tiers"]
+                return ["data.price.tiers", "data.price.currency_options"]
             else:
-                return ["data.tiers"]
+                return ["data.tiers", "data.currency_options"]
 
     @property
     def path(self):
@@ -538,6 +538,7 @@ class Plans(StripeStreamV2):
                 )
                     )
         ),
+        th.Property("currency_options", th.CustomType({"type": ["object", "string"]})),
         th.Property("usage_type", th.StringType),
     ).to_dict()
 
