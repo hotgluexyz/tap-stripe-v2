@@ -1,8 +1,9 @@
 """REST client handling, including stripeStream base class."""
 
 from datetime import datetime
-from typing import Any, Dict, Iterable, Optional, cast
+from typing import Any, Callable, Dict, Iterable, Optional, cast
 
+import backoff
 import requests
 from requests.exceptions import JSONDecodeError
 from memoization import cached
@@ -11,8 +12,6 @@ from hotglue_singer_sdk.authenticators import BearerTokenAuthenticator
 from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
 from hotglue_singer_sdk.streams import RESTStream
 from pendulum import parse
-from typing import Any, Callable, Dict, Iterable, Optional
-import backoff
 from hotglue_singer_sdk.exceptions import RetriableAPIError, FatalAPIError
 
 import singer
@@ -117,12 +116,12 @@ class stripeStream(RESTStream):
             return not_sync_invoice_status.split(",")
         return ["deleted"]
 
-    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:  # noqa: C901
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
         try:
             records = extract_jsonpath(self.records_jsonpath, input=response.json())
-        except:
+        except Exception:
             records = response
 
         if self.name == "plans" and self.path == "events":
