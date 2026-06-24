@@ -4,6 +4,7 @@ from typing import List
 
 from hotglue_singer_sdk import Stream, Tap
 from hotglue_singer_sdk import typing as th
+from hotglue_singer_sdk.helpers.capabilities import AlertingLevel
 
 from tap_stripe.streams import (
     Accounts,
@@ -75,6 +76,7 @@ class Tapstripe(Tap):
     """stripe tap class."""
 
     name = "tap-stripe-v2"
+    alerting_level = AlertingLevel.WARNING
 
     config_jsonschema = th.PropertiesList(
         th.Property("client_secret", th.StringType, required=True),
