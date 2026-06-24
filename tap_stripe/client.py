@@ -127,7 +127,7 @@ class stripeStream(RESTStream):
         if self.name == "plans" and self.path == "events":
             records = list(records)
             # for plans get all prices, including the updated ones from subscriptions
-            plans = [plan for plan in records if plan["type"].startswith("plan")]
+            plans = [plan.get("data", {}).get("object", {}) for plan in records if plan["type"].startswith("plan")]
             # Extract plans from the subscriptions
             subscription_plans = []
             [subscription_plans.extend(item.get("data", {}).get("object", {}).get("items", {}).get("data", [])) for item in records if (item["type"] == "customer.subscription.updated")]
