@@ -13,7 +13,7 @@ from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
 from hotglue_singer_sdk.streams import RESTStream
 from pendulum import parse
 from hotglue_singer_sdk.exceptions import RetriableAPIError, FatalAPIError
-from hotglue_singer_sdk.tap_base import InvalidCredentialsError
+from hotglue_etl_exceptions import InvalidCredentialsError
 
 import singer
 from singer import StateMessage

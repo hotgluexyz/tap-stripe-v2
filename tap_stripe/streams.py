@@ -3,7 +3,7 @@
 from typing import Any, Optional, Iterable, Dict
 from hotglue_singer_sdk import typing as th
 from hotglue_singer_sdk.exceptions import RetriableAPIError
-from hotglue_singer_sdk.tap_base import InvalidCredentialsError
+from hotglue_etl_exceptions import InvalidCredentialsError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
 from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
