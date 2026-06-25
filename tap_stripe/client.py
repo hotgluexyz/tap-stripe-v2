@@ -13,6 +13,7 @@ from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
 from hotglue_singer_sdk.streams import RESTStream
 from pendulum import parse
 from hotglue_singer_sdk.exceptions import RetriableAPIError, FatalAPIError
+from hotglue_etl_exceptions import InvalidCredentialsError
 
 import singer
 from singer import StateMessage
@@ -298,6 +299,9 @@ class stripeStream(RESTStream):
         )
 
     def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
+        if response.status_code == 401:
+            msg = self.response_error_message(response)
+            raise InvalidCredentialsError(msg)
         if (
             response.status_code in self.extra_retry_statuses
             or 500 <= response.status_code < 600

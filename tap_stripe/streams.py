@@ -3,6 +3,7 @@
 from typing import Any, Optional, Iterable, Dict
 from hotglue_singer_sdk import typing as th
 from hotglue_singer_sdk.exceptions import RetriableAPIError
+from hotglue_etl_exceptions import InvalidCredentialsError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
 from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -830,6 +831,9 @@ class UsageRecordsStream(stripeStream):
     ).to_dict()
 
     def validate_response(self, response: requests.Response) -> None:
+        if response.status_code == 401:
+            msg = self.response_error_message(response)
+            raise InvalidCredentialsError(msg)
 
         if (
             response.status_code in self.extra_retry_statuses
