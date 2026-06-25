@@ -832,9 +832,8 @@ class UsageRecordsStream(stripeStream):
 
     def validate_response(self, response: requests.Response) -> None:
         if response.status_code == 401:
-            raise InvalidCredentialsError(
-                f"Unauthorized: {response.status_code} {response.reason} at {self.path}"
-            )
+            msg = self.response_error_message(response)
+            raise InvalidCredentialsError(msg)
 
         if (
             response.status_code in self.extra_retry_statuses
