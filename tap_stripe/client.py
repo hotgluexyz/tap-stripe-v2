@@ -299,7 +299,9 @@ class stripeStream(RESTStream):
         )
 
     def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
-        if response.status_code == 401:
+        if response.status_code == 401 or (
+            response.status_code == 403 and "permission_denied" in response.text
+        ):
             msg = self.response_error_message(response)
             raise InvalidCredentialsError(msg)
         if (
