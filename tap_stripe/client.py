@@ -298,8 +298,23 @@ class stripeStream(RESTStream):
             f"{response.text} for path: {self.path}"
         )
 
-    def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
+    def is_invalid_credentials_response(self, response: requests.Response) -> bool:
+        """Return True when the response indicates invalid credentials."""
         if response.status_code == 401:
+            return True
+
+        if response.status_code != 403:
+            return False
+
+        try:
+            error = (response.json() or {}).get("error") or {}
+        except JSONDecodeError:
+            return False
+
+        return error.get("type") == "permission_denied"
+
+    def validate_response(self, response: requests.Response, is_csv_stream: bool = False) -> None:
+        if self.is_invalid_credentials_response(response):
             msg = self.response_error_message(response)
             raise InvalidCredentialsError(msg)
         if (
