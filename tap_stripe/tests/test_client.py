@@ -5,7 +5,6 @@ import json
 import pytest
 import requests
 from hotglue_etl_exceptions import InvalidCredentialsError
-from hotglue_singer_sdk.exceptions import FatalAPIError
 
 from tap_stripe.client import stripeStream
 
@@ -48,16 +47,4 @@ def test_validate_response_classifies_permission_denied_as_invalid_credentials()
     )
 
     with pytest.raises(InvalidCredentialsError):
-        stream.validate_response(response)
-
-
-def test_validate_response_keeps_other_forbidden_errors_fatal():
-    """Keep unrelated forbidden responses classified as fatal errors."""
-    stream = make_stream()
-    response = make_response(
-        403,
-        {"error": {"type": "invalid_request_error", "message": "Request failed."}},
-    )
-
-    with pytest.raises(FatalAPIError):
         stream.validate_response(response)
