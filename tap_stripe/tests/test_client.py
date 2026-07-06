@@ -7,6 +7,7 @@ import requests
 from hotglue_etl_exceptions import InvalidCredentialsError
 
 from tap_stripe.client import stripeStream
+from tap_stripe.streams import UsageRecordsStream
 
 
 class TestStripeStream(stripeStream):
@@ -14,6 +15,10 @@ class TestStripeStream(stripeStream):
 
     name = "events"
     path = "events"
+
+
+class TestUsageRecordsValidationStream(UsageRecordsStream):
+    """Minimal usage-records stream for response validation tests."""
 
 
 def make_response(status_code, payload):
@@ -34,7 +39,7 @@ def make_stream():
 
 
 def test_validate_response_classifies_permission_denied_as_invalid_credentials():
-    """Treat restricted-key permission errors as invalid credentials."""
+    """Treat any 403 response as invalid credentials in the base client path."""
     stream = make_stream()
     response = make_response(
         403,
@@ -45,6 +50,18 @@ def test_validate_response_classifies_permission_denied_as_invalid_credentials()
             }
         },
     )
+
+    with pytest.raises(InvalidCredentialsError):
+        stream.validate_response(response)
+
+
+def test_usage_records_validate_response_classifies_403_as_invalid_credentials():
+    """Treat any 403 response as invalid credentials in the usage-records path."""
+    stream = object.__new__(TestUsageRecordsValidationStream)
+    stream.ignore_statuscode = []
+    stream.extra_retry_statuses = []
+    stream.path = "subscription_items/{subscription_item_id}/usage_record_summaries"
+    response = make_response(403, {"error": {"message": "Forbidden"}})
 
     with pytest.raises(InvalidCredentialsError):
         stream.validate_response(response)

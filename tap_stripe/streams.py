@@ -831,7 +831,7 @@ class UsageRecordsStream(stripeStream):
     ).to_dict()
 
     def validate_response(self, response: requests.Response) -> None:
-        if response.status_code == 401:
+        if response.status_code in [401, 403]:
             msg = self.response_error_message(response)
             raise InvalidCredentialsError(msg)
 
