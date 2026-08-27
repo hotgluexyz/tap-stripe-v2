@@ -1,0 +1,83 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/customers?limit=100&created%5Bgt%5D=1698796800
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-hMnc", "data": [{"id": "cus_P624UkXAzvUW55",
+        "object": "-Fallback-scrubbed-VvnATnHf", "address": null, "balance": 96, "created":
+        1701272903, "currency": "-Fallback-scrubbed-wfP", "customer_account": null,
+        "default_source": "-Fallback-scrubbed-nFEUlfQoPjrlODyArSFDILxmDWCls", "delinquent":
+        true, "description": "-Fallback-scrubbed-UFfD", "discount": null, "email":
+        "charleshull@example.com", "invoice_prefix": "-Fallback-scrubbed-ZuPoBIRK",
+        "invoice_settings": {"custom_fields": null, "default_payment_method": null,
+        "footer": null, "rendering_options": null}, "livemode": true, "metadata":
+        {}, "name": "Willie Williams MD", "next_invoice_sequence": 3071, "phone":
+        null, "preferred_locales": [], "shipping": null, "tax_exempt": "-Fallback-scrubbed-zKVX",
+        "test_clock": null}], "has_more": false, "url": "/v1/customers"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '849'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=ctnkBa8o9DwFhdu5ikLKkqjRaFvnmUj0prhajaGH0aSVrKY6PNpjHoJhbCAKHq3WuCeRbJcohsHZVzH7;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:28 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=ctnkBa8o9DwFhdu5ikLKkqjRaFvnmUj0prhajaGH0aSVrKY6PNpjHoJhbCAKHq3WuCeRbJcohsHZVzH7&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=ctnkBa8o9DwFhdu5ikLKkqjRaFvnmUj0prhajaGH0aSVrKY6PNpjHoJhbCAKHq3WuCeRbJcohsHZVzH7&t=1"
+      Request-Id:
+      - req_nStHnMPp7Bqa3G
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

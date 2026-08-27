@@ -1,0 +1,299 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoiceitems?limit=100&created%5Bgt%5D=1698796800
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-KcBT", "data": [{"id": "ii_1OMBoiLKAgyp1fW9PyYxEU16",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 745, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1702310088, "description": "-Fallback-scrubbed-zSBAqA", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-XQbRYoGEsEYBGfFPplrHCkPtCvW",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 2189,
+        "start": 2189}, "plan": null, "price": {"id": "price_1OIeahLKAgyp1fW9WlTijlnh",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467383, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 745, "unit_amount_decimal":
+        "57"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-eVkcwxoQukwloAOVIjZjuiwoYpDwJM",
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "57"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        745, "unit_amount_decimal": "57"}, {"id": "ii_1OMBoeLKAgyp1fW9iGtVIBFo", "object":
+        "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 9277, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1702310084, "description": "-Fallback-scrubbed-ObTyy", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-XQbRYoGEsEYBGfFPplrHCkPtCvW",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 2756,
+        "start": 2756}, "plan": null, "price": {"id": "price_1OIebuLKAgyp1fW97jHu48kJ",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467458, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-AMuBJXABhXyUZIUEFXsATSPacqpEah",
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIht0LKAgyp1fW9S6zerIYe",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 745, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701480050, "description": "-Fallback-scrubbed-zSBAqA", "discountable":
+        false, "discounts": ["-Fallback-scrubbed-CXLKnMrYWcmwWttxlWPcpCgLAmO"], "frozen_fields":
+        [], "invoice": "-Fallback-scrubbed-rIYIIUaeBcoBGkPfTGSgdQqvNpW", "livemode":
+        false, "metadata": {}, "parent": null, "period": {"end": 4663, "start": 4663},
+        "plan": null, "price": {"id": "price_1OIeahLKAgyp1fW9WlTijlnh", "object":
+        "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467383, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 745, "unit_amount_decimal":
+        "57"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-eVkcwxoQukwloAOVIjZjuiwoYpDwJM",
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "57"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        745, "unit_amount_decimal": "57"}, {"id": "ii_1OIhsZLKAgyp1fW9Ld0eRqDB", "object":
+        "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 7642, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701480023, "description": "-Fallback-scrubbed-oNvKCj", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-rIYIIUaeBcoBGkPfTGSgdQqvNpW",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 8264,
+        "start": 8264}, "plan": null, "price": {"id": "price_1OIeayLKAgyp1fW9eAX4D25m",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467400, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-aMZcuXncprtxdlBrLNXXxOhgUayuEy",
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7014, "quantity_decimal":
+        "9867", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIhsZLKAgyp1fW9pc2hlRb5",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 745, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701480023, "description": "-Fallback-scrubbed-zSBAqA", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-rIYIIUaeBcoBGkPfTGSgdQqvNpW",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 3411,
+        "start": 3411}, "plan": null, "price": {"id": "price_1OIeahLKAgyp1fW9WlTijlnh",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467383, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 745, "unit_amount_decimal":
+        "57"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-eVkcwxoQukwloAOVIjZjuiwoYpDwJM",
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "57"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        745, "unit_amount_decimal": "57"}, {"id": "ii_1OIh61LKAgyp1fW9hZneUKxP", "object":
+        "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 8820, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701477013, "description": "-Fallback-scrubbed-Lyev", "discountable":
+        false, "discounts": ["-Fallback-scrubbed-uKLljWMFERgLaGdPITxfhrVaxmk"], "frozen_fields":
+        [], "invoice": "-Fallback-scrubbed-FGuBdHMIOhFKOxPRkICDysraMPP", "livemode":
+        false, "metadata": {}, "parent": null, "period": {"end": 1239, "start": 1239},
+        "plan": null, "price": {"id": "price_1OIh61LKAgyp1fW9eUHNyECk", "object":
+        "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701477013, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-qakAyEXfQTKZyBGaiHT", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 8820, "unit_amount_decimal":
+        "6883"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-HFIfxjQersuXpxKAPmoWBSDPEGRwsE",
+        "product": "-Fallback-scrubbed-qakAyEXfQTKZyBGaiHT"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "6883"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        8820, "unit_amount_decimal": "6883"}, {"id": "ii_1OIgWMLKAgyp1fW9x5yhWZ6X",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 728, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701474802, "description": "-Fallback-scrubbed-oNvKCj", "discountable":
+        false, "discounts": ["-Fallback-scrubbed-tJiRumaurKQNCglLqiOYDEquwrM"], "frozen_fields":
+        [], "invoice": "-Fallback-scrubbed-FGuBdHMIOhFKOxPRkICDysraMPP", "livemode":
+        false, "metadata": {}, "parent": null, "period": {"end": 4244, "start": 4244},
+        "plan": null, "price": {"id": "price_1OIeayLKAgyp1fW9eAX4D25m", "object":
+        "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467400, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-aMZcuXncprtxdlBrLNXXxOhgUayuEy",
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 8554, "quantity_decimal":
+        "9851", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIfEZLKAgyp1fW9Mrt86hp9",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 7642, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701469855, "description": "-Fallback-scrubbed-oNvKCj", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-VqMEekNIzfMimKZgsDXxVSOiSqj",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 8264,
+        "start": 8264}, "plan": null, "price": {"id": "price_1OIeayLKAgyp1fW9eAX4D25m",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467400, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-aMZcuXncprtxdlBrLNXXxOhgUayuEy",
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7014, "quantity_decimal":
+        "9867", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIfEZLKAgyp1fW9MZAhzh62",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 745, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701469855, "description": "-Fallback-scrubbed-zSBAqA", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-VqMEekNIzfMimKZgsDXxVSOiSqj",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 3411,
+        "start": 3411}, "plan": null, "price": {"id": "price_1OIeahLKAgyp1fW9WlTijlnh",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467383, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 745, "unit_amount_decimal":
+        "57"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-eVkcwxoQukwloAOVIjZjuiwoYpDwJM",
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "57"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        745, "unit_amount_decimal": "57"}, {"id": "ii_1OIegbLKAgyp1fW9TF9RoKMt", "object":
+        "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 9277, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701467749, "description": "-Fallback-scrubbed-ObTyy", "discountable":
+        false, "discounts": ["-Fallback-scrubbed-GBEKgLevOQWdXjfpXBFlGFiPMWi"], "frozen_fields":
+        [], "invoice": "-Fallback-scrubbed-FGuBdHMIOhFKOxPRkICDysraMPP", "livemode":
+        false, "metadata": {}, "parent": null, "period": {"end": 6266, "start": 6266},
+        "plan": null, "price": {"id": "price_1OIebuLKAgyp1fW97jHu48kJ", "object":
+        "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467458, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-AMuBJXABhXyUZIUEFXsATSPacqpEah",
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIebuLKAgyp1fW9OGOVrKTq",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 9277, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701467458, "description": "-Fallback-scrubbed-ObTyy", "discountable":
+        false, "discounts": ["-Fallback-scrubbed-FIwwDDQkmlaBGuCHykzqawDvhue"], "frozen_fields":
+        [], "invoice": "-Fallback-scrubbed-oXXPhrjJUUCSqXMCPEQhbiHhoWY", "livemode":
+        false, "metadata": {}, "parent": null, "period": {"end": 5680, "start": 5680},
+        "plan": null, "price": {"id": "price_1OIebuLKAgyp1fW97jHu48kJ", "object":
+        "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467458, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-AMuBJXABhXyUZIUEFXsATSPacqpEah",
+        "product": "-Fallback-scrubbed-CUZLclhKPuoqkskpBXQ"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIeapLKAgyp1fW9os7Ohk2k",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 7642, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701467391, "description": "-Fallback-scrubbed-oNvKCj", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-ZlcBdHsQNbRriqTwOLUiQWRFLxE",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 8264,
+        "start": 8264}, "plan": null, "price": {"id": "price_1OIeayLKAgyp1fW9eAX4D25m",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467400, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 9277, "unit_amount_decimal":
+        "654"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-aMZcuXncprtxdlBrLNXXxOhgUayuEy",
+        "product": "-Fallback-scrubbed-QjugJtUFQnwtIhcMxmR"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "654"}, "proration": false, "quantity": 7014, "quantity_decimal":
+        "9867", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        9277, "unit_amount_decimal": "654"}, {"id": "ii_1OIeahLKAgyp1fW9qC33ScX1",
+        "object": "-Fallback-scrubbed-LbTwMKHYFXU", "amount": 745, "currency": "-Fallback-scrubbed-Jci",
+        "customer": "-Fallback-scrubbed-iXFqKcvdxTOOYpcWZH", "customer_account": null,
+        "date": 1701467383, "description": "-Fallback-scrubbed-zSBAqA", "discountable":
+        false, "discounts": [], "frozen_fields": [], "invoice": "-Fallback-scrubbed-ZlcBdHsQNbRriqTwOLUiQWRFLxE",
+        "livemode": false, "metadata": {}, "parent": null, "period": {"end": 3411,
+        "start": 3411}, "plan": null, "price": {"id": "price_1OIeahLKAgyp1fW9WlTijlnh",
+        "object": "-Fallback-scrubbed-bZxya", "active": false, "billing_scheme": "-Fallback-scrubbed-GvZDKAea",
+        "created": 1701467383, "currency": "-Fallback-scrubbed-Jci", "custom_unit_amount":
+        null, "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj", "recurring": null, "tax_behavior":
+        "-Fallback-scrubbed-fovfdBPMTDM", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vZSlKiJV", "unit_amount": 745, "unit_amount_decimal":
+        "57"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-eVkcwxoQukwloAOVIjZjuiwoYpDwJM",
+        "product": "-Fallback-scrubbed-YFLmMCKHsMAEWLFOmoj"}, "type": "-Fallback-scrubbed-GjOyoVtdAXkYR",
+        "unit_amount_decimal": "57"}, "proration": false, "quantity": 7899, "quantity_decimal":
+        "1423", "subscription": null, "tax_rates": [], "test_clock": null, "unit_amount":
+        745, "unit_amount_decimal": "57"}], "has_more": false, "url": "/v1/invoiceitems"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19553'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=SivgPQv_KVrABWmaWR0OGOrYVxEnURZYAgpX0GF2AK9QVfANbAV4EZTTEMtW4z4t6fCZjec1OEv3Y0R5;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:30 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=SivgPQv_KVrABWmaWR0OGOrYVxEnURZYAgpX0GF2AK9QVfANbAV4EZTTEMtW4z4t6fCZjec1OEv3Y0R5&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=SivgPQv_KVrABWmaWR0OGOrYVxEnURZYAgpX0GF2AK9QVfANbAV4EZTTEMtW4z4t6fCZjec1OEv3Y0R5&t=1"
+      Request-Id:
+      - req_99weKcWsGhZS06
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1
