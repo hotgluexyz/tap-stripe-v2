@@ -140,3 +140,5 @@ dmypy.json
 __smoke-tests__/**/test_runtime/
 __smoke-tests__/unsanitized_*_test/
 
+.DS_Store
+
