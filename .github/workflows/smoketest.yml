@@ -1,0 +1,32 @@
+name: Smoke Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.31"
+          python-version: "3.10"
+          enable-cache: true
+
+      - name: Setup current repository dependencies
+        run: |
+          uv venv .venv
+          source .venv/bin/activate
+          uv pip install .
+          uv pip install hotglue-smoke-test
+
+      - name: Setup and run tests
+        run: |
+          source .venv/bin/activate
+          hotglue-smoke-test run
