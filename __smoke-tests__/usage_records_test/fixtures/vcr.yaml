@@ -1,0 +1,290 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/subscriptions?limit=100&created%5Bgt%5D=1748736000&status=all
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-lFsW", "data": [{"id": "sub_1Tf3kQLKAgyp1fW9wfaRrEem",
+        "object": "-Fallback-scrubbed-pWZmsfRQDdeE", "application": null, "application_fee_percent":
+        null, "automatic_tax": {"disabled_reason": null, "enabled": false, "liability":
+        null}, "billing_cycle_anchor": 5289, "billing_cycle_anchor_config": null,
+        "billing_mode": {"flexible": {"proration_discounts": "-Fallback-scrubbed-vSUtsjmv"},
+        "type": "-Fallback-scrubbed-IhlUPQGX", "updated_at": 5289}, "billing_thresholds":
+        null, "cancel_at": null, "cancel_at_period_end": false, "canceled_at": null,
+        "cancellation_details": {"comment": null, "feedback": null, "feedback_option":
+        null, "reason": null}, "collection_method": "-Fallback-scrubbed-mqBcWLVwZgcZmagXAEpT",
+        "created": 1780688982, "currency": "-Fallback-scrubbed-jHA", "current_period_end":
+        5162, "current_period_start": 6281, "customer": "-Fallback-scrubbed-cCawgypBHPUqPGOszR",
+        "customer_account": null, "days_until_due": null, "default_payment_method":
+        null, "default_source": "-Fallback-scrubbed-SugwXsnMaJmVHidRnWTGdWSJdNaxN",
+        "default_tax_rates": [], "description": null, "discount": null, "discounts":
+        [], "ended_at": null, "invoice_settings": {"account_tax_ids": null, "custom_fields":
+        null, "description": null, "footer": null, "issuer": {"type": "-Fallback-scrubbed-iQCg"}},
+        "items": {"object": "-Fallback-scrubbed-lFsW", "data": [{"id": "si_UeMTiuUxl3Mv0X",
+        "object": "-Fallback-scrubbed-hgqZIuwTtOVXvNCpy", "billing_thresholds": null,
+        "created": 1780688982, "current_period_end": 5162, "current_period_start":
+        6281, "discounts": [], "metadata": {}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-IULJ", "active": true, "aggregate_usage": null,
+        "amount": 2623, "amount_decimal": "7587", "billing_scheme": "-Fallback-scrubbed-ViHPFzFX",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-jHA", "interval": "-Fallback-scrubbed-OTRBI",
+        "interval_count": 58, "livemode": false, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-CGewDHmleePmEVkOoIm", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-aPURBjVL"},
+        "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object": "-Fallback-scrubbed-UQvJJ",
+        "active": true, "billing_scheme": "-Fallback-scrubbed-ViHPFzFX", "created":
+        1701467278, "currency": "-Fallback-scrubbed-jHA", "custom_unit_amount": null,
+        "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null, "product":
+        "-Fallback-scrubbed-CGewDHmleePmEVkOoIm", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-OTRBI", "interval_count": 58, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-aPURBjVL"},
+        "tax_behavior": "-Fallback-scrubbed-iIdWJjOTnyB", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vyieBuYlq", "unit_amount": 2623, "unit_amount_decimal":
+        "7587"}, "quantity": 58, "subscription": "-Fallback-scrubbed-qhEarykgPiXlQBYGEYBSWlNwbJBC",
+        "tax_rates": []}], "has_more": false, "total_count": 58, "url": "/v1/subscription_items?subscription=sub_1Tf3kQLKAgyp1fW9wfaRrEem"},
+        "latest_invoice": "-Fallback-scrubbed-omNvShzVjXTBmjwalZzFmEcrRjm", "livemode":
+        false, "managed_payments": {"enabled": false}, "metadata": {}, "next_pending_invoice_item_invoice":
+        null, "on_behalf_of": null, "pause_collection": null, "payment_settings":
+        {"payment_method_options": null, "payment_method_types": null, "save_default_payment_method":
+        "-Fallback-scrubbed-QkY"}, "pending_invoice_item_interval": null, "pending_setup_intent":
+        null, "pending_update": null, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-IULJ", "active": true, "aggregate_usage": null,
+        "amount": 2623, "amount_decimal": "7587", "billing_scheme": "-Fallback-scrubbed-ViHPFzFX",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-jHA", "interval": "-Fallback-scrubbed-OTRBI",
+        "interval_count": 58, "livemode": false, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-CGewDHmleePmEVkOoIm", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-aPURBjVL"},
+        "quantity": 58, "schedule": null, "start_date": 5289, "status": "-Fallback-scrubbed-lGzZzq",
+        "test_clock": null, "transfer_data": null, "trial_end": null, "trial_settings":
+        {"end_behavior": {"missing_payment_method": "-Fallback-scrubbed-cGHSGdqSbeXBcy"}},
+        "trial_start": null}], "has_more": false, "url": "/v1/subscriptions"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4513'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=0h5LIpUYZ_B6FlZMfDLOCN3wVjnrVM0jQMiXDfgnynGu4f5vyMja2grEyBnGGeJzlt3vNKov83dnO4YJ;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:42 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=0h5LIpUYZ_B6FlZMfDLOCN3wVjnrVM0jQMiXDfgnynGu4f5vyMja2grEyBnGGeJzlt3vNKov83dnO4YJ&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=0h5LIpUYZ_B6FlZMfDLOCN3wVjnrVM0jQMiXDfgnynGu4f5vyMja2grEyBnGGeJzlt3vNKov83dnO4YJ&t=1"
+      Request-Id:
+      - req_3fWRsgnVGY75Ij
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/subscription_items?limit=100&subscription=sub_1Tf3kQLKAgyp1fW9wfaRrEem
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-lFsW", "data": [{"id": "si_UeMTiuUxl3Mv0X",
+        "object": "-Fallback-scrubbed-hgqZIuwTtOVXvNCpy", "billing_thresholds": null,
+        "created": 1780688982, "current_period_end": 5162, "current_period_start":
+        6281, "discounts": [], "metadata": {}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-IULJ", "active": true, "aggregate_usage": null,
+        "amount": 2623, "amount_decimal": "7587", "billing_scheme": "-Fallback-scrubbed-ViHPFzFX",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-jHA", "interval": "-Fallback-scrubbed-OTRBI",
+        "interval_count": 58, "livemode": false, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-CGewDHmleePmEVkOoIm", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-aPURBjVL"},
+        "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object": "-Fallback-scrubbed-UQvJJ",
+        "active": true, "billing_scheme": "-Fallback-scrubbed-ViHPFzFX", "created":
+        1701467278, "currency": "-Fallback-scrubbed-jHA", "custom_unit_amount": null,
+        "livemode": false, "lookup_key": null, "metadata": {}, "nickname": null, "product":
+        "-Fallback-scrubbed-CGewDHmleePmEVkOoIm", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-OTRBI", "interval_count": 58, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-aPURBjVL"},
+        "tax_behavior": "-Fallback-scrubbed-iIdWJjOTnyB", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vyieBuYlq", "unit_amount": 2623, "unit_amount_decimal":
+        "7587"}, "quantity": 58, "subscription": "-Fallback-scrubbed-qhEarykgPiXlQBYGEYBSWlNwbJBC",
+        "tax_rates": []}], "has_more": false, "url": "/v1/subscription_items?subscription=sub_1Tf3kQLKAgyp1fW9wfaRrEem"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1790'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=50uXJxdKLeQ6EW_Dx6EVw1CbXmw3EvSuBG4zRFKiwDqArFROgoZh3avu37HaMRWygHEJxEOsFOLlN9Wp;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:42 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=50uXJxdKLeQ6EW_Dx6EVw1CbXmw3EvSuBG4zRFKiwDqArFROgoZh3avu37HaMRWygHEJxEOsFOLlN9Wp&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=50uXJxdKLeQ6EW_Dx6EVw1CbXmw3EvSuBG4zRFKiwDqArFROgoZh3avu37HaMRWygHEJxEOsFOLlN9Wp&t=1"
+      Request-Id:
+      - req_N5gHfg4PKJGuxZ
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/subscription_items/si_UeMTiuUxl3Mv0X/usage_record_summaries?limit=100
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-lFsW", "data": [{"id": "sis_1U98rqLKAgyp1fW9oR2GiUcK",
+        "object": "-Fallback-scrubbed-cohLBVMzJlJFkRtLScYy", "invoice": null, "livemode":
+        false, "period": {"end": null, "start": 6281}, "subscription_item": "-Fallback-scrubbed-PIHfSagnycjaJFMnt",
+        "total_usage": 58}], "has_more": false, "url": "/v1/subscription_items/si_UeMTiuUxl3Mv0X/usage_record_summaries"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '389'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:42 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8&t=1"
+      Request-Id:
+      - req_vrmh2fYliMnWcZ
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

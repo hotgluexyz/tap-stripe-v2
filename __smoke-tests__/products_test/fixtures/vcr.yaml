@@ -1,0 +1,94 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/products?limit=100&created%5Bgt%5D=1698796800
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-NIUP", "data": [{"id": "prod_P6sJcGxmCaxhOg",
+        "object": "-Fallback-scrubbed-tHgmTZC", "active": true, "attributes": [],
+        "created": 1701467288, "default_price": "-Fallback-scrubbed-hLDxQoeWmoEscKjlGMybKIiGJoOMZx",
+        "description": null, "features": [], "images": [], "livemode": true, "marketing_features":
+        [], "metadata": {}, "name": "Charles Barber", "package_dimensions": null,
+        "shippable": null, "statement_descriptor": null, "tax_code": null, "tax_details":
+        null, "type": "-Fallback-scrubbed-KvncgHp", "unit_label": null, "updated":
+        1701467289, "url": null}, {"id": "prod_P6sJioZkTcygky", "object": "-Fallback-scrubbed-tHgmTZC",
+        "active": true, "attributes": [], "created": 1701467277, "default_price":
+        "-Fallback-scrubbed-IFwymdSkQmxFgSRnAZLpLOauiozYUN", "description": null,
+        "features": [], "images": [], "livemode": true, "marketing_features": [],
+        "metadata": {}, "name": "Paul White", "package_dimensions": null, "shippable":
+        null, "statement_descriptor": null, "tax_code": null, "tax_details": null,
+        "type": "-Fallback-scrubbed-KvncgHp", "unit_label": null, "updated": 1701467278,
+        "url": null}, {"id": "prod_P6sJXxlgSmR6Vn", "object": "-Fallback-scrubbed-tHgmTZC",
+        "active": true, "attributes": [], "created": 1701467265, "default_price":
+        "-Fallback-scrubbed-DCrHqYkytvFtmrLOyzMPwVfYOVSJCA", "description": null,
+        "features": [], "images": [], "livemode": true, "marketing_features": [],
+        "metadata": {}, "name": "Sonya Williams", "package_dimensions": null, "shippable":
+        null, "statement_descriptor": null, "tax_code": null, "tax_details": null,
+        "type": "-Fallback-scrubbed-KvncgHp", "unit_label": null, "updated": 1701467266,
+        "url": null}], "has_more": false, "url": "/v1/products"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1720'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:36 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=q1V55TvIhBqOC1UsgtG6DpHv7d1BlJTZf6MnHrP7BDDTMmhOdXQ-OyHjjaf2mAIRKJoE-PnW1l9OHSX8&t=1"
+      Request-Id:
+      - req_UslqoRpybgt4fI
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

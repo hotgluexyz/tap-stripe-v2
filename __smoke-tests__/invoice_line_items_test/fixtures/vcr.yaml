@@ -1,0 +1,590 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoices?limit=100&created%5Bgt%5D=1748736000
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-TaOW", "data": [{"id": "in_1U1Ap3LKAgyp1fW9ALm0nA98",
+        "object": "-Fallback-scrubbed-tBNjMiO", "account_country": "-Fallback-scrubbed-FK",
+        "account_name": "-Fallback-scrubbed-uepQLEVL", "account_tax_ids": null, "amount_due":
+        6359, "amount_overpaid": 7013, "amount_paid": 6359, "amount_remaining": 7013,
+        "amount_shipping": 7013, "application": null, "application_fee_amount": null,
+        "attempt_count": 6579, "attempted": false, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-vmxaPsvlaZHZBUNLie", "charge": "-Fallback-scrubbed-LxuNhJwjKstGwRCiAMlLPPqtvxU",
+        "collection_method": "-Fallback-scrubbed-KoNenxqKcJfSrqjkZCMY", "created":
+        1785959393, "currency": "-Fallback-scrubbed-zNS", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-NkgDtNtxzNguSOgMyU", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-RttsqodguRZmcRnjSqb", "customer_name":
+        "-Fallback-scrubbed-HLRd", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-jzqD", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 5687, "ending_balance": 7013, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-qVYRolnpnoggJwzlGREazyWBUITKmIeYbJbHKBXWtBFYYhuIAFRvrfaTVRtndBKPtdCbfkzFRQhFLuRsYYFlmipVVmHapLnExzIuBBbkXdLhFStGcBlGMpgVTsHdfIPgruFluLbprmnJZFKrPDQjcKxqyZGUlBY",
+        "invoice_pdf": "-Fallback-scrubbed-SziSiexNCeNqGvVckLWvBdVZFWAxLCWjQGvdvgfooCLMxtHThnZOoXIKnzZsUyEfdflwQHlDXGJtnoXiTaNWsSHwpbtbCGGHMCybfJzqZWBevsOEDFVcbhyTZtdEoUXNocRuFrZsOTTDMrkBBfZoJQzBPxeaCQpeNQBGM",
+        "issuer": {"type": "-Fallback-scrubbed-kHgD"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-TaOW",
+        "data": [{"id": "il_1U1AosLKAgyp1fW9yj1r6AQO", "object": "-Fallback-scrubbed-iMtQkHnWi",
+        "amount": 6359, "amount_excluding_tax": 6359, "currency": "-Fallback-scrubbed-zNS",
+        "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT", "discount_amounts":
+        [], "discountable": false, "discounts": [], "invoice": "-Fallback-scrubbed-LvqHIjxwzdiarJxhZpYfIlJyPLo",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"},
+        "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"}, "period": {"end":
+        7879, "start": 6564}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null, "amount":
+        6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "total_count": 6579,
+        "url": "/v1/invoices/in_1U1Ap3LKAgyp1fW9ALm0nA98/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-BBADsZWSbQnvP",
+        "on_behalf_of": null, "paid": false, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp"},
+        "type": "-Fallback-scrubbed-PyZiOBMxocIlFnENjxXb"}, "payment_intent": "-Fallback-scrubbed-LrlZTlnwVbhcFOdijgdlHZYzdJN",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 6564, "period_start": 6320, "post_payment_credit_notes_amount":
+        7013, "pre_payment_credit_notes_amount": 7013, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 7013, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-WekN", "status_transitions": {"finalized_at":
+        5687, "marked_uncollectible_at": null, "paid_at": 386, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_details":
+        {"metadata": {}}, "subtotal": 6359, "subtotal_excluding_tax": 6359, "tax":
+        null, "test_clock": null, "total": 6359, "total_discount_amounts": [], "total_excluding_tax":
+        6359, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 996}, {"id": "in_1Tpw30LKAgyp1fW9gxJdOaVo",
+        "object": "-Fallback-scrubbed-tBNjMiO", "account_country": "-Fallback-scrubbed-FK",
+        "account_name": "-Fallback-scrubbed-uepQLEVL", "account_tax_ids": null, "amount_due":
+        6359, "amount_overpaid": 7013, "amount_paid": 6359, "amount_remaining": 7013,
+        "amount_shipping": 7013, "application": null, "application_fee_amount": null,
+        "attempt_count": 6579, "attempted": false, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-vmxaPsvlaZHZBUNLie", "charge": "-Fallback-scrubbed-GBdaRgUyfummYxikgLXsBnffvxG",
+        "collection_method": "-Fallback-scrubbed-KoNenxqKcJfSrqjkZCMY", "created":
+        1783280989, "currency": "-Fallback-scrubbed-zNS", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-NkgDtNtxzNguSOgMyU", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-RttsqodguRZmcRnjSqb", "customer_name":
+        "-Fallback-scrubbed-HLRd", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-jzqD", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 9226, "ending_balance": 7013, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-GYAZKzaFDIXfyjtJfGSFxZHztgUnilWPHbtPmoOkyPNDMeMHAdnedOSGbSaoeRRWMyRrBJhWRKUSfIrpAVACUSQXsyGkMILNmPTckfIPiEyiykaPwCcpsNqWtAPtNebpvAUUqHHqufMGJZiCIrLjvSgxZvEoDPG",
+        "invoice_pdf": "-Fallback-scrubbed-EWBPvHxOhdEDLYhmCPwdQNiqbeuFRYdYFDdhIqNqtOtOZdDLcBBJBuuTRDArWyyipMVptnExzryEbyEWeERjBAubpeJXsxNABXlMAlFYOUIZeQCqniuAHnQPoWfkpCjodecaCxkqEMgwgjkNYxGlERoxKLWrRCZQQBnrA",
+        "issuer": {"type": "-Fallback-scrubbed-kHgD"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-TaOW",
+        "data": [{"id": "il_1Tpw2sLKAgyp1fW9FHhV7P5V", "object": "-Fallback-scrubbed-iMtQkHnWi",
+        "amount": 6359, "amount_excluding_tax": 6359, "currency": "-Fallback-scrubbed-zNS",
+        "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT", "discount_amounts":
+        [], "discountable": false, "discounts": [], "invoice": "-Fallback-scrubbed-QMDqhHUGDtCfcswcLWCUkIDOuar",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"},
+        "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"}, "period": {"end":
+        6564, "start": 6320}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null, "amount":
+        6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "total_count": 6579,
+        "url": "/v1/invoices/in_1Tpw30LKAgyp1fW9gxJdOaVo/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-nbyeXzVyXzZUP",
+        "on_behalf_of": null, "paid": false, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp"},
+        "type": "-Fallback-scrubbed-PyZiOBMxocIlFnENjxXb"}, "payment_intent": "-Fallback-scrubbed-vfTlGLWidnxJrQLocMIbAzDLIEM",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 6320, "period_start": 5962, "post_payment_credit_notes_amount":
+        7013, "pre_payment_credit_notes_amount": 7013, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 7013, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-WekN", "status_transitions": {"finalized_at":
+        9226, "marked_uncollectible_at": null, "paid_at": 2495, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_details":
+        {"metadata": {}}, "subtotal": 6359, "subtotal_excluding_tax": 6359, "tax":
+        null, "test_clock": null, "total": 6359, "total_discount_amounts": [], "total_excluding_tax":
+        6359, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 1603}, {"id": "in_1Tf3kQLKAgyp1fW9TpbSx97j",
+        "object": "-Fallback-scrubbed-tBNjMiO", "account_country": "-Fallback-scrubbed-FK",
+        "account_name": "-Fallback-scrubbed-uepQLEVL", "account_tax_ids": null, "amount_due":
+        6359, "amount_overpaid": 7013, "amount_paid": 6359, "amount_remaining": 7013,
+        "amount_shipping": 7013, "application": null, "application_fee_amount": null,
+        "attempt_count": 6579, "attempted": false, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-ZmqZCAjpllWNZKakVbx", "charge": "-Fallback-scrubbed-usvOzXFBorEiuQjqRjwlnWUZXvU",
+        "collection_method": "-Fallback-scrubbed-KoNenxqKcJfSrqjkZCMY", "created":
+        1780688982, "currency": "-Fallback-scrubbed-zNS", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-NkgDtNtxzNguSOgMyU", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-RttsqodguRZmcRnjSqb", "customer_name":
+        "-Fallback-scrubbed-HLRd", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-jzqD", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 5962, "ending_balance": 7013, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-rtHVJYltdbwSPUKfmdZDTQIiaxiHdLtUiyrEyoExOXlaBeJHfvCiAITCSfDzUsOMLOrrKixOdchcKtGzQzNsiDQaWFpcZTjeOeGTSzqxLyeSvmHrtwYpqxLvhibhXCmgvFmbBBCQepvlomnMernhjtaPIYOVWbX",
+        "invoice_pdf": "-Fallback-scrubbed-tREgvIVQdDAtHMexYSmhYsxcuVeeKNmrFOlNKJoLqmqZggAyNvwaejClpDupHbHxQGGrRejeAfQoeWzHiOFAJpcOBlcwPFsJQDAYJsTuefmTiODmWDXgZXntrFbXJiQvaNglRaiuTZlZuiqoQZzbkiopWOnHkzjMrhiRP",
+        "issuer": {"type": "-Fallback-scrubbed-kHgD"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-TaOW",
+        "data": [{"id": "il_1Tf3kQLKAgyp1fW9RsYWfOxE", "object": "-Fallback-scrubbed-iMtQkHnWi",
+        "amount": 6359, "amount_excluding_tax": 6359, "currency": "-Fallback-scrubbed-zNS",
+        "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT", "discount_amounts":
+        [], "discountable": false, "discounts": [], "invoice": "-Fallback-scrubbed-gfIUxJnCFHgIvPirzNbThnGkvyY",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"},
+        "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"}, "period": {"end":
+        6320, "start": 5962}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null, "amount":
+        6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "total_count": 6579,
+        "url": "/v1/invoices/in_1Tf3kQLKAgyp1fW9TpbSx97j/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-mcUDUFfzLeeks",
+        "on_behalf_of": null, "paid": false, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp"},
+        "type": "-Fallback-scrubbed-PyZiOBMxocIlFnENjxXb"}, "payment_intent": "-Fallback-scrubbed-ccXKmefmMOxDASmZNgqKtFssswT",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 5962, "period_start": 5962, "post_payment_credit_notes_amount":
+        7013, "pre_payment_credit_notes_amount": 7013, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 7013, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-WekN", "status_transitions": {"finalized_at":
+        5962, "marked_uncollectible_at": null, "paid_at": 5962, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp", "subscription_details":
+        {"metadata": {}}, "subtotal": 6359, "subtotal_excluding_tax": 6359, "tax":
+        null, "test_clock": null, "total": 6359, "total_discount_amounts": [], "total_excluding_tax":
+        6359, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 5962}], "has_more": false,
+        "url": "/v1/invoices"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '18946'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=uq20Th9D1ppU9tpcPs3mG2qclUCzR_86-xHvRKHHkj5gBHmezeaRavlq6EZtCnC65eCrx6gWoRMyCS4R;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:32 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=uq20Th9D1ppU9tpcPs3mG2qclUCzR_86-xHvRKHHkj5gBHmezeaRavlq6EZtCnC65eCrx6gWoRMyCS4R&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=uq20Th9D1ppU9tpcPs3mG2qclUCzR_86-xHvRKHHkj5gBHmezeaRavlq6EZtCnC65eCrx6gWoRMyCS4R&t=1"
+      Request-Id:
+      - req_MdMtabXygR4IVj
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoices/in_1U1Ap3LKAgyp1fW9ALm0nA98/lines?limit=100
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-TaOW", "data": [{"id": "il_1U1AosLKAgyp1fW9yj1r6AQO",
+        "object": "-Fallback-scrubbed-iMtQkHnWi", "amount": 6359, "amount_excluding_tax":
+        6359, "currency": "-Fallback-scrubbed-zNS", "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT",
+        "discount_amounts": [], "discountable": false, "discounts": [], "invoice":
+        "-Fallback-scrubbed-LvqHIjxwzdiarJxhZpYfIlJyPLo", "livemode": true, "metadata":
+        {}, "parent": {"invoice_item_details": null, "license_fee_subscription_details":
+        null, "subscription_item_details": {"invoice_item": null, "proration": true,
+        "proration_details": {"credited_items": null}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"}, "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"},
+        "period": {"end": 7879, "start": 6564}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null,
+        "amount": 6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "url": "/v1/invoices/in_1U1Ap3LKAgyp1fW9ALm0nA98/lines"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2911'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=OBGPJCoJrVh7hMyEpi7lC3_aJfbVwPPuhXSgj7R9alt75SaUD1jUYnUea1rg6u7yu5ckURFe2DN-Tx89;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:32 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=OBGPJCoJrVh7hMyEpi7lC3_aJfbVwPPuhXSgj7R9alt75SaUD1jUYnUea1rg6u7yu5ckURFe2DN-Tx89&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=OBGPJCoJrVh7hMyEpi7lC3_aJfbVwPPuhXSgj7R9alt75SaUD1jUYnUea1rg6u7yu5ckURFe2DN-Tx89&t=1"
+      Request-Id:
+      - req_WHFcjIYt2VAmOM
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoices/in_1Tpw30LKAgyp1fW9gxJdOaVo/lines?limit=100
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-TaOW", "data": [{"id": "il_1Tpw2sLKAgyp1fW9FHhV7P5V",
+        "object": "-Fallback-scrubbed-iMtQkHnWi", "amount": 6359, "amount_excluding_tax":
+        6359, "currency": "-Fallback-scrubbed-zNS", "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT",
+        "discount_amounts": [], "discountable": false, "discounts": [], "invoice":
+        "-Fallback-scrubbed-QMDqhHUGDtCfcswcLWCUkIDOuar", "livemode": true, "metadata":
+        {}, "parent": {"invoice_item_details": null, "license_fee_subscription_details":
+        null, "subscription_item_details": {"invoice_item": null, "proration": true,
+        "proration_details": {"credited_items": null}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"}, "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"},
+        "period": {"end": 6564, "start": 6320}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null,
+        "amount": 6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "url": "/v1/invoices/in_1Tpw30LKAgyp1fW9gxJdOaVo/lines"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2911'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=-b_FEi1KfMJxJY_k_VwiSweMRB9em-gjQ7CB39UmO_r-3RM-uER31GMN5SlSDAMyupAUrpsuTzNDYMRS;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:32 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=-b_FEi1KfMJxJY_k_VwiSweMRB9em-gjQ7CB39UmO_r-3RM-uER31GMN5SlSDAMyupAUrpsuTzNDYMRS&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=-b_FEi1KfMJxJY_k_VwiSweMRB9em-gjQ7CB39UmO_r-3RM-uER31GMN5SlSDAMyupAUrpsuTzNDYMRS&t=1"
+      Request-Id:
+      - req_JuzzhdD6mT7fHP
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoices/in_1Tf3kQLKAgyp1fW9TpbSx97j/lines?limit=100
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-TaOW", "data": [{"id": "il_1Tf3kQLKAgyp1fW9RsYWfOxE",
+        "object": "-Fallback-scrubbed-iMtQkHnWi", "amount": 6359, "amount_excluding_tax":
+        6359, "currency": "-Fallback-scrubbed-zNS", "description": "-Fallback-scrubbed-rhNXlDhxqULSRuTsXMNblTIbKVGQT",
+        "discount_amounts": [], "discountable": false, "discounts": [], "invoice":
+        "-Fallback-scrubbed-gfIUxJnCFHgIvPirzNbThnGkvyY", "livemode": true, "metadata":
+        {}, "parent": {"invoice_item_details": null, "license_fee_subscription_details":
+        null, "subscription_item_details": {"invoice_item": null, "proration": true,
+        "proration_details": {"credited_items": null}, "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN"}, "type": "-Fallback-scrubbed-hYxMBcUTMuYxVddvWmlyuEQxj"},
+        "period": {"end": 6320, "start": 5962}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-uMYo", "active": false, "aggregate_usage": null,
+        "amount": 6359, "amount_decimal": "4204", "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "interval": "-Fallback-scrubbed-qzBak",
+        "interval_count": 6579, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ZMZOZ", "active": false, "billing_scheme": "-Fallback-scrubbed-cYTeEhtt",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-zNS", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-qzBak", "interval_count": 6579, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ARrBiMgL"},
+        "tax_behavior": "-Fallback-scrubbed-dPZPLnsypmY", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-vvyPdHXvy", "unit_amount": 6359, "unit_amount_decimal":
+        "4204"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-LzBxtSOzPSiMhpsfBBiSnECdVrAqSI",
+        "product": "-Fallback-scrubbed-jnOlRbOyKyTyGPcFQWq"}, "type": "-Fallback-scrubbed-DCOxvVcTUhrkA",
+        "unit_amount_decimal": "4204"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 6579, "quantity_decimal": "3821", "subscription": "-Fallback-scrubbed-ezdlkfsYwpxgHtHdmppzyZSVaVUp",
+        "subscription_item": "-Fallback-scrubbed-aWRJEBQfgrFNmZBvN", "subtotal": 6359,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-cLhksnjPyahv",
+        "unit_amount_excluding_tax": "4204"}], "has_more": false, "url": "/v1/invoices/in_1Tf3kQLKAgyp1fW9TpbSx97j/lines"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2911'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=WpSRQt3ezEKcPHn2X4sMdmY2VupQTA1Dba6vfTWBo0_d_U064uovInq2UxABAh6q033VDihSKc_d4k4q;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:32 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=WpSRQt3ezEKcPHn2X4sMdmY2VupQTA1Dba6vfTWBo0_d_U064uovInq2UxABAh6q033VDihSKc_d4k4q&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=WpSRQt3ezEKcPHn2X4sMdmY2VupQTA1Dba6vfTWBo0_d_U064uovInq2UxABAh6q033VDihSKc_d4k4q&t=1"
+      Request-Id:
+      - req_CidRMifLN7g1SW
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

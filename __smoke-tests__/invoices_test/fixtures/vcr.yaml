@@ -1,0 +1,284 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/invoices?limit=100&created%5Bgt%5D=1748736000
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-BMUU", "data": [{"id": "in_1U1Ap3LKAgyp1fW9ALm0nA98",
+        "object": "-Fallback-scrubbed-qCJWWxy", "account_country": "-Fallback-scrubbed-lz",
+        "account_name": "-Fallback-scrubbed-xUTLONwY", "account_tax_ids": null, "amount_due":
+        285, "amount_overpaid": 4177, "amount_paid": 285, "amount_remaining": 4177,
+        "amount_shipping": 4177, "application": null, "application_fee_amount": null,
+        "attempt_count": 7788, "attempted": true, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-FwCtJRPyuuwglMEnCp", "charge": "-Fallback-scrubbed-mlyDwYkJEMfrDUpsSfpOytZCvhE",
+        "collection_method": "-Fallback-scrubbed-eXpuVwMPvovTjYDvWUge", "created":
+        1785959393, "currency": "-Fallback-scrubbed-PIv", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-RNtdOENpSXtLpLTjVg", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-OQGlgrdlSESMHNykQkN", "customer_name":
+        "-Fallback-scrubbed-cXqG", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-rZde", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 9127, "ending_balance": 4177, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-pjJXtbxzAygrdOOZWZqEUojQofTVOcKyrKwHeWWYxjwUulUEHSvrRMmqCNLrQtNWeFilOCGwNfRAhEJeORnvwDhveEJLPUZuDIDuljUlRWdIVWaBxXSifSOGDkdsFlHXysZvpQRpsqVblwinOloQCzgcGLmLKvr",
+        "invoice_pdf": "-Fallback-scrubbed-pHhAnLBmtElOFNGenBCslmmhqqZXxQCmJWDtpowBGIWtMCMPLUcrZOMYaioNwxNVnNTLMkAVLYGePXNzrHuGJgRSeteUulZbSSPtofLwXBFQNHUGGkijzKmdIKrlnthfQZEXCRSekZkthHbfkDhFEertaUbWoKmXdHGjI",
+        "issuer": {"type": "-Fallback-scrubbed-sNSU"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-BMUU",
+        "data": [{"id": "il_1U1AosLKAgyp1fW9yj1r6AQO", "object": "-Fallback-scrubbed-hQLwMOUYr",
+        "amount": 285, "amount_excluding_tax": 285, "currency": "-Fallback-scrubbed-PIv",
+        "description": "-Fallback-scrubbed-girjtfIIhKaLnJSoRkQysuLfcbsvQ", "discount_amounts":
+        [], "discountable": true, "discounts": [], "invoice": "-Fallback-scrubbed-tPpWtSRNHZsikyjcvgrudwOhvHG",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG"},
+        "type": "-Fallback-scrubbed-YNdFomhibkztSsJJALEpQMOTV"}, "period": {"end":
+        6267, "start": 8161}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-KSJY", "active": true, "aggregate_usage": null, "amount":
+        285, "amount_decimal": "1565", "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "interval": "-Fallback-scrubbed-rQcjI",
+        "interval_count": 7788, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ravQx", "active": true, "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-rQcjI", "interval_count": 7788, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "tax_behavior": "-Fallback-scrubbed-CymuBuRvSdK", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-UnTcfCsrD", "unit_amount": 285, "unit_amount_decimal":
+        "1565"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-DdvFcQfRjKWCSluTwJREGuGWtWqROz",
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg"}, "type": "-Fallback-scrubbed-soLpkBRadFrCj",
+        "unit_amount_decimal": "1565"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 7788, "quantity_decimal": "8502", "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN",
+        "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG", "subtotal": 285,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-jmPrGQhbBmTi",
+        "unit_amount_excluding_tax": "1565"}], "has_more": false, "total_count": 7788,
+        "url": "/v1/invoices/in_1U1Ap3LKAgyp1fW9ALm0nA98/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-dDCmoIHFWjnAi",
+        "on_behalf_of": null, "paid": true, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN"},
+        "type": "-Fallback-scrubbed-vpuUOKWhwAHSVOasAmCn"}, "payment_intent": "-Fallback-scrubbed-sLjOWFfyrpEUCiZrPVVQIMeMWNM",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 8161, "period_start": 3164, "post_payment_credit_notes_amount":
+        4177, "pre_payment_credit_notes_amount": 4177, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 4177, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-lEXE", "status_transitions": {"finalized_at":
+        9127, "marked_uncollectible_at": null, "paid_at": 603, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_details":
+        {"metadata": {}}, "subtotal": 285, "subtotal_excluding_tax": 285, "tax": null,
+        "test_clock": null, "total": 285, "total_discount_amounts": [], "total_excluding_tax":
+        285, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 5348}, {"id": "in_1Tpw30LKAgyp1fW9gxJdOaVo",
+        "object": "-Fallback-scrubbed-qCJWWxy", "account_country": "-Fallback-scrubbed-lz",
+        "account_name": "-Fallback-scrubbed-xUTLONwY", "account_tax_ids": null, "amount_due":
+        285, "amount_overpaid": 4177, "amount_paid": 285, "amount_remaining": 4177,
+        "amount_shipping": 4177, "application": null, "application_fee_amount": null,
+        "attempt_count": 7788, "attempted": true, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-FwCtJRPyuuwglMEnCp", "charge": "-Fallback-scrubbed-BVoDihPXxBdhvWEryHVoWOUcPxv",
+        "collection_method": "-Fallback-scrubbed-eXpuVwMPvovTjYDvWUge", "created":
+        1783280989, "currency": "-Fallback-scrubbed-PIv", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-RNtdOENpSXtLpLTjVg", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-OQGlgrdlSESMHNykQkN", "customer_name":
+        "-Fallback-scrubbed-cXqG", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-rZde", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 9222, "ending_balance": 4177, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-oxLRwuFohCfHADIiEdJzbNarSbeiMhVKUcXNUOKrNTgDhTEcSCheTIwWMgrgnRKqTVmUIayEOwKrsVougTjitXwRDwEZSfdYHfCmuQbSMtVzPZBByQbxWtFXwWxMUfBBYJpaXLFkhArWhRxZhdYbmJxSylmExKf",
+        "invoice_pdf": "-Fallback-scrubbed-uPJZWTpdOUVwsDHWNxXSxbOrPcAOPPZlwBoKKeEqfdUaDeTyfaoCxBjVHnMXwFtuCJHVetYttffIrfhkKmMhgfjtHjtCrHoVenMxWueYPFVmhdOSmaHvrCehcUGpqlskTdltefmULVTjIHGQHPzBohONDQvRIPfkkSGVs",
+        "issuer": {"type": "-Fallback-scrubbed-sNSU"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-BMUU",
+        "data": [{"id": "il_1Tpw2sLKAgyp1fW9FHhV7P5V", "object": "-Fallback-scrubbed-hQLwMOUYr",
+        "amount": 285, "amount_excluding_tax": 285, "currency": "-Fallback-scrubbed-PIv",
+        "description": "-Fallback-scrubbed-girjtfIIhKaLnJSoRkQysuLfcbsvQ", "discount_amounts":
+        [], "discountable": true, "discounts": [], "invoice": "-Fallback-scrubbed-ySICDyTqkEsetGuNWcoXopVAZQY",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG"},
+        "type": "-Fallback-scrubbed-YNdFomhibkztSsJJALEpQMOTV"}, "period": {"end":
+        8161, "start": 3164}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-KSJY", "active": true, "aggregate_usage": null, "amount":
+        285, "amount_decimal": "1565", "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "interval": "-Fallback-scrubbed-rQcjI",
+        "interval_count": 7788, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ravQx", "active": true, "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-rQcjI", "interval_count": 7788, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "tax_behavior": "-Fallback-scrubbed-CymuBuRvSdK", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-UnTcfCsrD", "unit_amount": 285, "unit_amount_decimal":
+        "1565"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-DdvFcQfRjKWCSluTwJREGuGWtWqROz",
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg"}, "type": "-Fallback-scrubbed-soLpkBRadFrCj",
+        "unit_amount_decimal": "1565"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 7788, "quantity_decimal": "8502", "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN",
+        "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG", "subtotal": 285,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-jmPrGQhbBmTi",
+        "unit_amount_excluding_tax": "1565"}], "has_more": false, "total_count": 7788,
+        "url": "/v1/invoices/in_1Tpw30LKAgyp1fW9gxJdOaVo/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-FODqQwnaDElum",
+        "on_behalf_of": null, "paid": true, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN"},
+        "type": "-Fallback-scrubbed-vpuUOKWhwAHSVOasAmCn"}, "payment_intent": "-Fallback-scrubbed-jdUWTPJGjwsMPKxocZpmwUwQAXC",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 3164, "period_start": 8621, "post_payment_credit_notes_amount":
+        4177, "pre_payment_credit_notes_amount": 4177, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 4177, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-lEXE", "status_transitions": {"finalized_at":
+        9222, "marked_uncollectible_at": null, "paid_at": 5096, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_details":
+        {"metadata": {}}, "subtotal": 285, "subtotal_excluding_tax": 285, "tax": null,
+        "test_clock": null, "total": 285, "total_discount_amounts": [], "total_excluding_tax":
+        285, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 9588}, {"id": "in_1Tf3kQLKAgyp1fW9TpbSx97j",
+        "object": "-Fallback-scrubbed-qCJWWxy", "account_country": "-Fallback-scrubbed-lz",
+        "account_name": "-Fallback-scrubbed-xUTLONwY", "account_tax_ids": null, "amount_due":
+        285, "amount_overpaid": 4177, "amount_paid": 285, "amount_remaining": 4177,
+        "amount_shipping": 4177, "application": null, "application_fee_amount": null,
+        "attempt_count": 7788, "attempted": true, "auto_advance": true, "automatic_tax":
+        {"disabled_reason": null, "enabled": true, "liability": null, "provider":
+        null, "status": null}, "automatically_finalizes_at": null, "billing_reason":
+        "-Fallback-scrubbed-RrbhMWXXQGrFjKjEVyz", "charge": "-Fallback-scrubbed-oQtOXcUgaWTwrsUqHSzAkjeOJAx",
+        "collection_method": "-Fallback-scrubbed-eXpuVwMPvovTjYDvWUge", "created":
+        1780688982, "currency": "-Fallback-scrubbed-PIv", "custom_fields": null, "customer":
+        "-Fallback-scrubbed-RNtdOENpSXtLpLTjVg", "customer_account": null, "customer_address":
+        null, "customer_email": "-Fallback-scrubbed-OQGlgrdlSESMHNykQkN", "customer_name":
+        "-Fallback-scrubbed-cXqG", "customer_phone": null, "customer_shipping": null,
+        "customer_tax_exempt": "-Fallback-scrubbed-rZde", "customer_tax_ids": [],
+        "default_payment_method": null, "default_source": null, "default_tax_rates":
+        [], "description": null, "discount": null, "discounts": [], "due_date": null,
+        "effective_at": 8621, "ending_balance": 4177, "footer": null, "from_invoice":
+        null, "hosted_invoice_url": "-Fallback-scrubbed-vVJSZRWmGmHcEyhkfLCbpzmoRmsbDfvOquwUDgkRJydQNElVtKGxwOHmiQkGksnWmltmPNlVHzHLxMpJmUtkobRrjkmGvItUNJrwCeRqVSHqMjBQfCAqBWPQGfjceqFYTAvaTUmWfiTPxSpPoYGOxXNVWKzjwxZ",
+        "invoice_pdf": "-Fallback-scrubbed-eKRjiDWsEnXwXnfOJLLFkQeqYQcGXAtXheSkOPUNbKMIXtBFJqzrJnXyMkVWCYUtXhJLYxiKeKCjBDDmVipOrqAzQfAIeJdsolBTGNSJVrgfHfnCmVVrRmjYQgweymiqDoEAtVvSuTsxJZdyzdAvmQvSQYFvDwZirzBkb",
+        "issuer": {"type": "-Fallback-scrubbed-sNSU"}, "last_finalization_error":
+        null, "latest_revision": null, "lines": {"object": "-Fallback-scrubbed-BMUU",
+        "data": [{"id": "il_1Tf3kQLKAgyp1fW9RsYWfOxE", "object": "-Fallback-scrubbed-hQLwMOUYr",
+        "amount": 285, "amount_excluding_tax": 285, "currency": "-Fallback-scrubbed-PIv",
+        "description": "-Fallback-scrubbed-girjtfIIhKaLnJSoRkQysuLfcbsvQ", "discount_amounts":
+        [], "discountable": true, "discounts": [], "invoice": "-Fallback-scrubbed-jgqNRXggIkfGicXqDVtDGrusoiZ",
+        "livemode": true, "metadata": {}, "parent": {"invoice_item_details": null,
+        "license_fee_subscription_details": null, "subscription_item_details": {"invoice_item":
+        null, "proration": true, "proration_details": {"credited_items": null}, "subscription":
+        "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG"},
+        "type": "-Fallback-scrubbed-YNdFomhibkztSsJJALEpQMOTV"}, "period": {"end":
+        3164, "start": 8621}, "plan": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87", "object":
+        "-Fallback-scrubbed-KSJY", "active": true, "aggregate_usage": null, "amount":
+        285, "amount_decimal": "1565", "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "interval": "-Fallback-scrubbed-rQcjI",
+        "interval_count": 7788, "livemode": true, "metadata": {}, "meter": null, "nickname":
+        null, "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "tiers_mode": null,
+        "transform_usage": null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "pretax_credit_amounts": [], "price": {"id": "price_1OIeZ0LKAgyp1fW9Wp9jXs87",
+        "object": "-Fallback-scrubbed-ravQx", "active": true, "billing_scheme": "-Fallback-scrubbed-NnEcdPrE",
+        "created": 1701467278, "currency": "-Fallback-scrubbed-PIv", "custom_unit_amount":
+        null, "livemode": true, "lookup_key": null, "metadata": {}, "nickname": null,
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg", "recurring": {"aggregate_usage":
+        null, "interval": "-Fallback-scrubbed-rQcjI", "interval_count": 7788, "meter":
+        null, "trial_period_days": null, "usage_type": "-Fallback-scrubbed-ohlLFpUo"},
+        "tax_behavior": "-Fallback-scrubbed-CymuBuRvSdK", "tiers_mode": null, "transform_quantity":
+        null, "type": "-Fallback-scrubbed-UnTcfCsrD", "unit_amount": 285, "unit_amount_decimal":
+        "1565"}, "pricing": {"price_details": {"price": "-Fallback-scrubbed-DdvFcQfRjKWCSluTwJREGuGWtWqROz",
+        "product": "-Fallback-scrubbed-cVqGXVyLAFPYjwHNAUg"}, "type": "-Fallback-scrubbed-soLpkBRadFrCj",
+        "unit_amount_decimal": "1565"}, "proration": true, "proration_details": {"credited_items":
+        null}, "quantity": 7788, "quantity_decimal": "8502", "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN",
+        "subscription_item": "-Fallback-scrubbed-fVvffmYMBdNpQHPEG", "subtotal": 285,
+        "tax_amounts": [], "tax_rates": [], "taxes": [], "type": "-Fallback-scrubbed-jmPrGQhbBmTi",
+        "unit_amount_excluding_tax": "1565"}], "has_more": false, "total_count": 7788,
+        "url": "/v1/invoices/in_1Tf3kQLKAgyp1fW9TpbSx97j/lines"}, "livemode": true,
+        "metadata": {}, "next_payment_attempt": null, "number": "-Fallback-scrubbed-VDXTYozpsRSGv",
+        "on_behalf_of": null, "paid": true, "paid_out_of_band": true, "parent": {"quote_details":
+        null, "subscription_details": {"metadata": {}, "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN"},
+        "type": "-Fallback-scrubbed-vpuUOKWhwAHSVOasAmCn"}, "payment_intent": "-Fallback-scrubbed-uBaTWMFswHpEVSjLyxAepmObjei",
+        "payment_settings": {"default_mandate": null, "payment_method_options": null,
+        "payment_method_types": null}, "period_end": 8621, "period_start": 8621, "post_payment_credit_notes_amount":
+        4177, "pre_payment_credit_notes_amount": 4177, "quote": null, "receipt_number":
+        null, "rendering": null, "rendering_options": null, "shipping_cost": null,
+        "shipping_details": null, "starting_balance": 4177, "statement_descriptor":
+        null, "status": "-Fallback-scrubbed-lEXE", "status_transitions": {"finalized_at":
+        8621, "marked_uncollectible_at": null, "paid_at": 8621, "voided_at": null},
+        "subscription": "-Fallback-scrubbed-aRAyzWQdUnLFcrrCVYiOFROylTjN", "subscription_details":
+        {"metadata": {}}, "subtotal": 285, "subtotal_excluding_tax": 285, "tax": null,
+        "test_clock": null, "total": 285, "total_discount_amounts": [], "total_excluding_tax":
+        285, "total_pretax_credit_amounts": [], "total_tax_amounts": [], "total_taxes":
+        [], "transfer_data": null, "webhooks_delivered_at": 8621}], "has_more": false,
+        "url": "/v1/invoices"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '18899'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=hyUkVB-zfIZltAmr6sHsmD4nxF1L-QsSppZUz0hLOW2QHKys4_jSrZUCc-MnyrKK5Og5PBppG-XUSLTx;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:34 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=hyUkVB-zfIZltAmr6sHsmD4nxF1L-QsSppZUz0hLOW2QHKys4_jSrZUCc-MnyrKK5Og5PBppG-XUSLTx&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=hyUkVB-zfIZltAmr6sHsmD4nxF1L-QsSppZUz0hLOW2QHKys4_jSrZUCc-MnyrKK5Og5PBppG-XUSLTx&t=1"
+      Request-Id:
+      - req_275SbiifM5P9sC
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

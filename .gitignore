@@ -134,3 +134,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vscode/
+
+__smoke-tests__/**/test_runtime/
+__smoke-tests__/unsanitized_*_test/
+

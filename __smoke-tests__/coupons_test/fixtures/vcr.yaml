@@ -1,0 +1,83 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2022-11-15'
+      User-Agent:
+      - python-requests/2.33.1
+    method: GET
+    uri: https://api.stripe.com/v1/coupons?limit=100&created%5Bgt%5D=1698796800
+  response:
+    body:
+      string: '{"object": "-Fallback-scrubbed-TQjz", "data": [{"id": "RuqJHjLn", "object":
+        "-Fallback-scrubbed-oQPsEu", "amount_off": null, "created": 1701467349, "currency":
+        null, "duration": "-Fallback-scrubbed-besFoil", "duration_in_months": null,
+        "livemode": false, "max_redemptions": null, "metadata": {}, "name": "Emily
+        Mooney", "percent_off": -36742.2624237279, "redeem_by": null, "times_redeemed":
+        1885, "valid": false}, {"id": "px8MLAK2", "object": "-Fallback-scrubbed-oQPsEu",
+        "amount_off": null, "created": 1701467324, "currency": null, "duration": "-Fallback-scrubbed-besFoil",
+        "duration_in_months": null, "livemode": false, "max_redemptions": null, "metadata":
+        {}, "name": "Stephanie Berry MD", "percent_off": 44.74072557445, "redeem_by":
+        null, "times_redeemed": 1885, "valid": false}], "has_more": false, "url":
+        "/v1/coupons"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '825'
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=W_2PTnh6YDfO-3GpKtTP8w0ywiBhkYh83eX2KjLVgruvz0FBVwH4T37h2D8aF0L25iUqioi6NPqthwDd;
+        report-to csp
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 27 Aug 2026 19:21:25 GMT
+      Report-To:
+      - '{"group":"csp","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/csp-report-v2?q=W_2PTnh6YDfO-3GpKtTP8w0ywiBhkYh83eX2KjLVgruvz0FBVwH4T37h2D8aF0L25iUqioi6NPqthwDd&t=1"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - csp="https://q.stripe.com/csp-report-v2?q=W_2PTnh6YDfO-3GpKtTP8w0ywiBhkYh83eX2KjLVgruvz0FBVwH4T37h2D8aF0L25iUqioi6NPqthwDd&t=1"
+      Request-Id:
+      - req_ljUB688mSf6nBU
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Notice:
+      - You are using an outdated API version (2022-11-15). We recommend upgrading
+        to the latest API version, 2026-07-29.dahlia. See https://docs.stripe.com/upgrades
+      Stripe-Version:
+      - '2022-11-15'
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - 3c3
+    status:
+      code: 200
+      message: OK
+version: 1

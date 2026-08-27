@@ -1,0 +1,5236 @@
+{
+  "streams": [
+    {
+      "tap_stream_id": "coupons",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount_off": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration_in_months": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "max_redemptions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "percent_off": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "redeem_by": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "times_redeemed": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "valid": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "coupons",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_off"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "duration"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "duration_in_months"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "max_redemptions"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "percent_off"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "redeem_by"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "times_redeemed"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "valid"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "credit_notes",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_balance_transaction": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount_amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "discount_amounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "invoice": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "memo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "number": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "out_of_band_amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "refund": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subtotal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "subtotal_excluding_tax": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "tax_amounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "total": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_excluding_tax": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "voided_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "credit_notes",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_balance_transaction"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "lines"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "memo"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "number"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "out_of_band_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pdf"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "reason"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "refund"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subtotal"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subtotal_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "voided_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "customers",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "balance": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "delinquent": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoice_prefix": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoice_settings": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "next_invoice_sequence": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preferred_locales": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "shipping": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "tax_exempt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "test_clock": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "customers",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "address"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "balance"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_source"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "delinquent"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "email"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice_prefix"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice_settings"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "next_invoice_sequence"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "phone"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "preferred_locales"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "shipping"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_exempt"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "test_clock"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "events",
+      "replication_key": "created",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "api_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "pending_webhooks": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "request": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "events",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "api_version"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "data"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pending_webhooks"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "request"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": true,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "invoice_items",
+      "replication_key": "date",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discountable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "invoice": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "proration": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "quantity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscription_item": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "test_clock": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit_amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "unit_amount_decimal": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tax_rates": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "discounts": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "period": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "invoice_items",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "date"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discountable"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "proration"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "quantity"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription_item"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "test_clock"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "unit_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "unit_amount_decimal"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_rates"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "period"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "price"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "date"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "invoice_line_items",
+      "replication_method": "FULL_TABLE",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "amount_excluding_tax": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscription_item": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount_amounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "discountable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "discounts": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "invoice_item": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoice_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "period": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "proration": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "proration_details": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "quantity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tax_amounts": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "tax_rates": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit_amount_excluding_tax": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "invoice_line_items",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription_item"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discountable"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice_item"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice_id"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "period"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "price"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "proration"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "proration_details"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "quantity"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_rates"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "unit_amount_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "invoices",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "account_country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "account_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "account_tax_ids": {
+            "items": {
+              "type": [
+                "string"
+              ]
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "amount_due": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "amount_paid": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "amount_remaining": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "application": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "application_fee_amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "attempt_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "attempted": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "auto_advance": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "automatic_tax": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "billing_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "charge": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "collection_method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "customer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_address": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "customer_email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_shipping": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "customer_tax_exempt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer_tax_ids": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "default_payment_method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_tax_rates": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "discounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "due_date": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ending_balance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "footer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hosted_invoice_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoice_pdf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "last_finalization_error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "next_payment_attempt": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "number": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "on_behalf_of": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paid": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "paid_out_of_band": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "payment_intent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "period_end": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "period_start": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "post_payment_credit_notes_amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "pre_payment_credit_notes_amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "receipt_number": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "redaction": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rendering_options": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "starting_balance": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "statement_descriptor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subtotal": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "subtotal_excluding_tax": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "tax": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "test_clock": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "total": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "total_excluding_tax": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "transfer_data": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "webhooks_delivered_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "total_discount_amounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "total_tax_amounts": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "payment_settings": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "status_transitions": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "invoices",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "account_country"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "account_name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "account_tax_ids"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_due"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_paid"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_remaining"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "application"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "application_fee_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "attempt_count"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "attempted"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "auto_advance"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "automatic_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "billing_reason"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "charge"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "collection_method"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "custom_fields"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_address"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_email"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_phone"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_shipping"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_tax_exempt"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer_tax_ids"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_payment_method"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_source"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_tax_rates"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "due_date"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "ending_balance"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "footer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "hosted_invoice_url"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice_pdf"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "last_finalization_error"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "next_payment_attempt"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "number"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "on_behalf_of"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "paid"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "paid_out_of_band"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "payment_intent"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "period_end"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "period_start"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "post_payment_credit_notes_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pre_payment_credit_notes_amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "quote"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "receipt_number"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "redaction"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "rendering_options"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "starting_balance"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "statement_descriptor"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subtotal"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subtotal_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "test_clock"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total_excluding_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "transfer_data"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "webhooks_delivered_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total_discount_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total_tax_amounts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "payment_settings"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status_transitions"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "lines"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "plans",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "active": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "aggregate_usage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "amount_decimal": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "billing_scheme": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "interval": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "interval_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "nickname": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tiers_mode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "transform_usage": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "trial_period_days": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "tiers": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "flat_amount": {
+                      "type": [
+                        "null",
+                        "integer"
+                      ]
+                    },
+                    "unit_amount": {
+                      "type": [
+                        "null",
+                        "integer"
+                      ]
+                    },
+                    "up_to": {
+                      "type": [
+                        "null",
+                        "integer"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "usage_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "plans",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "active"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "aggregate_usage"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "amount_decimal"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "billing_scheme"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "currency"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "interval"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "interval_count"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "nickname"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "product"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tiers_mode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "transform_usage"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "trial_period_days"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tiers"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "usage_type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "products",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "active": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_price": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "images": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "package_dimensions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shippable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "statement_descriptor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tax_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "products",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "active"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_price"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "images"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "package_dimensions"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "shippable"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "statement_descriptor"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_code"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "unit_label"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "url"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "subscription_items",
+      "replication_method": "FULL_TABLE",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "object": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "active": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "billing_scheme": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "created": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "currency": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "livemode": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "lookup_key": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "nickname": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "recurring": {
+                "properties": {
+                  "aggregate_usage": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "interval": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "interval_count": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "usage_type": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "tax_behavior": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "tiers_mode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit_amount": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "unit_amount_decimal": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "quantity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tax_rates": {
+            "items": {
+              "type": [
+                "object",
+                "string"
+              ]
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "subscription_items",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "price"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "quantity"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "tax_rates"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "subscription_schedules",
+      "replication_key": "created",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "canceled_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "completed_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "current_phase": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "customer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_settings": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "end_behavior": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "phases": {
+            "type": [
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "released_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "released_subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subscription": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "subscription_schedules",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "canceled_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "completed_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "current_phase"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_settings"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "end_behavior"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "phases"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "released_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "released_subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "subscriptions",
+      "replication_key": "updated",
+      "replication_method": "INCREMENTAL",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "application": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "application_fee_percent": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "automatic_tax": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "billing_cycle_anchor": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "billing_thresholds": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "cancel_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cancel_at_period_end": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "canceled_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "collection_method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updated": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "current_period_end": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "current_period_start": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "days_until_due": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "default_payment_method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default_tax_rates": {
+            "type": [
+              "array",
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "ended_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "items": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "latest_invoice": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "next_pending_invoice_item_invoice": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pause_collection": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "payment_settings": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "pending_invoice_item_interval": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pending_setup_intent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pending_update": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "plan": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "quantity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "schedule": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_date": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "test_clock": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "transfer_data": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "trial_end": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "trial_start": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "subscriptions",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "application"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "application_fee_percent"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "automatic_tax"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "billing_cycle_anchor"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "billing_thresholds"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "cancel_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "cancel_at_period_end"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "canceled_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "collection_method"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "updated"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "current_period_end"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "current_period_start"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "customer"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "days_until_due"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_payment_method"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_source"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "default_tax_rates"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "discount"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "ended_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "items"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "latest_invoice"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "metadata"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "next_pending_invoice_item_invoice"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pause_collection"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "payment_settings"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pending_invoice_item_interval"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pending_setup_intent"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "pending_update"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "plan"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "quantity"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "schedule"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "start_date"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "test_clock"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "transfer_data"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "trial_end"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "trial_start"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ],
+            "valid-replication-keys": [
+              "updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "usage_records",
+      "replication_method": "FULL_TABLE",
+      "key_properties": [
+        "id"
+      ],
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoice": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "livemode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "period": {
+            "type": [
+              "object",
+              "string",
+              "null"
+            ]
+          },
+          "subscription_item": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "total_usage": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "stream": "usage_records",
+      "metadata": [
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "object"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "invoice"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "livemode"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "period"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "subscription_item"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "total_usage"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "inclusion": "available",
+            "selected": false,
+            "table-key-properties": [
+              "id"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
