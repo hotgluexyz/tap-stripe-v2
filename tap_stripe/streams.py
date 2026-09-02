@@ -1,8 +1,8 @@
 """Stream type classes for tap-stripe-v2."""
 
 from typing import Optional
-from singer_sdk import typing as th
-from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
+from hotglue_singer_sdk import typing as th
+from hotglue_singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from tap_stripe.client import stripeStream  
 from urllib.parse import urlencode
 import requests

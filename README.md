@@ -2,7 +2,7 @@
 
 `tap-stripe-v2` is a Singer tap for stripe.
 
-Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
+Built with the [Hotglue Singer SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## Installation
 
