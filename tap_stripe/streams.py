@@ -234,10 +234,15 @@ class InvoiceLineItems(stripeStream):
             return {"invoice_item_id": record["invoice_item"]}
 
     def _sync_children(self, child_context: dict) -> None:
-        """Fetch the linked invoice item by id when a line item references one."""
+        """Fetch the linked invoice item by id when a line item references one.
+
+        Only runs when invoice_items is selected in the catalog.
+        """
         if not child_context or not child_context.get("invoice_item_id"):
             return
         invoice_items_stream = self._tap.streams["invoice_items"]
+        if not invoice_items_stream.selected:
+            return
         invoice_items_stream.fetch_from_parent_stream = True
         try:
             invoice_items_stream.sync(context=child_context)
@@ -251,6 +256,7 @@ class InvoiceItems(stripeStream):
     replication_key = "date"
     object = "plan"
     fetch_from_parent_stream = False
+    fetch_pending_items = False
     ids = set()
 
     @property
@@ -296,7 +302,12 @@ class InvoiceItems(stripeStream):
     ).to_dict()
     
     def request_records(self, context: Optional[dict]) -> Iterable[dict]:
-        """Fetch invoice items from the list API, or by id when called from a line item."""
+        """Fetch invoice items from the list API, or by id when called from a line item.
+
+        Standalone sync uses two list passes: incremental by created date, then all
+        pending items (invoice is null). Pending items can be edited or deleted in
+        Stripe after creation, so the second pass keeps them fresh without a full sync.
+        """
         if self.fetch_from_parent_stream:
             yield from super().request_records(context or {})
             return
@@ -307,6 +318,11 @@ class InvoiceItems(stripeStream):
             ]
         self.ids = set()
         yield from super().request_records(context or {})
+        self.fetch_pending_items = True
+        try:
+            yield from super().request_records(context or {})
+        finally:
+            self.fetch_pending_items = False
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
@@ -317,6 +333,9 @@ class InvoiceItems(stripeStream):
             # this params are not allowed for fetching invoiceitems by id
             params.pop("created[gte]", None)
             params.pop("limit", None)
+        elif self.fetch_pending_items:
+            params.pop("created[gte]", None)
+            params["pending"] = "true"
         return params
     
     def post_process(self, row, context) -> dict:
