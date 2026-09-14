@@ -234,8 +234,20 @@ class InvoiceLineItems(stripeStream):
             return {"invoice_item_id": record["invoice_item"]}
 
     def _sync_children(self, child_context: dict) -> None:
-        if child_context is not None:
-            return super()._sync_children(child_context)
+        """Fetch the linked invoice item by id when a line item references one.
+
+        Only runs when invoice_items is selected in the catalog.
+        """
+        if not child_context or not child_context.get("invoice_item_id"):
+            return
+        invoice_items_stream = self._tap.streams["invoice_items"]
+        if not invoice_items_stream.selected:
+            return
+        invoice_items_stream.fetch_from_parent_stream = True
+        try:
+            invoice_items_stream.sync(context=child_context)
+        finally:
+            invoice_items_stream.fetch_from_parent_stream = False
 
 class InvoiceItems(stripeStream):
     """Define InvoiceItems stream."""
@@ -243,8 +255,8 @@ class InvoiceItems(stripeStream):
     name = "invoice_items"
     replication_key = "date"
     object = "plan"
-    parent_stream_type = InvoiceLineItems
     fetch_from_parent_stream = False
+    fetch_pending_items = False
     ids = set()
 
     @property
@@ -290,23 +302,27 @@ class InvoiceItems(stripeStream):
     ).to_dict()
     
     def request_records(self, context: Optional[dict]) -> Iterable[dict]:
-        # 1. fetch all invoices using rep key
-        invoice_item_id = None
-        if not self.fetch_from_parent_stream:
-            # invoice_items is a child stream but it also fetches data using its own rep key
-            # so we need to keep the rep_key_value at the header level
-            if "replication_key_value" in self.stream_state:
-                self.stream_state['starting_replication_value'] = self.stream_state['replication_key_value']
-            #---
-            invoice_item_id = context.pop("invoice_item_id")
-            yield from super().request_records(context)
-            self.fetch_from_parent_stream = True
-        # 2. fetch invoices from parent stream
+        """Fetch invoice items from the list API, or by id when called from a line item.
+
+        Standalone sync uses two list passes: incremental by created date, then all
+        pending items (invoice is null). Pending items can be edited or deleted in
+        Stripe after creation, so the second pass keeps them fresh without a full sync.
+        """
         if self.fetch_from_parent_stream:
-            if invoice_item_id:
-                context.update({"invoice_item_id": invoice_item_id})
-            # get invoiceitem ids
-            yield from super().request_records(context)
+            yield from super().request_records(context or {})
+            return
+
+        if "replication_key_value" in self.stream_state:
+            self.stream_state["starting_replication_value"] = self.stream_state[
+                "replication_key_value"
+            ]
+        self.ids = set()
+        yield from super().request_records(context or {})
+        self.fetch_pending_items = True
+        try:
+            yield from super().request_records(context or {})
+        finally:
+            self.fetch_pending_items = False
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
@@ -317,6 +333,9 @@ class InvoiceItems(stripeStream):
             # this params are not allowed for fetching invoiceitems by id
             params.pop("created[gte]", None)
             params.pop("limit", None)
+        elif self.fetch_pending_items:
+            params.pop("created[gte]", None)
+            params["pending"] = "true"
         return params
     
     def post_process(self, row, context) -> dict:
