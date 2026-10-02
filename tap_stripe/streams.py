@@ -7,7 +7,6 @@ from hotglue_etl_exceptions import InvalidCredentialsError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
 from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
-from pendulum import parse
 from tap_stripe.base_reports import BaseReportsStream
 
 class Accounts(stripeStream):
