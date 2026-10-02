@@ -7,6 +7,7 @@ from hotglue_etl_exceptions import InvalidCredentialsError
 from tap_stripe.client import stripeStream, StripeStreamV2
 import requests
 from hotglue_singer_sdk.helpers.jsonpath import extract_jsonpath
+from pendulum import parse
 from tap_stripe.base_reports import BaseReportsStream
 
 class Accounts(stripeStream):
@@ -782,6 +783,41 @@ class Customers(stripeStream):
     def post_process(self, row, context) -> dict:
         row["deleted"] = row.get("deleted", False)
         return super().post_process(row, context)
+
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"customer_id": record["id"]}
+
+class CustomerBalanceTransactionsStream(stripeStream):
+    """Credit-balance changes for a customer.
+
+    Stripe only lists these under a customer:
+    ``GET /v1/customers/:id/balance_transactions``.
+    """
+
+    name = "customer_balance_transactions"
+    path = "customers/{customer_id}/balance_transactions"
+    parent_stream_type = Customers
+    object = "customer_balance_transaction"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("amount", th.IntegerType),
+        th.Property("checkout_session", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("updated", th.DateTimeType),
+        th.Property("credit_note", th.StringType),
+        th.Property("currency", th.StringType),
+        th.Property("customer", th.StringType),
+        th.Property("customer_account", th.StringType),
+        th.Property("description", th.StringType),
+        th.Property("ending_balance", th.IntegerType),
+        th.Property("invoice", th.StringType),
+        th.Property("livemode", th.BooleanType),
+        th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
+        th.Property("type", th.StringType),
+    ).to_dict()
 
 
 class Events(stripeStream):
