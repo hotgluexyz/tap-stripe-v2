@@ -30,4 +30,6 @@ def test_hidden_parent_is_not_visible_in_the_catalog():
     catalog = tap.catalog_dict
     assert _root_metadata(catalog, "customers_parent")["visible"] is False
     assert _root_metadata(catalog, "customers")["visible"] is True
+    assert tap.streams["customers_parent"].selected is False
+    assert tap.streams["customers"].selected is True
     assert CustomerBalanceTransactionsStream.parent_stream_type is not Customers

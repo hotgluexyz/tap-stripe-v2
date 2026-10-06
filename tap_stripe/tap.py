@@ -107,7 +107,12 @@ class Tapstripe(Tap):
                 if input_catalog is not None:
                     stream.apply_catalog(input_catalog)
                 root_metadata = stream.metadata[()]
-                root_metadata.visible = getattr(stream, "visible_in_catalog", True)
+                visible = getattr(stream, "visible_in_catalog", True)
+                root_metadata.visible = visible
+                # Catalog-free syncs select every stream. Keep hidden parents
+                # unselected so they are not written on their own.
+                if input_catalog is None and not visible:
+                    root_metadata.selected = False
                 self._streams[stream.name] = stream
         return self._streams
 
