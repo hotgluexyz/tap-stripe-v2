@@ -783,9 +783,30 @@ class Customers(stripeStream):
         row["deleted"] = row.get("deleted", False)
         return super().post_process(row, context)
 
+
+class CustomersParentStream(stripeStream):
+    """Full customer list that exists only to parent balance transactions.
+
+    Hidden from the catalog so the user-facing customers stream keeps its
+    own incremental sync.
+    """
+
+    name = "customers_parent"
+    path = "customers"
+    visible_in_catalog = False
+    object = "customer"
+
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("object", th.StringType),
+        th.Property("created", th.DateTimeType),
+        th.Property("deleted", th.BooleanType),
+    ).to_dict()
+
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"customer_id": record["id"]}
+
 
 class CustomerBalanceTransactionsStream(stripeStream):
     """Credit-balance changes for a customer.
@@ -796,7 +817,7 @@ class CustomerBalanceTransactionsStream(stripeStream):
 
     name = "customer_balance_transactions"
     path = "customers/{customer_id}/balance_transactions"
-    parent_stream_type = Customers
+    parent_stream_type = CustomersParentStream
     object = "customer_balance_transaction"
 
     schema = th.PropertiesList(

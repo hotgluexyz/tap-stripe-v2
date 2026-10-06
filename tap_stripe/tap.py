@@ -11,6 +11,7 @@ from tap_stripe.streams import (
     Coupons,
     CreditNotes,
     Customers,
+    CustomersParentStream,
     CustomerBalanceTransactionsStream,
     Events,
     InvoiceItems,
@@ -45,6 +46,7 @@ STREAM_TYPES = [
     Coupons,
     CreditNotes,
     Customers,
+    CustomersParentStream,
     CustomerBalanceTransactionsStream,
     Events,
     InvoiceItems,
@@ -93,6 +95,21 @@ class Tapstripe(Tap):
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]
+
+    @property
+    def streams(self) -> dict:
+        """Mark parent-only streams hidden in catalog metadata."""
+        input_catalog = self.input_catalog
+
+        if self._streams is None:
+            self._streams = {}
+            for stream in self.load_streams():
+                if input_catalog is not None:
+                    stream.apply_catalog(input_catalog)
+                root_metadata = stream.metadata[()]
+                root_metadata.visible = getattr(stream, "visible_in_catalog", True)
+                self._streams[stream.name] = stream
+        return self._streams
 
 
 if __name__ == "__main__":
