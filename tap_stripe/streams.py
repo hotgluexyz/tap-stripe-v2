@@ -796,6 +796,11 @@ class CustomersParentStream(stripeStream):
     visible_in_catalog = False
     object = "customer"
 
+    @property
+    def selected(self) -> bool:
+        """Never emit this stream. A selected child still runs it."""
+        return False
+
     schema = th.PropertiesList(
         th.Property("id", th.StringType),
         th.Property("object", th.StringType),
