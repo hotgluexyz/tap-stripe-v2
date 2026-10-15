@@ -387,6 +387,7 @@ class Subscriptions(stripeStream):
         ),
         th.Property("description", th.StringType),
         th.Property("discount", th.CustomType({"type": ["object", "string"]})),
+        th.Property("discounts", th.CustomType({"type": ["array", "object", "string"]})),
         th.Property("ended_at", th.DateTimeType),
         th.Property("items", th.CustomType({"type": ["object", "string"]})),
         th.Property("latest_invoice", th.StringType),
