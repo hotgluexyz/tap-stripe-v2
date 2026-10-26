@@ -1,5 +1,6 @@
 """Stream type classes for tap-stripe-v2."""
 
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional, Iterable, Dict
 from hotglue_singer_sdk import typing as th
 from hotglue_singer_sdk.exceptions import RetriableAPIError
@@ -257,6 +258,8 @@ class InvoiceItems(stripeStream):
     object = "plan"
     fetch_from_parent_stream = False
     fetch_pending_items = False
+    # 365d pending chunks; shrink if Stripe 500s on sparse pages
+    _pending_window = timedelta(days=365)
     ids = set()
 
     @property
@@ -320,9 +323,23 @@ class InvoiceItems(stripeStream):
         yield from super().request_records(context or {})
         self.fetch_pending_items = True
         try:
-            yield from super().request_records(context or {})
+            yield from self._request_pending_records(context or {})
         finally:
             self.fetch_pending_items = False
+
+    def _request_pending_records(self, context: dict) -> Iterable[dict]:
+        """List pending invoice items in [_pending_window] created slices, newest first."""
+        window_end = datetime.now(timezone.utc)
+        # not config start_date: pending must refresh old open items past the incremental bookmark
+        floor = datetime(2000, 1, 1, tzinfo=timezone.utc)
+        while window_end > floor:
+            window_start = max(window_end - self._pending_window, floor)
+            self._pending_created_gte = int(window_start.timestamp())
+            self._pending_created_lte = int(window_end.timestamp())
+            yield from super().request_records(context)
+            if window_start <= floor:
+                break
+            window_end = window_start
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
@@ -332,10 +349,12 @@ class InvoiceItems(stripeStream):
         if self.fetch_from_parent_stream:
             # this params are not allowed for fetching invoiceitems by id
             params.pop("created[gte]", None)
+            params.pop("created[lte]", None)
             params.pop("limit", None)
         elif self.fetch_pending_items:
-            params.pop("created[gte]", None)
             params["pending"] = "true"
+            params["created[gte]"] = self._pending_created_gte
+            params["created[lte]"] = self._pending_created_lte
         return params
     
     def post_process(self, row, context) -> dict:
