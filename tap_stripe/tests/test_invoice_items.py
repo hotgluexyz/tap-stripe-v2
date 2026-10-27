@@ -58,11 +58,15 @@ def make_invoice_items_stream():
     stream.fetch_pending_items = False
     stream.ids = set()
     type(stream).stream_state = PropertyMock(return_value={})
+    # one pending window: floor within the last year
+    type(stream).config = PropertyMock(
+        return_value={"start_date": "2026-01-01T00:00:00Z"}
+    )
     return stream
 
 
 def test_invoice_items_standalone_runs_pending_pass_after_incremental():
-    """Standalone sync should list incrementally, then re-list all pending items."""
+    """Standalone sync should list incrementally, then pending in created windows."""
     stream = make_invoice_items_stream()
     pending_flags = []
 
@@ -73,7 +77,8 @@ def test_invoice_items_standalone_runs_pending_pass_after_incremental():
     with patch.object(stripeStream, "request_records", fake_request_records):
         list(stream.request_records({}))
 
-    assert pending_flags == [False, True]
+    assert pending_flags[0] is False
+    assert pending_flags[1:] and all(pending_flags[1:])
     assert stream.fetch_pending_items is False
 
 
@@ -90,13 +95,20 @@ def test_invoice_items_by_id_skips_pending_pass():
 
 
 def test_invoice_items_get_url_params_pending_pass():
-    """Pending list pass should drop created filter and set pending=true."""
+    """Pending list pass should set pending=true and window created[gte]/[lte]."""
     stream = make_invoice_items_stream()
     stream.fetch_pending_items = True
+    stream._pending_created_gte = 100
+    stream._pending_created_lte = 200
 
     with patch.object(
         stripeStream, "get_url_params", return_value={"limit": 100, "created[gte]": 123}
     ):
         params = stream.get_url_params(None, None)
 
-    assert params == {"limit": 100, "pending": "true"}
+    assert params == {
+        "limit": 100,
+        "pending": "true",
+        "created[gte]": 100,
+        "created[lte]": 200,
+    }
