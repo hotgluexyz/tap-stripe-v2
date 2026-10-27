@@ -258,8 +258,8 @@ class InvoiceItems(stripeStream):
     object = "plan"
     fetch_from_parent_stream = False
     fetch_pending_items = False
-    # 365d pending chunks; shrink if Stripe 500s on sparse pages
-    _pending_window = timedelta(days=365)
+    # 30d pending chunks; shrink if Stripe 500s on sparse pages
+    _pending_window = timedelta(days=30)
     ids = set()
 
     @property
