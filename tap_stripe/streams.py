@@ -258,8 +258,8 @@ class InvoiceItems(stripeStream):
     object = "plan"
     fetch_from_parent_stream = False
     fetch_pending_items = False
-    # 365d pending chunks; shrink if Stripe 500s on sparse pages
-    _pending_window = timedelta(days=365)
+    # 30d pending chunks; shrink if Stripe 500s on sparse pages
+    _pending_window = timedelta(days=30)
     ids = set()
 
     @property
@@ -331,7 +331,7 @@ class InvoiceItems(stripeStream):
         """List pending invoice items in [_pending_window] created slices, newest first."""
         window_end = datetime.now(timezone.utc)
         # not config start_date: pending must refresh old open items past the incremental bookmark
-        floor = datetime(2000, 1, 1, tzinfo=timezone.utc)
+        floor = datetime(2010, 1, 1, tzinfo=timezone.utc)
         while window_end > floor:
             window_start = max(window_end - self._pending_window, floor)
             self._pending_created_gte = int(window_start.timestamp())
