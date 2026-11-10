@@ -1,5 +1,8 @@
 """stripe tap class."""
 
+import json
+import platform
+from importlib import metadata
 from typing import List
 
 from hotglue_singer_sdk import Stream, Tap
@@ -94,6 +97,15 @@ class Tapstripe(Tap):
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
+        sdk = metadata.distribution("hotglue-singer-sdk")
+        sdk_origin = json.loads(sdk.read_text("direct_url.json"))
+        self.logger.info(
+            "HGI-11648 validation: Python=%s jsonpath-ng=%s SDK=%s SDK-commit=%s",
+            platform.python_version(),
+            metadata.version("jsonpath-ng"),
+            sdk.version,
+            sdk_origin["vcs_info"]["commit_id"],
+        )
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]
 
     @property
