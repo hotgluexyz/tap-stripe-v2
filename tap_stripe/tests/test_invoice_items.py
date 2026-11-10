@@ -112,3 +112,27 @@ def test_invoice_items_get_url_params_pending_pass():
         "created[gte]": 100,
         "created[lte]": 200,
     }
+
+
+def test_parse_response_preserves_object_for_star_jsonpath():
+    """$.[*] on a single-object payload must not expand into field values."""
+    stream = object.__new__(stripeStream)
+    stream.records_jsonpath = "$.[*]"
+    stream.name = "invoice_items"
+    stream.path = "invoiceitems/{invoice_item_id}"
+    stream.expand = None
+    stream.event_ids = []
+    stream.ignore_statuscode = []
+    stream.url_base = "https://api.stripe.com/v1"
+    stream.request_decorator = lambda fn: fn
+    type(stream).get_from_events = PropertyMock(return_value=False)
+    type(stream).get_data_from_id = PropertyMock(return_value=False)
+    type(stream).not_sync_invoice_status = property(lambda self: ["deleted"])
+
+    payload = {"id": "ii_1", "object": "invoiceitem", "created": 1, "currency": "usd"}
+    response = MagicMock()
+    response.json.return_value = payload
+
+    records = list(stream.parse_response(response))
+    assert len(records) == 1
+    assert records[0]["id"] == "ii_1"
