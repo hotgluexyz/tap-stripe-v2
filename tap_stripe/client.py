@@ -121,7 +121,12 @@ class stripeStream(RESTStream):
         decorated_request = self.request_decorator(self._request)
         base_url = "/".join(self.url_base.split("/")[:-2])
         try:
-            records = extract_jsonpath(self.records_jsonpath, input=response.json())
+            payload = response.json()
+            # Newer jsonpath-ng expands $.[*] on a dict into that object's values.
+            if self.records_jsonpath == "$.[*]" and isinstance(payload, dict):
+                records = [payload]
+            else:
+                records = extract_jsonpath(self.records_jsonpath, input=payload)
         except Exception:
             records = response
 
