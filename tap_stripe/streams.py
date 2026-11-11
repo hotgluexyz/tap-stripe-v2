@@ -114,7 +114,7 @@ class Invoices(stripeStream):
         th.Property("footer", th.StringType),
         th.Property("hosted_invoice_url", th.StringType),
         th.Property("invoice_pdf", th.StringType),
-        th.Property("last_finalization_error", th.StringType),
+        th.Property("last_finalization_error", th.CustomType({"type": ["object", "string"]}),),
         th.Property("livemode", th.BooleanType),
         th.Property("next_payment_attempt", th.DateTimeType),
         th.Property("number", th.StringType),
@@ -148,10 +148,10 @@ class Invoices(stripeStream):
         ),
         th.Property("total_tax_amounts", th.CustomType({"type": ["array", "string"]})),
         th.Property(
-            "payment_settings", th.CustomType({"type": ["array", "object", "string"]})
+            "payment_settings", th.CustomType({"type": ["object", "string"]})
         ),
         th.Property(
-            "status_transitions", th.CustomType({"type": ["array", "object", "string"]})
+            "status_transitions", th.CustomType({"type": ["object", "string"]})
         ),
         th.Property("lines", th.CustomType({"type": ["object", "string"]})),
     ).to_dict()
