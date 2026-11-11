@@ -136,7 +136,7 @@ class Invoices(stripeStream):
         th.Property("subscription", th.StringType),
         th.Property("subtotal", th.IntegerType),
         th.Property("subtotal_excluding_tax", th.IntegerType),
-        th.Property("tax", th.IntegerType),
+        th.Property("tax", th.NumberType),
         th.Property("test_clock", th.StringType),
         th.Property("total", th.IntegerType),
         th.Property("total_excluding_tax", th.IntegerType),
