@@ -78,8 +78,8 @@ class Invoices(stripeStream):
         th.Property("account_name", th.StringType),
         th.Property("account_tax_ids", th.ArrayType(th.StringType)),
         th.Property("amount_due", th.IntegerType),
-        th.Property("amount_paid", th.IntegerType),
-        th.Property("amount_remaining", th.IntegerType),
+        th.Property("amount_paid", th.NumberType),
+        th.Property("amount_remaining", th.NumberType),
         th.Property("application", th.StringType),
         th.Property("application_fee_amount", th.IntegerType),
         th.Property("attempt_count", th.IntegerType),
@@ -110,7 +110,7 @@ class Invoices(stripeStream):
         th.Property("discount", th.CustomType({"type": ["object", "string"]})),
         th.Property("discounts", th.CustomType({"type": ["array", "string"]})),
         th.Property("due_date", th.DateTimeType),
-        th.Property("ending_balance", th.IntegerType),
+        th.Property("ending_balance", th.NumberType),
         th.Property("footer", th.StringType),
         th.Property("hosted_invoice_url", th.StringType),
         th.Property("invoice_pdf", th.StringType),
@@ -140,7 +140,7 @@ class Invoices(stripeStream):
         th.Property("test_clock", th.StringType),
         th.Property("total", th.IntegerType),
         th.Property("total_excluding_tax", th.IntegerType),
-        th.Property("transfer_data", th.CustomType({"type": ["object", "string"]})),
+        th.Property("transfer_data", th.StringType),
         th.Property("webhooks_delivered_at", th.DateTimeType),
         th.Property("metadata", th.CustomType({"type": ["object", "string"]})),
         th.Property(
@@ -148,10 +148,10 @@ class Invoices(stripeStream):
         ),
         th.Property("total_tax_amounts", th.CustomType({"type": ["array", "string"]})),
         th.Property(
-            "payment_settings", th.CustomType({"type": ["object", "string"]})
+            "payment_settings", th.CustomType({"type": ["array", "object", "string"]})
         ),
         th.Property(
-            "status_transitions", th.CustomType({"type": ["object", "string"]})
+            "status_transitions", th.CustomType({"type": ["array", "object", "string"]})
         ),
         th.Property("lines", th.CustomType({"type": ["object", "string"]})),
     ).to_dict()
@@ -424,7 +424,7 @@ class Subscriptions(stripeStream):
         th.Property("start_date", th.DateTimeType),
         th.Property("status", th.StringType),
         th.Property("test_clock", th.StringType),
-        th.Property("transfer_data", th.CustomType({"type": ["object", "string"]})),
+        th.Property("transfer_data", th.StringType),
         th.Property("trial_end", th.DateTimeType),
         th.Property("trial_start", th.DateTimeType),
         th.Property("currency", th.StringType),
@@ -1061,7 +1061,8 @@ class ChargesStream(stripeStream):
         th.Property("statement_descriptor", th.StringType),
         th.Property("statement_descriptor_suffix", th.StringType),
         th.Property("status", th.StringType),
-        th.Property("transfer_data", th.CustomType({"type": ["object", "string"]})),
+        th.Property("transfer_data", th.StringType),
+        th.Property("transfer_data", th.StringType),
         th.Property("transfer_group", th.StringType),
     ).to_dict()
 
