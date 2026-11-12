@@ -114,7 +114,7 @@ class Invoices(stripeStream):
         th.Property("footer", th.StringType),
         th.Property("hosted_invoice_url", th.StringType),
         th.Property("invoice_pdf", th.StringType),
-        th.Property("last_finalization_error", th.StringType),
+        th.Property("last_finalization_error", th.CustomType({"type": ["object", "string"]}),),
         th.Property("livemode", th.BooleanType),
         th.Property("next_payment_attempt", th.DateTimeType),
         th.Property("number", th.StringType),
